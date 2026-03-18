@@ -10,10 +10,54 @@ datasource db {
   provider = "postgresql"
 }
 
-model User {
+model Service {
+  id          Int      @id @default(autoincrement())
+  title       String
+  slug        String   @unique
+  description String
+  content     String?
+  icon        String?
+  order       Int      @default(0)
+  published   Boolean  @default(true)
+  metaTitle   String?
+  metaDesc    String?
+  ogImage     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model BeforeAfter {
+  id          Int      @id @default(autoincrement())
+  title       String
+  treatment   String
+  beforeImage String
+  afterImage  String
+  description String?
+  published   Boolean  @default(true)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Post {
+  id          Int       @id @default(autoincrement())
+  title       String
+  slug        String    @unique
+  excerpt     String?
+  content     String
+  coverImage  String?
+  published   Boolean   @default(false)
+  publishedAt DateTime?
+  metaTitle   String?
+  metaDesc    String?
+  ogImage     String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model SiteSetting {
   id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
+  key       String   @unique
+  value     String
   updatedAt DateTime @updatedAt
 }
