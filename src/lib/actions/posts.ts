@@ -36,6 +36,7 @@ export async function createPost(
         publishedAt: published ? new Date() : null,
         metaTitle: (formData.get("metaTitle") as string) || null,
         metaDesc: (formData.get("metaDesc") as string) || null,
+        metaKeywords: (formData.get("metaKeywords") as string) || null,
         ogImage: (formData.get("ogImage") as string) || null,
       },
     });
@@ -78,6 +79,7 @@ export async function updatePost(
           published && !existing?.publishedAt ? new Date() : existing?.publishedAt ?? null,
         metaTitle: (formData.get("metaTitle") as string) || null,
         metaDesc: (formData.get("metaDesc") as string) || null,
+        metaKeywords: (formData.get("metaKeywords") as string) || null,
         ogImage: (formData.get("ogImage") as string) || null,
       },
     });

@@ -1,3 +1,5 @@
+export const revalidate = 3600;
+
 import { db } from "@/lib/db";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";

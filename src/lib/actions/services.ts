@@ -34,6 +34,7 @@ export async function createService(
         published: formData.get("published") === "on",
         metaTitle: (formData.get("metaTitle") as string) || null,
         metaDesc: (formData.get("metaDesc") as string) || null,
+        metaKeywords: (formData.get("metaKeywords") as string) || null,
         ogImage: (formData.get("ogImage") as string) || null,
       },
     });
@@ -73,6 +74,7 @@ export async function updateService(
         published: formData.get("published") === "on",
         metaTitle: (formData.get("metaTitle") as string) || null,
         metaDesc: (formData.get("metaDesc") as string) || null,
+        metaKeywords: (formData.get("metaKeywords") as string) || null,
         ogImage: (formData.get("ogImage") as string) || null,
       },
     });

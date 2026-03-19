@@ -122,6 +122,102 @@ export function SettingsForm({ initialData }: { initialData: Settings }) {
         </div>
       </section>
 
+      {/* Google Reviews */}
+      <section>
+        <h2 className="text-base font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-100">
+          Google Reviews
+        </h2>
+        <div className="space-y-4">
+          {/* hidden fallback so unchecked sends "false"; checkbox "true" follows to override when checked */}
+          <input type="hidden" name="googleReviewsEnabled" value="false" />
+          <div className="flex items-center gap-3">
+            <input
+              type="checkbox"
+              id="googleReviewsEnabled"
+              name="googleReviewsEnabled"
+              defaultChecked={initialData["googleReviewsEnabled"] !== "false"}
+              value="true"
+              className="w-4 h-4 rounded border-gray-300 text-[#1b4f72] focus:ring-[#1b4f72]/20"
+            />
+            <label htmlFor="googleReviewsEnabled" className="text-sm font-medium text-gray-700">
+              Show Google Reviews section on homepage
+            </label>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {field("googleRating", "Overall Rating", "text", "4.9")}
+            {field("googleReviewCount", "Review Count Label", "text", "127 reviews")}
+            {field("googleReviewsUrl", "Google Reviews URL", "url", "https://g.page/r/…/review")}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Individual Reviews (JSON)
+            </label>
+            <textarea
+              name="googleReviews"
+              defaultValue={initialData["googleReviews"] ?? ""}
+              rows={8}
+              placeholder={`[\n  {\n    "name": "Sarah M.",\n    "rating": 5,\n    "text": "Amazing results!",\n    "date": "February 2025"\n  }\n]`}
+              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#1b4f72]/20 focus:border-[#1b4f72] resize-y"
+            />
+            <p className="text-xs text-gray-400 mt-1.5">
+              Paste a JSON array of reviews. Each review needs: <code className="bg-gray-100 px-1 py-0.5 rounded">name</code>, <code className="bg-gray-100 px-1 py-0.5 rounded">rating</code> (1–5), <code className="bg-gray-100 px-1 py-0.5 rounded">text</code>, and <code className="bg-gray-100 px-1 py-0.5 rounded">date</code>. Leave empty to use built-in sample reviews.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Instagram */}
+      <section>
+        <h2 className="text-base font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-100">
+          Instagram Feed
+        </h2>
+        <div className="space-y-4">
+          <input type="hidden" name="instagramEnabled" value="false" />
+          <div className="flex items-center gap-3">
+            <input
+              type="checkbox"
+              id="instagramEnabled"
+              name="instagramEnabled"
+              defaultChecked={initialData["instagramEnabled"] !== "false"}
+              value="true"
+              className="w-4 h-4 rounded border-gray-300 text-[#1b4f72] focus:ring-[#1b4f72]/20"
+            />
+            <label htmlFor="instagramEnabled" className="text-sm font-medium text-gray-700">
+              Show Instagram section on homepage
+            </label>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {field("instagramHandle", "Instagram Handle (without @)", "text", "dr.firaszoghieb")}
+            {field("instagramFollowers", "Followers Label", "text", "e.g. 12.4k")}
+          </div>
+          <div>
+            {field("instagramBio", "Profile Bio (shown under handle)", "text", "Cosmetic Dentist · Composite Bonding · Invisalign")}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Last 6 Posts (JSON)
+            </label>
+            <textarea
+              name="instagramPosts"
+              defaultValue={initialData["instagramPosts"] ?? ""}
+              rows={10}
+              placeholder={`[\n  {\n    "image": "https://…/photo.jpg",\n    "caption": "Smile transformation ✨",\n    "url": "https://www.instagram.com/p/ABC123"\n  }\n]`}
+              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#1b4f72]/20 focus:border-[#1b4f72] resize-y"
+            />
+            <p className="text-xs text-gray-400 mt-1.5">
+              Paste a JSON array with up to 6 posts. Each post needs:{" "}
+              <code className="bg-gray-100 px-1 py-0.5 rounded">image</code> (URL),{" "}
+              <code className="bg-gray-100 px-1 py-0.5 rounded">caption</code>, and optionally{" "}
+              <code className="bg-gray-100 px-1 py-0.5 rounded">url</code> (direct link to the post). Leave empty to show placeholders.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <div className="flex justify-end pt-2">
         <SubmitButton />
       </div>

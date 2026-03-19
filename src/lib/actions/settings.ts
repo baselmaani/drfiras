@@ -21,6 +21,12 @@ export async function updateSettings(
   }
 
   revalidatePath("/");
+  revalidatePath("/blog");
   revalidatePath("/dashboard/settings");
+  revalidatePath("/dashboard/content/hero");
+  revalidatePath("/dashboard/content/about");
+  revalidatePath("/dashboard/content/faq");
+  revalidatePath("/dashboard/content/at-a-glance");
+  revalidatePath("/dashboard/content/pages-seo");
   return { success: true };
 }

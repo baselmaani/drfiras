@@ -28,19 +28,19 @@ export default async function Expertise() {
   }
 
   return (
-    <section id="expertise" className="py-20 bg-[#f7f9fc]">
-      <div className="max-w-6xl mx-auto px-6">
+    <section id="expertise" className="py-20 bg-[#0d0d0d]">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-14">
-          <p className="text-[#c9a84c] text-sm font-semibold uppercase tracking-widest mb-3">
+          <p className="text-[#c9a84c] text-[11px] font-semibold uppercase tracking-[0.28em] mb-3">
             What We Offer
           </p>
           <h2
-            className="text-3xl md:text-4xl font-bold text-[#1b4f72] mb-4"
+            className="text-3xl md:text-4xl font-bold text-white mb-4"
             style={{ fontFamily: "var(--font-playfair)" }}
           >
             Areas of Expertise
           </h2>
-          <p className="text-gray-500 max-w-xl mx-auto text-[15px] leading-relaxed">
+          <p className="text-white/40 max-w-xl mx-auto text-[15px] leading-relaxed">
             Dr. Firas offers a full range of cosmetic and restorative dental
             treatments tailored to help you achieve the smile you deserve.
           </p>
@@ -50,18 +50,18 @@ export default async function Expertise() {
           {treatments.map((t) => {
             const inner = (
               <>
-                <div className="w-12 h-12 rounded-full bg-[#1b4f72]/8 flex items-center justify-center mb-4 group-hover:bg-[#1b4f72] transition-colors">
-                  <span className="text-[#1b4f72] text-xl group-hover:text-white transition-colors">
+                <div className="w-12 h-12 rounded-full bg-[#c9a84c]/8 flex items-center justify-center mb-4 group-hover:bg-[#c9a84c]/20 transition-colors">
+                  <span className="text-[#c9a84c] text-xl">
                     {t.icon}
                   </span>
                 </div>
                 <h3
-                  className="text-lg font-bold text-[#1b4f72] mb-2"
+                  className="text-lg font-bold text-white mb-2"
                   style={{ fontFamily: "var(--font-playfair)" }}
                 >
                   {t.title}
                 </h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{t.description}</p>
+                <p className="text-white/40 text-sm leading-relaxed">{t.description}</p>
                 {t.slug && (
                   <span className="inline-block mt-3 text-[#c9a84c] text-xs font-medium">
                     Learn more →
@@ -73,14 +73,14 @@ export default async function Expertise() {
               <Link
                 key={t.title}
                 href={`/services/${t.slug}`}
-                className="bg-white rounded-2xl p-6 border border-gray-100 hover:border-[#2e86c1] hover:shadow-lg transition-all group block"
+                className="bg-[#141414] rounded-2xl p-6 border border-[#1e1e1e] hover:border-[#c9a84c]/40 hover:bg-[#171717] transition-all group block"
               >
                 {inner}
               </Link>
             ) : (
               <div
                 key={t.title}
-                className="bg-white rounded-2xl p-6 border border-gray-100 hover:border-[#2e86c1] hover:shadow-lg transition-all group"
+                className="bg-[#141414] rounded-2xl p-6 border border-[#1e1e1e] hover:border-[#c9a84c]/40 hover:bg-[#171717] transition-all group"
               >
                 {inner}
               </div>
@@ -93,7 +93,7 @@ export default async function Expertise() {
           <a
             href="#book"
             id="book"
-            className="inline-block bg-[#1b4f72] text-white px-10 py-4 rounded-full font-medium text-sm hover:bg-[#154460] transition-colors shadow-lg shadow-[#1b4f72]/20"
+            className="inline-block bg-[#e85535] text-white px-10 py-4 rounded-full font-semibold text-sm hover:bg-[#d44428] transition-colors shadow-lg shadow-[#e85535]/15"
           >
             Book Free Consultation
           </a>

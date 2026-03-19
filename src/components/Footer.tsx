@@ -1,22 +1,23 @@
 export default function Footer() {
   return (
-    <footer id="contact" className="bg-[#1b4f72] text-white">
+    <footer id="contact" className="bg-[#080808] text-white">
       {/* CTA Banner */}
-      <div className="bg-[#c9a84c] py-12 px-6 text-center">
+      <div className="bg-[#141414] border-t border-[#c9a84c]/20 py-14 px-4 sm:px-6 text-center">
+        <p className="text-[#c9a84c] text-[11px] font-semibold uppercase tracking-[0.28em] mb-3">Take the first step</p>
         <h3
           className="text-2xl md:text-3xl font-bold text-white mb-3"
           style={{ fontFamily: "var(--font-playfair)" }}
         >
           Start Your Smile Journey Today
         </h3>
-        <p className="text-white/80 text-sm mb-6 max-w-md mx-auto">
+        <p className="text-white/45 text-sm mb-8 max-w-md mx-auto">
           Book a free, no-obligation consultation with Dr. Firas and discover what
           a confident, beautiful smile can do for you.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <a
             href="mailto:info@drfiras.com"
-            className="bg-white text-[#1b4f72] px-8 py-3 rounded-full font-semibold text-sm hover:bg-gray-100 transition-colors"
+            className="bg-[#e85535] text-white px-8 py-3 rounded-full font-semibold text-sm hover:bg-[#d44428] transition-colors shadow-lg shadow-[#e85535]/15"
           >
             Book Free Consultation
           </a>
@@ -24,7 +25,7 @@ export default function Footer() {
             href="https://wa.me/"
             target="_blank"
             rel="noopener noreferrer"
-            className="border border-white text-white px-8 py-3 rounded-full font-semibold text-sm hover:bg-white/10 transition-colors"
+            className="border border-[#c9a84c]/40 text-[#c9a84c] px-8 py-3 rounded-full font-semibold text-sm hover:border-[#c9a84c] hover:bg-[#c9a84c]/5 transition-colors"
           >
             WhatsApp Us
           </a>
@@ -32,7 +33,7 @@ export default function Footer() {
       </div>
 
       {/* Main Footer */}
-      <div className="max-w-6xl mx-auto px-6 py-14 grid md:grid-cols-3 gap-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14 grid md:grid-cols-3 gap-12">
         {/* Brand */}
         <div>
           <div className="flex items-center gap-3 mb-4">

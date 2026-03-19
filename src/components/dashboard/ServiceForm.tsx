@@ -145,6 +145,17 @@ export function ServiceForm({
         </div>
         <div>
           <label className="block text-xs font-medium text-gray-600 mb-1">
+            Meta Keywords
+          </label>
+          <input
+            name="metaKeywords"
+            defaultValue={service?.metaKeywords ?? ""}
+            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1b4f72]/30 bg-white"
+            placeholder="e.g. composite bonding, cosmetic dentist london"
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-medium text-gray-600 mb-1">
             OG Image URL
           </label>
           <input

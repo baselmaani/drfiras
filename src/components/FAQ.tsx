@@ -1,7 +1,9 @@
 "use client";
 import { useState } from "react";
 
-const faqs = [
+export type FAQItem = { question: string; answer: string };
+
+const DEFAULT_FAQS: FAQItem[] = [
   {
     question: "What is composite bonding and how does it work?",
     answer:
@@ -39,18 +41,19 @@ const faqs = [
   },
 ];
 
-export default function FAQ() {
+export default function FAQ({ items }: { items?: FAQItem[] }) {
+  const faqs = items && items.length > 0 ? items : DEFAULT_FAQS;
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section id="faq" className="py-20 bg-[#f7f9fc]">
-      <div className="max-w-3xl mx-auto px-6">
+    <section id="faq" className="py-20 bg-[#0d0d0d]">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-14">
-          <p className="text-[#c9a84c] text-sm font-semibold uppercase tracking-widest mb-3">
+          <p className="text-[#c9a84c] text-[11px] font-semibold uppercase tracking-[0.28em] mb-3">
             Got Questions?
           </p>
           <h2
-            className="text-3xl md:text-4xl font-bold text-[#1b4f72]"
+            className="text-3xl md:text-4xl font-bold text-white"
             style={{ fontFamily: "var(--font-playfair)" }}
           >
             Frequently Asked Questions
@@ -61,19 +64,19 @@ export default function FAQ() {
           {faqs.map((faq, index) => (
             <div
               key={index}
-              className="bg-white rounded-2xl border border-gray-100 overflow-hidden"
+              className="bg-[#141414] rounded-2xl border border-[#1e1e1e] overflow-hidden"
             >
               <button
-                className="w-full flex items-center justify-between px-6 py-5 text-left gap-4 hover:bg-gray-50 transition-colors"
+                className="w-full flex items-center justify-between px-6 py-5 text-left gap-4 hover:bg-white/[0.02] transition-colors"
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
                 aria-expanded={openIndex === index}
               >
-                <span className="font-semibold text-[#1b4f72] text-[15px] leading-snug">
+                <span className="font-semibold text-white/85 text-[15px] leading-snug">
                   {faq.question}
                 </span>
-                <span className="flex-shrink-0 w-7 h-7 rounded-full bg-[#1b4f72]/8 flex items-center justify-center">
+                <span className="flex-shrink-0 w-7 h-7 rounded-full bg-[#c9a84c]/10 flex items-center justify-center">
                   <svg
-                    className={`w-4 h-4 text-[#1b4f72] transition-transform duration-200 ${
+                    className={`w-4 h-4 text-[#c9a84c] transition-transform duration-200 ${
                       openIndex === index ? "rotate-45" : ""
                     }`}
                     fill="none"
@@ -91,7 +94,7 @@ export default function FAQ() {
               </button>
 
               {openIndex === index && (
-                <div className="px-6 pb-5 text-gray-600 text-[15px] leading-relaxed border-t border-gray-100 pt-4">
+                <div className="px-6 pb-5 text-white/45 text-[15px] leading-relaxed border-t border-[#1e1e1e] pt-4">
                   {faq.answer}
                 </div>
               )}

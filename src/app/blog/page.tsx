@@ -1,3 +1,5 @@
+export const revalidate = 3600;
+
 import { db } from "@/lib/db";
 import type { Metadata } from "next";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";

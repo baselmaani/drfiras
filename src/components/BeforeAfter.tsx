@@ -15,19 +15,19 @@ function BeforeAfterCard({ title, treatment, beforeImage, afterImage }: {
 }) {
   const placeholder = (label: string, side: "before" | "after") => (
     <div className="relative">
-      <div className={`aspect-[3/4] flex items-center justify-center ${side === "before" ? "bg-gradient-to-br from-gray-200 to-gray-300" : "bg-gradient-to-br from-[#2e86c1]/20 to-[#1b4f72]/30"}`}>
-        <svg className={`w-10 h-10 ${side === "before" ? "text-gray-400" : "text-[#1b4f72]/40"}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-        </svg>
+        <div className={`aspect-[3/4] flex items-center justify-center ${side === "before" ? "bg-gradient-to-br from-[#1a1a1a] to-[#222]" : "bg-gradient-to-br from-[#c9a84c]/10 to-[#c9a84c]/5"}`}>
+          <svg className={`w-10 h-10 ${side === "before" ? "text-white/15" : "text-[#c9a84c]/30"}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <span className={`absolute top-2 ${side === "before" ? "left-2 bg-black/70" : "right-2 bg-[#c9a84c]"} text-white text-xs px-2 py-0.5 rounded-full font-medium`}>
+          {label}
+        </span>
       </div>
-      <span className={`absolute top-2 ${side === "before" ? "left-2 bg-black/60" : "right-2 bg-[#1b4f72]"} text-white text-xs px-2 py-0.5 rounded-full`}>
-        {label}
-      </span>
-    </div>
   );
 
   return (
-    <div className="rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+    <div className="rounded-2xl overflow-hidden border border-[#1e1e1e] hover:border-[#c9a84c]/30 transition-all">
       <div className="grid grid-cols-2">
         {beforeImage ? (
           <div className="relative">
@@ -40,15 +40,15 @@ function BeforeAfterCard({ title, treatment, beforeImage, afterImage }: {
           <div className="relative">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={afterImage} alt={`After - ${treatment}`} className="aspect-[3/4] w-full object-cover" />
-            <span className="absolute top-2 right-2 bg-[#1b4f72] text-white text-xs px-2 py-0.5 rounded-full">After</span>
+            <span className="absolute top-2 right-2 bg-[#c9a84c] text-white text-xs px-2 py-0.5 rounded-full font-medium">After</span>
           </div>
         ) : placeholder("After", "after")}
       </div>
-      <div className="p-4 bg-white">
-        <p className="text-sm font-semibold text-[#1b4f72]" style={{ fontFamily: "var(--font-playfair)" }}>
+      <div className="p-4 bg-[#141414]">
+        <p className="text-sm font-semibold text-white/80" style={{ fontFamily: "var(--font-playfair)" }}>
           {title}
         </p>
-        <p className="text-xs text-gray-400 mt-0.5">{treatment}</p>
+        <p className="text-xs text-white/30 mt-0.5">{treatment}</p>
       </div>
     </div>
   );
@@ -71,19 +71,19 @@ export default async function BeforeAfter() {
   }
 
   return (
-    <section id="before-after" className="py-20 bg-white">
-      <div className="max-w-6xl mx-auto px-6">
+    <section id="before-after" className="py-20 bg-[#0f0f0f]">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-14">
-          <p className="text-[#c9a84c] text-sm font-semibold uppercase tracking-widest mb-3">
+          <p className="text-[#c9a84c] text-[11px] font-semibold uppercase tracking-[0.28em] mb-3">
             Real Results
           </p>
           <h2
-            className="text-3xl md:text-4xl font-bold text-[#1b4f72] mb-4"
+            className="text-3xl md:text-4xl font-bold text-white mb-4"
             style={{ fontFamily: "var(--font-playfair)" }}
           >
             Before &amp; After
           </h2>
-          <p className="text-gray-500 max-w-xl mx-auto text-[15px] leading-relaxed">
+          <p className="text-white/40 max-w-xl mx-auto text-[15px] leading-relaxed">
             See the life-changing smile transformations Dr. Firas has achieved for
             his patients.
           </p>
