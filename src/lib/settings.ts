@@ -10,11 +10,19 @@ export const DEFAULT_SETTINGS: Record<string, string> = {
   specialty: "Cosmetic Dentist",
   phone: "020 1234 5678",
   email: "info@drfiras.com",
-  address: "123 Smile Street, London, EC1A 1BB",
+  address: "123 Smile Street, Dubai",
   instagram: "",
   facebook: "",
   whatsapp: "",
   bookingUrl: "#book",
+  mapUrl: "",
+  formEmail: "",
+  // SMTP
+  smtpHost: "",
+  smtpPort: "587",
+  smtpUser: "",
+  smtpPass: "",
+  smtpFrom: "",
   // Google Reviews
   googleReviewsEnabled: "true",
   googleRating: "5.0",
@@ -28,7 +36,7 @@ export const DEFAULT_SETTINGS: Record<string, string> = {
   instagramBio: "Cosmetic Dentist · Composite Bonding · Invisalign · Veneers ✨",
   instagramPosts: "",
   // Hero section
-  heroEyebrow: "Cosmetic Dentist London",
+  heroEyebrow: "Cosmetic Dentist Dubai",
   heroHeading: "Dr. Firas",
   heroBody:
     "Dr. Firas is an experienced cosmetic dentist specialising in composite bonding, Invisalign, and minimal-prep veneers. With a gentle, minimally invasive approach, he helps patients achieve beautiful, natural-looking smiles they can be proud of.",
@@ -64,7 +72,7 @@ export const DEFAULT_SETTINGS: Record<string, string> = {
   seoHomeDesc: "",
   seoHomeKeywords: "",
   seoBlogTitle: "Dental Tips & Advice | Dr. Firas",
-  seoBlogDesc: "Read expert dental tips and cosmetic dentistry advice from Dr. Firas Zoghieb, London cosmetic dentist.",
+  seoBlogDesc: "Read expert dental tips and cosmetic dentistry advice from Dr. Firas Zoghieb, Dubai cosmetic dentist.",
   seoBlogKeywords: "",
   seoServicesTitle: "Our Services | Dr. Firas",
   seoServicesDesc: "Explore the full range of cosmetic dental treatments offered by Dr. Firas Zoghieb.",

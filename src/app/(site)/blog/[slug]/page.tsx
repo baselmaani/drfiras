@@ -7,7 +7,6 @@ import { SITE_NAME, SITE_URL } from "@/lib/constants";
 import { ArticleJsonLd } from "@/components/JsonLd";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 
 export async function generateStaticParams() {
   const posts = await db.post.findMany({
@@ -127,8 +126,6 @@ export default async function BlogPostPage({
           </div>
         </div>
       </article>
-
-      <Footer />
     </>
   );
 }

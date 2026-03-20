@@ -17,11 +17,11 @@ export async function generateMetadata(): Promise<Metadata> {
   const raw = await getSettings();
   const s = { ...DEFAULT_SETTINGS, ...raw };
   return {
-    title: s.seoHomeTitle || `${s.doctorName} | ${s.specialty} London`,
-    description: s.seoHomeDesc || `${s.doctorName} is a ${s.specialty} in London specialising in composite bonding, Invisalign, and veneers.`,
+    title: s.seoHomeTitle || `${s.doctorName} | ${s.specialty} Dubai`,
+    description: s.seoHomeDesc || `${s.doctorName} is a ${s.specialty} in Dubai specialising in composite bonding, Invisalign, and veneers.`,
     keywords: s.seoHomeKeywords || undefined,
     openGraph: {
-      title: s.seoHomeTitle || `${s.doctorName} | ${s.specialty} London`,
+      title: s.seoHomeTitle || `${s.doctorName} | ${s.specialty} Dubai`,
       description: s.seoHomeDesc || "",
     },
   };
@@ -39,7 +39,6 @@ export default function Home() {
       <GoogleReviews />
       <InstagramFeed />
       <FAQSection />
-      <Footer />
     </>
   );
 }

@@ -6,7 +6,7 @@ const DEFAULT_ITEMS: GlanceItem[] = [
   { label: "GDC Number", value: "123456" },
   { label: "Qualifications", value: "BDS, MSc Cosmetic Dentistry" },
   { label: "Languages Spoken", value: "English, Arabic" },
-  { label: "Clinic Location", value: "London & Online" },
+  { label: "Clinic Location", value: "Dubai & Online" },
   { label: "Specialisation", value: "Composite Bonding, Invisalign, Veneers" },
   { label: "Experience", value: "10+ Years" },
 ];
@@ -26,7 +26,7 @@ export default async function AtAGlance() {
 
   return (
     <section className="bg-white py-16 border-b border-gray-100" id="glance">
-      <div className="max-w-6xl mx-auto px-6">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-12">
           <p className="text-[#c9a84c] text-sm font-semibold uppercase tracking-widest mb-2">
             Quick Overview

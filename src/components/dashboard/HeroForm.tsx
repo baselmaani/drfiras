@@ -1,6 +1,7 @@
 "use client";
 import { useActionState } from "react";
 import { updateSettings } from "@/lib/actions/settings";
+import { ImageUpload } from "./ImageUpload";
 
 type Values = Record<string, string>;
 
@@ -18,7 +19,7 @@ export function HeroForm({ values }: { values: Values }) {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1.5">Eyebrow text</label>
-        <input name="heroEyebrow" defaultValue={values.heroEyebrow ?? ""} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1b4f72]/30" placeholder="Cosmetic Dentist London" />
+        <input name="heroEyebrow" defaultValue={values.heroEyebrow ?? ""} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1b4f72]/30" placeholder="Cosmetic Dentist Dubai" />
       </div>
 
       <div>
@@ -50,10 +51,11 @@ export function HeroForm({ values }: { values: Values }) {
         </div>
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1.5">Portrait Image URL</label>
-        <input name="heroImageUrl" type="url" defaultValue={values.heroImageUrl ?? ""} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1b4f72]/30" placeholder="https://... (leave blank to show silhouette)" />
-      </div>
+      <ImageUpload
+        name="heroImageUrl"
+        label="Portrait Image"
+        defaultValue={values.heroImageUrl ?? ""}
+      />
 
       <div className="grid sm:grid-cols-2 gap-4">
         <div>

@@ -30,6 +30,8 @@ export async function createService(
         description,
         content: (formData.get("content") as string) || null,
         icon: (formData.get("icon") as string) || null,
+        heroImage: (formData.get("heroImage") as string) || null,
+        caseImages: (formData.get("caseImages") as string) || null,
         order: parseInt((formData.get("order") as string) || "0"),
         published: formData.get("published") === "on",
         metaTitle: (formData.get("metaTitle") as string) || null,
@@ -70,6 +72,8 @@ export async function updateService(
         description,
         content: (formData.get("content") as string) || null,
         icon: (formData.get("icon") as string) || null,
+        heroImage: (formData.get("heroImage") as string) || null,
+        caseImages: (formData.get("caseImages") as string) || null,
         order: parseInt((formData.get("order") as string) || "0"),
         published: formData.get("published") === "on",
         metaTitle: (formData.get("metaTitle") as string) || null,
@@ -78,8 +82,13 @@ export async function updateService(
         ogImage: (formData.get("ogImage") as string) || null,
       },
     });
-  } catch {
-    return { error: "Failed to update. Slug may already be taken." };
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    if (msg.includes("Unique constraint") || msg.includes("unique")) {
+      return { error: "That slug is already used by another service." };
+    }
+    console.error("updateService error:", msg);
+    return { error: `Failed to update: ${msg}` };
   }
 
   revalidatePath("/dashboard/services");

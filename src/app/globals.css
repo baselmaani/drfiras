@@ -20,14 +20,47 @@
   --font-heading: var(--font-playfair);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-inter), "Helvetica Neue", Arial, sans-serif;
+  overflow-x: hidden;
 }
 
 h1, h2, h3 {
   font-family: var(--font-playfair), Georgia, serif;
+}
+
+::placeholder {
+  color: #111111;
+  opacity: 1;
+}
+
+input, textarea, select {
+  color: #111111;
+}
+
+a, button, [role="button"], label[for], select, [tabindex]:not([tabindex="-1"]) {
+  cursor: pointer;
+}
+
+#book input::placeholder,
+#book textarea::placeholder,
+.contact-form-dark input::placeholder,
+.contact-form-dark textarea::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+  opacity: 1;
+}
+
+#book input,
+#book textarea,
+.contact-form-dark input,
+.contact-form-dark textarea {
+  color: #ffffff;
 }
 
 * {

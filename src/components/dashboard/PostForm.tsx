@@ -1,6 +1,7 @@
 "use client";
 import { useActionState } from "react";
 import type { Post } from "@/generated/prisma/client";
+import { ImageUpload } from "./ImageUpload";
 
 type ActionState = { error: string } | null;
 type PostAction = (prevState: ActionState, formData: FormData) => Promise<ActionState>;
@@ -91,18 +92,11 @@ export function PostForm({
         />
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1.5">
-          Cover Image URL
-        </label>
-        <input
-          name="coverImage"
-          type="url"
-          defaultValue={post?.coverImage ?? ""}
-          className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1b4f72]/30 focus:border-[#1b4f72]"
-          placeholder="https://..."
-        />
-      </div>
+      <ImageUpload
+        name="coverImage"
+        label="Cover Image"
+        defaultValue={post?.coverImage ?? ""}
+      />
 
       {/* SEO */}
       <div className="border border-gray-100 rounded-2xl p-5 space-y-4 bg-gray-50">
@@ -140,17 +134,16 @@ export function PostForm({
             name="metaKeywords"
             defaultValue={post?.metaKeywords ?? ""}
             className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1b4f72]/30 bg-white"
-            placeholder="e.g. composite bonding, cosmetic dentist london"
+            placeholder="e.g. composite bonding, cosmetic dentist dubai"
           />
         </div>
         <div>
           <label className="block text-xs font-medium text-gray-600 mb-1">
-            OG Image URL
+            OG Image
           </label>
-          <input
+          <ImageUpload
             name="ogImage"
             defaultValue={post?.ogImage ?? ""}
-            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1b4f72]/30 bg-white"
           />
         </div>
       </div>

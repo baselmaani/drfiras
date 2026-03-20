@@ -50,7 +50,7 @@ export function PageSeoForm({ values }: { values: Values }) {
               name={page.kwKey}
               defaultValue={values[page.kwKey] ?? ""}
               className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1b4f72]/30 bg-white"
-              placeholder="e.g. composite bonding london, cosmetic dentist"
+              placeholder="e.g. composite bonding dubai, cosmetic dentist"
             />
           </div>
         </div>

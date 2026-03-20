@@ -42,12 +42,12 @@ const leftNav = [
   { href: "#expertise", label: "Treatments" },
   { href: "#before-after", label: "Smile Gallery" },
   { href: "/blog", label: "Blog" },
-  { href: "#about", label: "About" },
+  { href: "/about", label: "About" },
 ];
 
 const rightNav = [
   { href: "#faq", label: "FAQ" },
-  { href: "#contact", label: "Contact" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export default function Navbar() {
@@ -56,7 +56,7 @@ export default function Navbar() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
       {/* ── Utility Bar ─────────────────────────────────────────── */}
-      <div className="bg-[#080808] border-b border-white/[0.05]">
+      <div className="hidden sm:block bg-[#080808] border-b border-white/[0.05]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-8 flex items-center justify-between">
           <div className="flex items-center gap-4 text-[11px] text-white/35 tracking-wide">
             <a href={PHONE} className="flex items-center gap-1.5 hover:text-[#c9a84c] transition-colors duration-200">

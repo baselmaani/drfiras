@@ -6,7 +6,7 @@ export default async function Hero() {
   const s = { ...DEFAULT_SETTINGS, ...raw };
 
   return (
-    <section className="relative min-h-screen bg-[#0d0d0d] overflow-hidden flex items-center pt-[108px]">
+    <section className="relative min-h-screen bg-[#0d0d0d] overflow-hidden flex items-center pt-[76px] sm:pt-[108px]">
 
       {/* ── Background: repeating pill-outline pattern ── */}
       <div
@@ -41,7 +41,7 @@ export default async function Hero() {
 
           {/* Heading */}
           <h1
-            className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-[1.04] mb-7"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.04] mb-7"
             style={{ fontFamily: "var(--font-playfair)" }}
           >
             {s.heroHeading}

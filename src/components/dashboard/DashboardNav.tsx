@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { logoutAction } from "@/lib/auth";
+import { useState } from "react";
 
 const topItems = [
   {
@@ -104,12 +105,13 @@ const settingsItem = {
   ),
 };
 
-function NavLink({ href, label, icon, exact = false }: { href: string; label: string; icon: React.ReactNode; exact?: boolean }) {
+function NavLink({ href, label, icon, exact = false, onClick }: { href: string; label: string; icon: React.ReactNode; exact?: boolean; onClick?: () => void }) {
   const pathname = usePathname();
   const isActive = exact ? pathname === href : pathname.startsWith(href);
   return (
     <Link
       href={href}
+      onClick={onClick}
       className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
         isActive ? "bg-white/15 text-white" : "text-white/60 hover:text-white hover:bg-white/10"
       }`}
@@ -121,8 +123,11 @@ function NavLink({ href, label, icon, exact = false }: { href: string; label: st
 }
 
 export function DashboardNav() {
-  return (
-    <aside className="fixed top-0 left-0 h-screen w-56 bg-[#1b4f72] flex flex-col z-40">
+  const [open, setOpen] = useState(false);
+  const close = () => setOpen(false);
+
+  const navContent = (
+    <>
       {/* Logo */}
       <div className="px-5 py-5 border-b border-white/10">
         <div className="flex items-center gap-3">
@@ -139,21 +144,21 @@ export function DashboardNav() {
       {/* Nav */}
       <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
         {topItems.map((item) => (
-          <NavLink key={item.href} href={item.href} label={item.label} icon={item.icon} exact />
+          <NavLink key={item.href} href={item.href} label={item.label} icon={item.icon} exact onClick={close} />
         ))}
 
         <p className="text-white/25 text-[10px] font-semibold uppercase tracking-widest px-3 pt-4 pb-1">Content</p>
         {contentItems.map((item) => (
-          <NavLink key={item.href} href={item.href} label={item.label} icon={item.icon} />
+          <NavLink key={item.href} href={item.href} label={item.label} icon={item.icon} onClick={close} />
         ))}
 
         <p className="text-white/25 text-[10px] font-semibold uppercase tracking-widest px-3 pt-4 pb-1">Media</p>
         {mediaItems.map((item) => (
-          <NavLink key={item.href} href={item.href} label={item.label} icon={item.icon} />
+          <NavLink key={item.href} href={item.href} label={item.label} icon={item.icon} onClick={close} />
         ))}
 
         <p className="text-white/25 text-[10px] font-semibold uppercase tracking-widest px-3 pt-4 pb-1">Config</p>
-        <NavLink href={settingsItem.href} label={settingsItem.label} icon={settingsItem.icon} />
+        <NavLink href={settingsItem.href} label={settingsItem.label} icon={settingsItem.icon} onClick={close} />
       </nav>
 
       {/* Footer */}
@@ -180,7 +185,51 @@ export function DashboardNav() {
           </button>
         </form>
       </div>
-    </aside>
+    </>
+  );
+
+  return (
+    <>
+      {/* ── Desktop sidebar ─────────────────────────────── */}
+      <aside className="hidden lg:flex fixed top-0 left-0 h-screen w-56 bg-[#1b4f72] flex-col z-40">
+        {navContent}
+      </aside>
+
+      {/* ── Mobile top bar ──────────────────────────────── */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-[#1b4f72] flex items-center justify-between px-4 h-14">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
+            <span className="text-white font-bold text-xs">DF</span>
+          </div>
+          <span className="text-white font-semibold text-sm">Dr. Firas CMS</span>
+        </div>
+        <button
+          onClick={() => setOpen(!open)}
+          aria-label="Toggle menu"
+          aria-expanded={open}
+          className="text-white/70 hover:text-white p-1"
+        >
+          {open ? (
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          ) : (
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          )}
+        </button>
+      </div>
+
+      {/* ── Mobile drawer ───────────────────────────────── */}
+      {open && (
+        <>
+          <div className="lg:hidden fixed inset-0 bg-black/40 z-40" onClick={close} />
+          <aside className="lg:hidden fixed top-0 left-0 h-screen w-64 bg-[#1b4f72] flex flex-col z-50">
+            {navContent}
+          </aside>
+        </>
+      )}
+    </>
   );
 }
-

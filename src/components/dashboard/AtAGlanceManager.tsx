@@ -1,5 +1,6 @@
 "use client";
 import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { updateSettings } from "@/lib/actions/settings";
 
 export type GlanceItem = { label: string; value: string };
@@ -13,33 +14,41 @@ export function AtAGlanceManager({ initial }: { initial: GlanceItem[] }) {
   const [adding, setAdding] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
-  function save() {
+  function save(currentItems = items) {
     const fd = new FormData();
-    fd.append("glanceItems", JSON.stringify(items));
+    fd.append("glanceItems", JSON.stringify(currentItems));
     startTransition(async () => {
       const result = await updateSettings(null, fd);
-      setMessage(result.success ? "Saved!" : (result.error ?? "Error"));
+      setMessage(result.success ? "Saved!" : (result.error ?? "Error saving. Check your connection."));
+      if (result.success) router.refresh();
       setTimeout(() => setMessage(null), 3000);
     });
   }
 
   function addItem() {
     if (!draft.label.trim()) return;
-    setItems((prev) => [...prev, { ...draft }]);
+    const updated = [...items, { ...draft }];
+    setItems(updated);
     setDraft(EMPTY);
     setAdding(false);
+    save(updated);
   }
 
   function updateItem() {
     if (editing === null || !draft.label.trim()) return;
-    setItems((prev) => prev.map((item, i) => (i === editing ? { ...draft } : item)));
+    const updated = items.map((item, i) => (i === editing ? { ...draft } : item));
+    setItems(updated);
     setEditing(null);
     setDraft(EMPTY);
+    save(updated);
   }
 
   function deleteItem(index: number) {
-    setItems((prev) => prev.filter((_, i) => i !== index));
+    const updated = items.filter((_, i) => i !== index);
+    setItems(updated);
+    save(updated);
   }
 
   function startEdit(index: number) {
@@ -121,9 +130,9 @@ export function AtAGlanceManager({ initial }: { initial: GlanceItem[] }) {
         </button>
       )}
 
-      <button onClick={save} disabled={isPending} className="bg-[#1b4f72] text-white px-8 py-3 rounded-xl font-medium text-sm hover:bg-[#154460] transition-colors disabled:opacity-60">
-        {isPending ? "Saving…" : "Save All Items"}
-      </button>
+      {isPending && (
+        <p className="text-sm text-gray-400">Saving…</p>
+      )}
     </div>
   );
 }

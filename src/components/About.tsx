@@ -72,7 +72,7 @@ export default async function About() {
           </ul>
 
           {/* Stats row */}
-          <div className="mt-10 grid grid-cols-3 gap-4">
+          <div className="mt-10 grid grid-cols-3 gap-2 sm:gap-4">
             {[
               { number: s.aboutStat1Number, label: s.aboutStat1Label },
               { number: s.aboutStat2Number, label: s.aboutStat2Label },

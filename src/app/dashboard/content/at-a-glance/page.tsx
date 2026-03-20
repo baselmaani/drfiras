@@ -9,7 +9,7 @@ export default async function AtAGlancePage() {
     { label: "GDC Number", value: "123456" },
     { label: "Qualifications", value: "BDS, MSc Cosmetic Dentistry" },
     { label: "Languages Spoken", value: "English, Arabic" },
-    { label: "Clinic Location", value: "London & Online" },
+    { label: "Clinic Location", value: "Dubai & Online" },
     { label: "Specialisation", value: "Composite Bonding, Invisalign, Veneers" },
     { label: "Experience", value: "10+ Years" },
   ];

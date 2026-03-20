@@ -75,7 +75,7 @@ export function SettingsForm({ initialData }: { initialData: Settings }) {
           {field("email", "Email", "email", "hello@drfiras.com")}
         </div>
         <div className="mt-4">
-          {field("address", "Address", "textarea", "123 Harley St, London W1G 6BA")}
+          {field("address", "Address", "textarea", "123 Street, Dubai")}
         </div>
       </section>
 
@@ -103,6 +103,44 @@ export function SettingsForm({ initialData }: { initialData: Settings }) {
           {field("whatsapp", "WhatsApp Link", "url", "https://wa.me/447700000000")}
           {field("bookingUrl", "Online Booking URL", "url", "https://calendly.com/drfiras")}
         </div>
+      </section>
+
+      {/* Contact Form & Map */}
+      <section>
+        <h2 className="text-base font-semibold text-gray-800 mb-1 pb-2 border-b border-gray-100">
+          Contact Form &amp; Map
+        </h2>
+        <p className="text-xs text-gray-400 mb-4">
+          The contact form sends to your clinic email above. Paste a Google Maps embed URL to show the map on the contact section.
+        </p>
+        <div className="space-y-4">
+          {field("formEmail", "Form Destination Email", "email", "hello@drfiras.com")}
+          {field("mapUrl", "Google Maps Embed URL", "url", "https://maps.google.com/maps?q=...&output=embed")}
+        </div>
+        <p className="mt-3 text-xs text-gray-400">
+          To get the embed URL: open Google Maps → search your clinic → Share → Embed a map → copy the <code className="bg-gray-100 px-1 rounded">src</code> value from the iframe code.
+        </p>
+      </section>
+
+      {/* SMTP */}
+      <section>
+        <h2 className="text-base font-semibold text-gray-800 mb-1 pb-2 border-b border-gray-100">
+          SMTP Email Settings
+        </h2>
+        <p className="text-xs text-gray-400 mb-4">
+          Configure your outgoing mail server so contact form submissions are sent as real emails.
+          Common providers: Gmail (smtp.gmail.com, port 587), Outlook (smtp.office365.com, port 587), custom hosting.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {field("smtpHost", "SMTP Host", "text", "smtp.gmail.com")}
+          {field("smtpPort", "SMTP Port", "text", "587")}
+          {field("smtpUser", "SMTP Username / Email", "email", "you@gmail.com")}
+          {field("smtpPass", "SMTP Password / App Password", "text", "")}
+          {field("smtpFrom", "From Name & Address", "text", "Dr. Firas <hello@drfiras.com>")}
+        </div>
+        <p className="mt-3 text-xs text-gray-400">
+          For Gmail, use an <strong>App Password</strong> (not your main password): Google Account → Security → 2-Step Verification → App passwords.
+        </p>
       </section>
 
       {/* SEO */}

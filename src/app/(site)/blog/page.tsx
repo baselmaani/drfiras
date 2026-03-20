@@ -5,7 +5,6 @@ import type { Metadata } from "next";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Dental Tips & Advice",
@@ -39,7 +38,7 @@ export default async function BlogPage() {
 
       {/* Header */}
       <section className="pt-32 pb-12 bg-[#f7f9fc]">
-        <div className="max-w-5xl mx-auto px-6">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <h1
             className="text-4xl md:text-5xl font-bold text-[#1b4f72] mb-4"
             style={{ fontFamily: "var(--font-playfair)" }}
@@ -54,7 +53,7 @@ export default async function BlogPage() {
 
       {/* Posts Grid */}
       <section className="py-16">
-        <div className="max-w-5xl mx-auto px-6">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
           {posts.length === 0 ? (
             <p className="text-gray-500 text-center py-20">No  published yet. Check back soon.</p>
           ) : (
@@ -103,8 +102,6 @@ export default async function BlogPage() {
           )}
         </div>
       </section>
-
-      <Footer />
     </>
   );
 }

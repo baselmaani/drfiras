@@ -1,6 +1,7 @@
 "use client";
 import { useActionState } from "react";
 import type { BeforeAfter } from "@/generated/prisma/client";
+import { ImageUpload } from "./ImageUpload";
 
 type ActionState = { error: string } | null;
 type BAAction = (prevState: ActionState, formData: FormData) => Promise<ActionState>;
@@ -49,33 +50,19 @@ export function BeforeAfterForm({
         </div>
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1.5">
-          Before Image URL <span className="text-red-500">*</span>
-        </label>
-        <input
-          name="beforeImage"
-          required
-          type="url"
-          defaultValue={item?.beforeImage}
-          className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1b4f72]/30 focus:border-[#1b4f72]"
-          placeholder="https://..."
-        />
-      </div>
+      <ImageUpload
+        name="beforeImage"
+        label="Before Image"
+        defaultValue={item?.beforeImage ?? ""}
+        required
+      />
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1.5">
-          After Image URL <span className="text-red-500">*</span>
-        </label>
-        <input
-          name="afterImage"
-          required
-          type="url"
-          defaultValue={item?.afterImage}
-          className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1b4f72]/30 focus:border-[#1b4f72]"
-          placeholder="https://..."
-        />
-      </div>
+      <ImageUpload
+        name="afterImage"
+        label="After Image"
+        defaultValue={item?.afterImage ?? ""}
+        required
+      />
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1.5">
