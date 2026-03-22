@@ -2,6 +2,7 @@
 import { useActionState, useState } from "react";
 import type { Service } from "@/generated/prisma/client";
 import { ImageUpload } from "./ImageUpload";
+import { RichTextEditor } from "./RichTextEditor";
 
 type ActionState = { error: string } | null;
 type ServiceAction = (prevState: ActionState, formData: FormData) => Promise<ActionState>;
@@ -125,13 +126,12 @@ export function ServiceForm({
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1.5">
-          Full Content (HTML or plain text)
+          Full Content
         </label>
-        <textarea
+        <RichTextEditor
           name="content"
-          rows={8}
           defaultValue={service?.content ?? ""}
-          className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1b4f72]/30 focus:border-[#1b4f72] resize-y font-mono"
+          placeholder="Start writing about this service… Use H2 for main sections (Benefits, Procedure, FAQ) and H3 for sub-points."
         />
       </div>
 

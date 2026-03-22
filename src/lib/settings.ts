@@ -6,12 +6,12 @@ export async function getSettings(): Promise<Record<string, string>> {
 }
 
 export const DEFAULT_SETTINGS: Record<string, string> = {
-  doctorName: "Dr. Firas",
+  doctorName: "Dr. Firas Zoghieb",
   specialty: "Cosmetic Dentist",
-  phone: "020 1234 5678",
-  email: "info@drfiras.com",
-  address: "123 Smile Street, Dubai",
-  instagram: "",
+  phone: "+971 50 869 6919",
+  email: "info@drfiraszoghieb.com",
+  address: "Happiness St, Al Wasl, Dubai",
+  instagram: "https://www.instagram.com/dr.firaszoghieb",
   facebook: "",
   whatsapp: "",
   bookingUrl: "#book",
@@ -26,7 +26,7 @@ export const DEFAULT_SETTINGS: Record<string, string> = {
   // Google Reviews
   googleReviewsEnabled: "true",
   googleRating: "5.0",
-  googleReviewCount: "100+",
+  googleReviewCount: "1",
   googleReviewsUrl: "",
   googleReviews: "",
   // Instagram
@@ -77,4 +77,10 @@ export const DEFAULT_SETTINGS: Record<string, string> = {
   seoServicesTitle: "Our Services | Dr. Firas",
   seoServicesDesc: "Explore the full range of cosmetic dental treatments offered by Dr. Firas Zoghieb.",
   seoServicesKeywords: "",
+  seoAboutTitle: "",
+  seoAboutDesc: "",
+  seoAboutKeywords: "",
+  seoContactTitle: "Contact Us | Dr. Firas",
+  seoContactDesc: "Get in touch with Dr. Firas' clinic in Dubai. Book a consultation or send us a message.",
+  seoContactKeywords: "",
 };

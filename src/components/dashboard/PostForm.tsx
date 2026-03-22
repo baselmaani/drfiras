@@ -2,6 +2,7 @@
 import { useActionState } from "react";
 import type { Post } from "@/generated/prisma/client";
 import { ImageUpload } from "./ImageUpload";
+import { RichTextEditor } from "./RichTextEditor";
 
 type ActionState = { error: string } | null;
 type PostAction = (prevState: ActionState, formData: FormData) => Promise<ActionState>;
@@ -82,13 +83,10 @@ export function PostForm({
         <label className="block text-sm font-medium text-gray-700 mb-1.5">
           Content <span className="text-red-500">*</span>
         </label>
-        <textarea
+        <RichTextEditor
           name="content"
-          required
-          rows={16}
-          defaultValue={post?.content}
-          className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1b4f72]/30 focus:border-[#1b4f72] resize-y font-mono"
-          placeholder="Write your post content here (HTML supported)"
+          defaultValue={post?.content ?? ""}
+          placeholder="Start writing your post… Use H2 for main sections and H3 for sub-points. Link to related services with 🔗 Link."
         />
       </div>
 

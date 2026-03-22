@@ -43,7 +43,7 @@ export default async function AtAGlance() {
           {items.map((item) => (
             <div
               key={item.label}
-              className="flex items-start gap-4 p-5 rounded-2xl border border-white/[0.06] hover:border-[#c9a84c]/30 hover:bg-white/[0.02] transition-all duration-200 bg-[#141414]"
+              className="flex items-start gap-4 p-5 rounded-2xl border border-white/[0.06] hover:border-[#c9a84c]/30 hover:bg-[#1c1c1c] transition-all duration-200 bg-[#141414]"
             >
               <div className="w-11 h-11 rounded-full bg-[#c9a84c]/10 flex items-center justify-center text-[#c9a84c] flex-shrink-0">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

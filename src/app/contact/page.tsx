@@ -6,10 +6,15 @@ import Navbar from "@/components/Navbar";
 import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
 
-export const metadata: Metadata = {
-  title: "Contact Us | Dr. Firas",
-  description: "Get in touch with Dr. Firas' clinic in Dubai. Book a consultation or send us a message.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const raw = await getSettings();
+  const s = { ...DEFAULT_SETTINGS, ...raw };
+  return {
+    title: s.seoContactTitle || "Contact Us | Dr. Firas",
+    description: s.seoContactDesc || "Get in touch with Dr. Firas' clinic in Dubai. Book a consultation or send us a message.",
+    ...(s.seoContactKeywords && { keywords: s.seoContactKeywords }),
+  };
+}
 
 export default async function ContactPage() {
   const raw = await getSettings();

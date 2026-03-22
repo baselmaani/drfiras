@@ -12,6 +12,7 @@ import GoogleReviews from "@/components/GoogleReviews";
 import InstagramFeed from "@/components/InstagramFeed";
 import FAQSection from "@/components/FAQSection";
 import Footer from "@/components/Footer";
+import { FAQJsonLd } from "@/components/JsonLd";
 
 export async function generateMetadata(): Promise<Metadata> {
   const raw = await getSettings();
@@ -27,12 +28,18 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function Home() {
+export default async function Home() {
+  const raw = await getSettings();
+  const s = { ...DEFAULT_SETTINGS, ...raw };
+  let faqItems: { question: string; answer: string }[] = [];
+  if (s.faqItems) {
+    try { faqItems = JSON.parse(s.faqItems); } catch { /* keep empty */ }
+  }
   return (
     <>
+      <FAQJsonLd items={faqItems} />
       <Navbar />
       <Hero />
-      <AtAGlance />
       <About />
       <Expertise />
       <BeforeAfter />

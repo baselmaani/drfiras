@@ -8,16 +8,22 @@ interface DentistJsonLdProps {
   address?: string;
   description?: string;
   image?: string;
+  rating?: string;
+  reviewCount?: string;
+  instagram?: string;
 }
 
 export function DentistJsonLd({
-  doctorName = "Dr. Firas",
+  doctorName = "Dr. Firas Zoghieb",
   specialty = "Cosmetic Dentist",
   phone,
   email,
   address,
   description,
   image,
+  rating,
+  reviewCount,
+  instagram,
 }: DentistJsonLdProps) {
   const schema = {
     "@context": "https://schema.org",
@@ -25,23 +31,42 @@ export function DentistJsonLd({
       {
         "@type": ["Dentist", "LocalBusiness"],
         "@id": `${SITE_URL}/#dentist`,
-        name: doctorName,
+        name: `${doctorName} | Composite Bonding - Dubai`,
         description:
           description ??
-          `${doctorName} is a specialist ${specialty.toLowerCase()} offering composite bonding, Invisalign, veneers, and smile makeovers.`,
+          `${doctorName} is a specialist ${specialty.toLowerCase()} in Dubai offering composite bonding, Invisalign, veneers, and smile makeovers.`,
         url: SITE_URL,
         ...(phone && { telephone: phone }),
         ...(email && { email }),
-        ...(address && {
-          address: {
-            "@type": "PostalAddress",
-            streetAddress: address,
-          },
-        }),
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: address ?? "Happiness St, Al Wasl",
+          addressLocality: "Dubai",
+          addressCountry: "AE",
+        },
         ...(image && { image }),
         medicalSpecialty: "Dentistry",
         priceRange: "££",
-        sameAs: [],
+        openingHoursSpecification: [
+          {
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+            opens: "11:00",
+            closes: "20:00",
+          },
+        ],
+        sameAs: [
+          instagram ?? "https://www.instagram.com/dr.firaszoghieb",
+        ].filter(Boolean),
+        ...(rating && reviewCount && {
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: rating,
+            reviewCount: reviewCount,
+            bestRating: "5",
+            worstRating: "1",
+          },
+        }),
       },
       {
         "@type": "WebSite",
@@ -49,6 +74,17 @@ export function DentistJsonLd({
         url: SITE_URL,
         name: SITE_NAME,
         publisher: { "@id": `${SITE_URL}/#dentist` },
+      },
+      {
+        "@type": "Person",
+        "@id": `${SITE_URL}/#person`,
+        name: doctorName,
+        jobTitle: specialty,
+        url: `${SITE_URL}/about`,
+        worksFor: { "@id": `${SITE_URL}/#dentist` },
+        sameAs: [
+          instagram ?? "https://www.instagram.com/dr.firaszoghieb",
+        ].filter(Boolean),
       },
     ],
   };
@@ -66,29 +102,47 @@ export function ServiceJsonLd({
   description,
   url,
   image,
+  slug,
 }: {
   name: string;
   description: string;
   url: string;
   image?: string;
+  slug?: string;
 }) {
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "MedicalProcedure",
-    name,
-    description,
-    url,
-    ...(image && { image }),
-    procedureType: "Noninvasive",
-    followup: "Consultation with Dr. Firas",
-    provider: { "@id": `${SITE_URL}/#dentist` },
-  };
+  const schemas = [
+    {
+      "@context": "https://schema.org",
+      "@type": "MedicalProcedure",
+      name,
+      description,
+      url,
+      ...(image && { image }),
+      procedureType: "Noninvasive",
+      followup: `Consultation with ${SITE_NAME}`,
+      provider: { "@id": `${SITE_URL}/#dentist` },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+        { "@type": "ListItem", position: 2, name: "Services", item: `${SITE_URL}/services` },
+        { "@type": "ListItem", position: 3, name, item: url },
+      ],
+    },
+  ];
 
   return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-    />
+    <>
+      {schemas.map((schema, i) => (
+        <script
+          key={i}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      ))}
+    </>
   );
 }
 
@@ -107,19 +161,57 @@ export function ArticleJsonLd({
   publishedAt?: Date | null;
   updatedAt: Date;
 }) {
+  const schemas = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: title,
+      ...(description && { description }),
+      url,
+      ...(image && { image }),
+      ...(publishedAt && { datePublished: publishedAt.toISOString() }),
+      dateModified: updatedAt.toISOString(),
+      author: { "@id": `${SITE_URL}/#person` },
+      publisher: { "@id": `${SITE_URL}/#dentist` },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+        { "@type": "ListItem", position: 2, name: "Blog", item: `${SITE_URL}/blog` },
+        { "@type": "ListItem", position: 3, name: title, item: url },
+      ],
+    },
+  ];
+
+  return (
+    <>
+      {schemas.map((schema, i) => (
+        <script
+          key={i}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      ))}
+    </>
+  );
+}
+
+export function FAQJsonLd({ items }: { items: { question: string; answer: string }[] }) {
+  if (!items.length) return null;
   const schema = {
     "@context": "https://schema.org",
-    "@type": "Article",
-    headline: title,
-    ...(description && { description }),
-    url,
-    ...(image && { image }),
-    ...(publishedAt && { datePublished: publishedAt.toISOString() }),
-    dateModified: updatedAt.toISOString(),
-    author: { "@id": `${SITE_URL}/#dentist` },
-    publisher: { "@id": `${SITE_URL}/#dentist` },
+    "@type": "FAQPage",
+    mainEntity: items.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
   };
-
   return (
     <script
       type="application/ld+json"
@@ -127,3 +219,4 @@ export function ArticleJsonLd({
     />
   );
 }
+

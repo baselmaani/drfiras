@@ -9,6 +9,8 @@ export function PageSeoForm({ values }: { values: Values }) {
 
   const pages = [
     { label: "Homepage", titleKey: "seoHomeTitle", descKey: "seoHomeDesc", kwKey: "seoHomeKeywords" },
+    { label: "About page", titleKey: "seoAboutTitle", descKey: "seoAboutDesc", kwKey: "seoAboutKeywords" },
+    { label: "Contact page", titleKey: "seoContactTitle", descKey: "seoContactDesc", kwKey: "seoContactKeywords" },
     { label: "Blog listing", titleKey: "seoBlogTitle", descKey: "seoBlogDesc", kwKey: "seoBlogKeywords" },
     { label: "Services listing", titleKey: "seoServicesTitle", descKey: "seoServicesDesc", kwKey: "seoServicesKeywords" },
   ] as const;

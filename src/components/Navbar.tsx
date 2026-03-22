@@ -110,7 +110,7 @@ export default function Navbar() {
                 {item.label}
               </Link>
             ))}
-            <a href={WA} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-[13px] font-medium text-white/45 hover:text-[#c9a84c] transition-colors duration-200 tracking-wide">
+            <a href={WA} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 border border-[#c9a84c]/45 text-[#c9a84c] text-[12px] font-medium px-5 py-2 rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200 tracking-wide">
               <WAIcon className="w-3.5 h-3.5" />
               WhatsApp
             </a>
@@ -139,9 +139,9 @@ export default function Navbar() {
             </Link>
           ))}
           <div className="flex flex-col gap-3 pt-4">
-            <a href={WA} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white/50 hover:text-[#c9a84c] text-sm transition-colors">
-              <WAIcon className="w-4 h-4" />
-              WhatsApp us
+            <a href={WA} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 border border-[#c9a84c]/45 text-[#c9a84c] text-[12px] font-medium px-5 py-2 rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200 tracking-wide">
+              <WAIcon className="w-3.5 h-3.5" />
+              WhatsApp
             </a>
             <Link href="#book" onClick={() => setOpen(false)} className="bg-[#e85535] text-white text-center py-3.5 rounded-full font-semibold text-sm hover:bg-[#d44428] transition-colors shadow-lg">
               Book Free Consultation

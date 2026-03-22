@@ -10,8 +10,9 @@ export async function generateMetadata(): Promise<Metadata> {
   const raw = await getSettings();
   const s = { ...DEFAULT_SETTINGS, ...raw };
   return {
-    title: `About ${s.doctorName} | ${s.specialty} Dubai`,
-    description: s.aboutPara1,
+    title: s.seoAboutTitle || `About ${s.doctorName} | ${s.specialty} Dubai`,
+    description: s.seoAboutDesc || s.aboutPara1,
+    ...(s.seoAboutKeywords && { keywords: s.seoAboutKeywords }),
   };
 }
 
