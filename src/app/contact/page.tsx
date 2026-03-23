@@ -5,6 +5,7 @@ import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
 import Navbar from "@/components/Navbar";
 import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
+import BeforeAfter from "@/components/BeforeAfter";
 
 export async function generateMetadata(): Promise<Metadata> {
   const raw = await getSettings();
@@ -133,6 +134,7 @@ export default async function ContactPage() {
           </div>
         </div>
       </section>
+      <BeforeAfter />
       <Footer />
     </>
   );

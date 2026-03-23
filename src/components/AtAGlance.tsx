@@ -25,14 +25,14 @@ export default async function AtAGlance() {
   }
 
   return (
-    <section className="bg-white py-16 border-b border-gray-100" id="glance">
+    <section className="bg-[#111111] py-16" id="glance">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-12">
           <p className="text-[#c9a84c] text-sm font-semibold uppercase tracking-widest mb-2">
             Quick Overview
           </p>
           <h2
-            className="text-3xl md:text-4xl font-bold text-[#1b4f72]"
+            className="text-3xl md:text-4xl font-bold text-white"
             style={{ fontFamily: "var(--font-playfair)" }}
           >
             At a Glance

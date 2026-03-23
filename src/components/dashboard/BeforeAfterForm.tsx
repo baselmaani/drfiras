@@ -52,15 +52,8 @@ export function BeforeAfterForm({
 
       <ImageUpload
         name="beforeImage"
-        label="Before Image"
+        label="Image"
         defaultValue={item?.beforeImage ?? ""}
-        required
-      />
-
-      <ImageUpload
-        name="afterImage"
-        label="After Image"
-        defaultValue={item?.afterImage ?? ""}
         required
       />
 

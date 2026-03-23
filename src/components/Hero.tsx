@@ -68,28 +68,6 @@ export default async function Hero() {
             </a>
           </div>
 
-          {/* Trust badges */}
-          <div className="mt-11 flex flex-wrap gap-6 text-[12px] text-white/30 font-medium tracking-wide">
-            <div className="flex items-center gap-2">
-              <svg className="w-4 h-4 text-[#c9a84c]" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-              </svg>
-              5-Star Rated
-            </div>
-            <div className="flex items-center gap-2">
-              <svg className="w-4 h-4 text-[#c9a84c]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-              GDC Registered
-            </div>
-            <div className="flex items-center gap-2">
-              <svg className="w-4 h-4 text-[#c9a84c]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Same Day Appointments
-            </div>
-          </div>
-
           {/* Dot accent */}
           <div className="mt-10 flex items-center gap-1.5">
             {Array.from({ length: 10 }).map((_, i) => (
@@ -148,16 +126,13 @@ export default async function Hero() {
               {/* Name overlay at bottom */}
               <div className="absolute bottom-0 left-0 right-0 px-6 py-5 bg-gradient-to-t from-[#0d0d0d]/80 to-transparent text-center">
                 <p className="text-white/80 font-bold text-sm tracking-wide" style={{ fontFamily: "var(--font-playfair)" }}>
-                  {s.doctorName} Zoghieb
-                </p>
-                <p className="text-[#c9a84c]/60 text-[10px] tracking-[0.2em] uppercase mt-0.5">
-                  BDS · MSc Cosmetic Dentistry
+                  {s.doctorName}
                 </p>
               </div>
             </div>
 
             {/* Stat card */}
-            <div className="absolute -bottom-4 -left-4 md:-left-8 bg-[#141414] border border-[#2a2a2a] rounded-2xl px-5 py-3.5 shadow-2xl backdrop-blur-sm">
+            <div className="absolute -bottom-4 -left-8 md:-left-14 bg-[#141414] border border-[#2a2a2a] rounded-2xl px-5 py-3.5 shadow-2xl backdrop-blur-sm">
               <p className="text-[#c9a84c] font-bold text-xl leading-none" style={{ fontFamily: "var(--font-playfair)" }}>
                 {s.heroStatNumber}
               </p>

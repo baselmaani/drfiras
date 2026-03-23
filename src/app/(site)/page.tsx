@@ -6,8 +6,9 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import AtAGlance from "@/components/AtAGlance";
 import About from "@/components/About";
-import Expertise from "@/components/Expertise";
+import ServicesGrid from "@/components/ServicesGrid";
 import BeforeAfter from "@/components/BeforeAfter";
+import ContactSection from "@/components/ContactSection";
 import GoogleReviews from "@/components/GoogleReviews";
 import InstagramFeed from "@/components/InstagramFeed";
 import FAQSection from "@/components/FAQSection";
@@ -40,9 +41,10 @@ export default async function Home() {
       <FAQJsonLd items={faqItems} />
       <Navbar />
       <Hero />
-      <About />
-      <Expertise />
+      <ServicesGrid />
       <BeforeAfter />
+      <ContactSection />
+      <About />
       <GoogleReviews />
       <InstagramFeed />
       <FAQSection />

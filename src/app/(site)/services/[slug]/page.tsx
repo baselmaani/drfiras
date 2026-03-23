@@ -8,6 +8,7 @@ import { ServiceJsonLd } from "@/components/JsonLd";
 import Link from "next/link";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
+import BeforeAfter from "@/components/BeforeAfter";
 
 export async function generateMetadata({
   params,
@@ -67,57 +68,62 @@ export default async function ServicePage({
       />
 
       {/* Hero */}
-      <section className="relative pt-24 bg-[#0d0d0d] overflow-hidden">
-        {/* Subtle radial glow */}
+      <section className="relative bg-[#0d0d0d] pt-[68px] overflow-hidden">
+        {/* Gold radial glow top-right */}
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0"
           style={{
             background:
-              "radial-gradient(ellipse 60% 50% at 70% 50%, rgba(201,168,76,0.08) 0%, transparent 70%)",
+              "radial-gradient(ellipse 55% 60% at 75% 40%, rgba(201,168,76,0.07) 0%, transparent 65%)",
           }}
         />
 
         <div className="max-w-6xl mx-auto px-6">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 pt-8 pb-0 text-sm text-white/40">
+          <nav className="flex items-center gap-2 pt-8 text-[13px] text-white/35">
             <Link href="/" className="hover:text-[#c9a84c] transition-colors">Home</Link>
-            <span>/</span>
+            <span className="text-white/15">/</span>
             <Link href="/services" className="hover:text-[#c9a84c] transition-colors">Services</Link>
-            <span>/</span>
-            <span className="text-white/70 truncate max-w-[160px]">{service.title}</span>
+            <span className="text-white/15">/</span>
+            <span className="text-white/60 truncate max-w-[180px]">{service.title}</span>
           </nav>
 
           <div
-            className={`grid items-center gap-12 py-16 ${
-              service.heroImage ? "md:grid-cols-[1fr_420px] lg:grid-cols-[1fr_480px]" : ""
+            className={`grid items-center gap-12 pt-10 pb-20 ${
+              service.heroImage ? "md:grid-cols-[1fr_420px] lg:grid-cols-[1fr_500px]" : "max-w-3xl"
             }`}
           >
             {/* Left — text */}
             <div>
               {service.icon && (
-                <div className="text-5xl mb-5">{service.icon}</div>
+                <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#c9a84c]/10 border border-[#c9a84c]/20 text-3xl mb-6">
+                  {service.icon}
+                </div>
               )}
+              <p className="text-[#c9a84c] text-[11px] font-semibold uppercase tracking-[0.28em] mb-3">
+                Treatment
+              </p>
               <h1
-                className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-5 leading-tight"
+                className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold text-white mb-5 leading-[1.1]"
                 style={{ fontFamily: "var(--font-playfair)" }}
               >
                 {service.title}
               </h1>
-              <p className="text-lg text-white/65 leading-relaxed mb-8 max-w-xl">
+              <p className="text-base md:text-lg text-white/55 leading-relaxed mb-10 max-w-lg">
                 {service.description}
               </p>
 
               <div className="flex flex-wrap gap-3">
                 <Link
                   href="/#book"
-                  className="inline-block border border-[#c9a84c] text-[#c9a84c] hover:bg-[#c9a84c] hover:text-white px-8 py-3 rounded-full font-semibold transition-colors"
+                  className="inline-flex items-center gap-2 border border-[#c9a84c] text-[#c9a84c] hover:bg-[#c9a84c]/10 px-8 py-3.5 rounded-full font-semibold text-sm transition-colors"
                 >
                   Book a Consultation
                 </Link>
                 <Link
                   href="/services"
-                  className="inline-block border border-[#c9a84c]/50 text-[#c9a84c]/80 hover:border-[#c9a84c] hover:text-[#c9a84c] px-8 py-3 rounded-full font-semibold transition-colors"
+                  className="inline-flex items-center gap-2 border border-[#c9a84c]/40 text-[#c9a84c]/70 hover:border-[#c9a84c] hover:text-[#c9a84c] px-8 py-3.5 rounded-full font-medium text-sm transition-colors"
                 >
                   ← All Treatments
                 </Link>
@@ -126,7 +132,8 @@ export default async function ServicePage({
 
             {/* Right — image */}
             {service.heroImage && (
-              <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl bg-[#1a1a1a]"
+              <div
+                className="relative w-full rounded-3xl overflow-hidden shadow-2xl bg-[#141414] border border-white/[0.06]"
                 style={{ aspectRatio: "4/5", minHeight: "360px" }}
               >
                 <Image
@@ -134,41 +141,45 @@ export default async function ServicePage({
                   alt={service.title}
                   fill
                   className="object-cover object-center"
-                  sizes="(max-width: 768px) 100vw, 480px"
+                  sizes="(max-width: 768px) 100vw, 500px"
                   priority
                 />
-                {/* Bottom gradient overlay */}
                 <div
                   aria-hidden
-                  className="absolute inset-x-0 bottom-0 h-1/4"
+                  className="absolute inset-x-0 bottom-0 h-1/3"
                   style={{
-                    background: "linear-gradient(to top, rgba(13,13,13,0.5) 0%, transparent 100%)",
+                    background: "linear-gradient(to top, rgba(13,13,13,0.6) 0%, transparent 100%)",
                   }}
                 />
               </div>
             )}
           </div>
         </div>
-
-        {/* Bottom fade into white content section */}
-        <div
-          aria-hidden
-          className="h-10 bg-gradient-to-b from-transparent to-white"
-        />
       </section>
 
       {/* Content */}
       {service.content && (
-        <section className="py-16 bg-white text-gray-800">
-          <div className="max-w-4xl mx-auto px-6">
-            <div className="mb-10">
-              <p className="text-[#c9a84c] text-sm font-semibold uppercase tracking-widest mb-2">
+        <section className="bg-[#111] border-t border-white/[0.06]">
+          <div className="max-w-4xl mx-auto px-6 py-20">
+            <div className="flex items-center gap-4 mb-10">
+              <div className="w-8 h-[2px] bg-[#c9a84c]" />
+              <p className="text-[#c9a84c] text-[11px] font-semibold uppercase tracking-[0.28em]">
                 About This Treatment
               </p>
-              <div className="w-12 h-[2px] bg-[#c9a84c]" />
             </div>
             <div
-              className="prose prose-lg prose-headings:font-semibold prose-headings:text-[#1b4f72] prose-a:text-[#c9a84c] prose-li:text-gray-700 prose-p:text-gray-700 max-w-none"
+              className="
+                [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-white [&_h2]:mt-8 [&_h2]:mb-3 [&_h2]:leading-snug
+                [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-white/90 [&_h3]:mt-6 [&_h3]:mb-2
+                [&_p]:text-white/55 [&_p]:leading-relaxed [&_p]:mb-4 [&_p]:text-[15px]
+                [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-1.5 [&_ul]:mb-4
+                [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:space-y-1.5 [&_ol]:mb-4
+                [&_li]:text-white/55 [&_li]:text-[15px]
+                [&_strong]:text-white/80 [&_strong]:font-semibold
+                [&_a]:text-[#c9a84c] [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:text-[#b8943e]
+                [&_hr]:border-white/10 [&_hr]:my-8
+                [&_blockquote]:border-l-2 [&_blockquote]:border-[#c9a84c] [&_blockquote]:pl-4 [&_blockquote]:text-white/45 [&_blockquote]:italic [&_blockquote]:my-4
+              "
               dangerouslySetInnerHTML={{ __html: service.content }}
             />
           </div>
@@ -177,10 +188,10 @@ export default async function ServicePage({
 
       {/* Case Images Gallery */}
       {caseImages.length > 0 && (
-        <section className="py-20 bg-[#0d0d0d]">
+        <section className="py-20 bg-[#0d0d0d] border-t border-white/[0.06]">
           <div className="max-w-6xl mx-auto px-6">
             <div className="text-center mb-12">
-              <p className="text-[#c9a84c] text-sm font-semibold uppercase tracking-widest mb-3">
+              <p className="text-[#c9a84c] text-[11px] font-semibold uppercase tracking-[0.28em] mb-3">
                 Real Results
               </p>
               <h2
@@ -191,7 +202,7 @@ export default async function ServicePage({
               </h2>
             </div>
             <div
-              className={`grid gap-5 ${
+              className={`grid gap-4 ${
                 caseImages.length === 1
                   ? "max-w-sm mx-auto"
                   : caseImages.length === 2
@@ -202,7 +213,7 @@ export default async function ServicePage({
               {caseImages.map((img, i) => (
                 <div
                   key={i}
-                  className="relative rounded-2xl overflow-hidden shadow-xl bg-[#1a1a1a] group"
+                  className="relative rounded-2xl overflow-hidden bg-[#141414] border border-white/[0.06] group"
                   style={{ aspectRatio: "4/5" }}
                 >
                   <Image
@@ -216,8 +227,7 @@ export default async function ServicePage({
                     aria-hidden
                     className="absolute inset-x-0 bottom-0 h-1/3 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                     style={{
-                      background:
-                        "linear-gradient(to top, rgba(13,13,13,0.7) 0%, transparent 100%)",
+                      background: "linear-gradient(to top, rgba(13,13,13,0.7) 0%, transparent 100%)",
                     }}
                   />
                 </div>
@@ -227,38 +237,37 @@ export default async function ServicePage({
         </section>
       )}
 
+      <BeforeAfter />
+
       {/* CTA */}
-      <section className="py-20 bg-[#0d0d0d]">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          {/* Decorative line */}
-          <div className="flex items-center justify-center gap-4 mb-8">
-            <div className="flex-1 h-px bg-white/10 max-w-[80px]" />
-            <div className="w-2 h-2 rounded-full bg-[#c9a84c]" />
-            <div className="flex-1 h-px bg-white/10 max-w-[80px]" />
+      <section className="py-24 bg-[#0d0d0d] border-t border-white/[0.06]">
+        <div className="max-w-2xl mx-auto px-6 text-center">
+          <div className="inline-flex items-center gap-2 bg-[#c9a84c]/10 border border-[#c9a84c]/20 rounded-full px-5 py-2 mb-8">
+            <div className="w-1.5 h-1.5 rounded-full bg-[#c9a84c]" />
+            <span className="text-[#c9a84c] text-[11px] font-semibold uppercase tracking-[0.22em]">
+              Take the First Step
+            </span>
           </div>
-          <p className="text-[#c9a84c] text-sm font-semibold uppercase tracking-widest mb-4">
-            Take the First Step
-          </p>
           <h2
             className="text-3xl md:text-4xl font-bold text-white mb-5 leading-tight"
             style={{ fontFamily: "var(--font-playfair)" }}
           >
             Ready to Transform Your Smile?
           </h2>
-          <p className="text-white/60 mb-10 text-lg leading-relaxed">
+          <p className="text-white/45 mb-10 text-base leading-relaxed">
             Book a consultation with Dr. Firas and discover if{" "}
-            <span className="text-white/85">{service.title}</span> is right for you.
+            <span className="text-white/70 font-medium">{service.title}</span> is right for you.
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="flex flex-wrap justify-center gap-3">
             <Link
               href="/#book"
-              className="inline-block border border-[#c9a84c] text-[#c9a84c] hover:bg-[#c9a84c] hover:text-white px-10 py-4 rounded-full font-semibold transition-colors text-base"
+              className="inline-flex items-center gap-2 border border-[#c9a84c] text-[#c9a84c] hover:bg-[#c9a84c]/10 px-10 py-4 rounded-full font-semibold transition-colors text-sm"
             >
               Book a Consultation
             </Link>
             <Link
               href="/services"
-              className="inline-block border border-[#c9a84c]/50 text-[#c9a84c]/80 hover:border-[#c9a84c] hover:text-[#c9a84c] px-10 py-4 rounded-full font-semibold transition-colors text-base"
+              className="inline-flex items-center gap-2 border border-[#c9a84c]/40 text-[#c9a84c]/70 hover:border-[#c9a84c] hover:text-[#c9a84c] px-10 py-4 rounded-full font-medium text-sm transition-colors"
             >
               Explore Other Treatments
             </Link>

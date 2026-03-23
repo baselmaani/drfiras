@@ -44,31 +44,18 @@ export default async function BeforeAfterPage() {
               key={item.id}
               className="bg-white rounded-2xl border border-gray-100 overflow-hidden"
             >
-              <div className="grid grid-cols-2 h-40">
-                <div className="relative bg-gray-100">
+              <div className="relative h-48 bg-gray-100">
+                {item.beforeImage ? (
                   <Image
                     src={item.beforeImage}
-                    alt={`Before - ${item.title}`}
+                    alt={item.title}
                     fill
-                    className="object-cover"
+                    className="object-contain"
                     unoptimized
                   />
-                  <span className="absolute top-1.5 left-1.5 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded">
-                    Before
-                  </span>
-                </div>
-                <div className="relative bg-blue-50">
-                  <Image
-                    src={item.afterImage}
-                    alt={`After - ${item.title}`}
-                    fill
-                    className="object-cover"
-                    unoptimized
-                  />
-                  <span className="absolute top-1.5 right-1.5 bg-[#1b4f72] text-white text-xs px-1.5 py-0.5 rounded">
-                    After
-                  </span>
-                </div>
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-gray-300 text-sm">No image</div>
+                )}
               </div>
               <div className="p-4">
                 <p className="font-semibold text-sm text-gray-800">{item.title}</p>

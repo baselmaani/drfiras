@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
+import BeforeAfter from "@/components/BeforeAfter";
 
 export const metadata: Metadata = {
   title: "Dental Tips & Advice",
@@ -102,6 +103,7 @@ export default async function BlogPage() {
           )}
         </div>
       </section>
+      <BeforeAfter />
     </>
   );
 }

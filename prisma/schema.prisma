@@ -33,8 +33,8 @@ model BeforeAfter {
   id          Int      @id @default(autoincrement())
   title       String
   treatment   String
-  beforeImage String
-  afterImage  String
+  beforeImage String   // repurposed as the single combined image
+  afterImage  String?  // kept for backward compat, no longer required
   description String?
   published   Boolean  @default(true)
   order       Int      @default(0)
@@ -64,4 +64,18 @@ model SiteSetting {
   key       String   @unique
   value     String
   updatedAt DateTime @updatedAt
+}
+
+model MenuItem {
+  id        Int        @id @default(autoincrement())
+  label     String
+  href      String
+  position  String     @default("left")   // "left" | "right"
+  order     Int        @default(0)
+  parentId  Int?
+  parent    MenuItem?  @relation("SubMenuItems", fields: [parentId], references: [id], onDelete: Cascade)
+  children  MenuItem[] @relation("SubMenuItems")
+  enabled   Boolean    @default(true)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 }

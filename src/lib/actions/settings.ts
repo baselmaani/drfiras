@@ -22,11 +22,18 @@ export async function updateSettings(
 
   revalidatePath("/");
   revalidatePath("/blog");
+  revalidatePath("/services");
+  revalidatePath("/contact");
+  revalidatePath("/about");
   revalidatePath("/dashboard/settings");
   revalidatePath("/dashboard/content/hero");
   revalidatePath("/dashboard/content/about");
   revalidatePath("/dashboard/content/faq");
   revalidatePath("/dashboard/content/at-a-glance");
   revalidatePath("/dashboard/content/pages-seo");
+  revalidatePath("/dashboard/content/contact");
+  revalidatePath("/dashboard/content/google-reviews");
+  revalidatePath("/dashboard/content/instagram");
+  revalidatePath("/dashboard/content/navbar");
   return { success: true };
 }

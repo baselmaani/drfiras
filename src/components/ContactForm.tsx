@@ -47,7 +47,7 @@ export default function ContactForm({ phone, email, address }: Props) {
   }
 
   const inputClass =
-    "w-full bg-[#1c1c1c] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-white/70 focus:outline-none focus:border-[#c9a84c]/50 focus:ring-1 focus:ring-[#c9a84c]/30 transition-colors";
+    "w-full bg-[#1c1c1c] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white [&::placeholder]:text-white/20 [&::placeholder]:italic focus:outline-none focus:border-[#c9a84c]/50 focus:ring-1 focus:ring-[#c9a84c]/30 transition-colors";
 
   const labelClass = "block text-xs font-medium text-[#c9a84c] mb-1.5 uppercase tracking-wide";
 

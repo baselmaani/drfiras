@@ -60,7 +60,7 @@ export default async function BlogPostPage({
   if (!post) notFound();
 
   return (
-    <>
+    <div className="bg-[#0d0d0d] min-h-screen">
       <Navbar />
       <ArticleJsonLd
         title={post.title}
@@ -72,32 +72,34 @@ export default async function BlogPostPage({
       />
 
       {/* Article Header */}
-      <section className="pt-32 pb-10 bg-[#f7f9fc]">
+      <section className="pt-32 pb-12 border-b border-white/[0.06]">
         <div className="max-w-3xl mx-auto px-6">
-          {post.publishedAt && (
-            <time className="text-sm text-gray-400 uppercase tracking-wide">
-              {new Date(post.publishedAt).toLocaleDateString("en-GB", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              })}
-            </time>
-          )}
+          <div className="flex items-center gap-3 mb-5">
+            {post.publishedAt && (
+              <time className="text-xs text-white/40 uppercase tracking-widest">
+                {new Date(post.publishedAt).toLocaleDateString("en-GB", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                })}
+              </time>
+            )}
+          </div>
           <h1
-            className="text-4xl md:text-5xl font-bold text-[#1b4f72] mt-3 mb-4 leading-tight"
+            className="text-4xl md:text-5xl font-bold text-white mt-2 mb-5 leading-tight"
             style={{ fontFamily: "var(--font-playfair)" }}
           >
             {post.title}
           </h1>
           {post.excerpt && (
-            <p className="text-xl text-gray-600 leading-relaxed">{post.excerpt}</p>
+            <p className="text-lg text-white/55 leading-relaxed">{post.excerpt}</p>
           )}
         </div>
       </section>
 
       {/* Cover Image */}
       {post.coverImage && (
-        <div className="max-w-4xl mx-auto px-6 py-6">
+        <div className="max-w-4xl mx-auto px-6 pt-10">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={post.coverImage}
@@ -108,24 +110,24 @@ export default async function BlogPostPage({
       )}
 
       {/* Article Content */}
-      <article className="py-10 pb-20">
+      <article className="py-12 pb-24 border-t border-white/[0.06]">
         <div className="max-w-3xl mx-auto px-6">
           <div
-            className="prose prose-lg prose-headings:font-semibold prose-headings:text-[#1b4f72] prose-a:text-[#c9a84c] prose-strong:text-gray-800 max-w-none"
+            className="[&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-white [&_h2]:mt-8 [&_h2]:mb-3 [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:text-white/90 [&_h3]:mt-6 [&_h3]:mb-2 [&_p]:text-white/55 [&_p]:text-[16px] [&_p]:leading-relaxed [&_p]:mb-4 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-4 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-4 [&_li]:text-white/55 [&_li]:mb-1 [&_strong]:text-white/80 [&_strong]:font-semibold [&_a]:text-[#c9a84c] [&_a]:underline [&_blockquote]:border-l-4 [&_blockquote]:border-[#c9a84c] [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-white/45 [&_hr]:border-white/10 [&_hr]:my-8"
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
 
           {/* Back link */}
-          <div className="mt-12 pt-8 border-t border-gray-100">
+          <div className="mt-12 pt-8 border-t border-white/[0.06]">
             <Link
               href="/blog"
-              className="text-[#1b4f72] hover:text-[#c9a84c] font-medium transition-colors"
+              className="text-white/50 hover:text-[#c9a84c] font-medium transition-colors"
             >
               ← Back to all posts
             </Link>
           </div>
         </div>
       </article>
-    </>
+    </div>
   );
 }

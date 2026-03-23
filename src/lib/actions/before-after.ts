@@ -12,10 +12,9 @@ export async function createBeforeAfter(
   const title = (formData.get("title") as string)?.trim();
   const treatment = (formData.get("treatment") as string)?.trim();
   const beforeImage = (formData.get("beforeImage") as string)?.trim();
-  const afterImage = (formData.get("afterImage") as string)?.trim();
 
-  if (!title || !treatment || !beforeImage || !afterImage) {
-    return { error: "Title, treatment, and both image URLs are required." };
+  if (!title || !treatment || !beforeImage) {
+    return { error: "Title, treatment, and image are required." };
   }
 
   await db.beforeAfter.create({
@@ -23,7 +22,6 @@ export async function createBeforeAfter(
       title,
       treatment,
       beforeImage,
-      afterImage,
       description: (formData.get("description") as string) || null,
       order: parseInt((formData.get("order") as string) || "0"),
       published: formData.get("published") === "on",
@@ -43,10 +41,9 @@ export async function updateBeforeAfter(
   const title = (formData.get("title") as string)?.trim();
   const treatment = (formData.get("treatment") as string)?.trim();
   const beforeImage = (formData.get("beforeImage") as string)?.trim();
-  const afterImage = (formData.get("afterImage") as string)?.trim();
 
-  if (!title || !treatment || !beforeImage || !afterImage) {
-    return { error: "Title, treatment, and both image URLs are required." };
+  if (!title || !treatment || !beforeImage) {
+    return { error: "Title, treatment, and image are required." };
   }
 
   await db.beforeAfter.update({
@@ -55,7 +52,6 @@ export async function updateBeforeAfter(
       title,
       treatment,
       beforeImage,
-      afterImage,
       description: (formData.get("description") as string) || null,
       order: parseInt((formData.get("order") as string) || "0"),
       published: formData.get("published") === "on",

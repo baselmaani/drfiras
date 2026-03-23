@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
 import Navbar from "@/components/Navbar";
+import BeforeAfter from "@/components/BeforeAfter";
 
 export async function generateMetadata(): Promise<Metadata> {
   const raw = await getSettings();
@@ -201,6 +202,8 @@ export default async function AboutPage() {
           </ul>
         </div>
       </section>
+
+      <BeforeAfter />
 
       {/* CTA */}
       <section className="bg-[#0d0d0d] border-t border-white/[0.06] py-20">
