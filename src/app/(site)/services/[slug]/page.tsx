@@ -1,4 +1,4 @@
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 import { db } from "@/lib/db";
 import { notFound } from "next/navigation";
@@ -9,6 +9,14 @@ import Link from "next/link";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import BeforeAfter from "@/components/BeforeAfter";
+
+export async function generateStaticParams() {
+  const services = await db.service.findMany({
+    where: { published: true },
+    select: { slug: true },
+  });
+  return services.map((s) => ({ slug: s.slug }));
+}
 
 export async function generateMetadata({
   params,
@@ -26,6 +34,7 @@ export async function generateMetadata({
   return {
     title,
     description,
+    ...(service.metaKeywords && { keywords: service.metaKeywords }),
     alternates: { canonical: url },
     openGraph: {
       title: `${title} | ${SITE_NAME}`,
@@ -105,12 +114,13 @@ export default async function ServicePage({
                 Treatment
               </p>
               <h1
+                data-speakable
                 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold text-white mb-5 leading-[1.1]"
-                style={{ fontFamily: "var(--font-playfair)" }}
+                style={{ fontFamily: "var(--font-playfair))" }}
               >
                 {service.title}
               </h1>
-              <p className="text-base md:text-lg text-white/55 leading-relaxed mb-10 max-w-lg">
+              <p data-speakable className="text-base md:text-lg text-white/55 leading-relaxed mb-10 max-w-lg">
                 {service.description}
               </p>
 

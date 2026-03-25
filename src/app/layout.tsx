@@ -3,7 +3,7 @@ import Script from "next/script";
 import { Playfair_Display, Inter, Manrope } from "next/font/google";
 import "./globals.css";
 import { DentistJsonLd } from "@/components/JsonLd";
-import { SITE_NAME, SITE_URL, SITE_DESCRIPTION } from "@/lib/constants";
+import { SITE_NAME, SITE_URL, SITE_DESCRIPTION, SITE_LOCALE, GEO_LAT, GEO_LNG, GEO_REGION, GEO_PLACENAME } from "@/lib/constants";
 import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
 
 const playfair = Playfair_Display({
@@ -34,24 +34,52 @@ export const viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} | Cosmetic Dentist`,
+    default: `${SITE_NAME} | Cosmetic Dentist Dubai`,
     template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
+  keywords: [
+    "cosmetic dentist dubai",
+    "composite bonding dubai",
+    "composite bonding al wasl",
+    "invisalign dubai",
+    "veneers dubai",
+    "smile makeover dubai",
+    "teeth whitening dubai",
+    "dental bonding dubai",
+    "cosmetic dentistry uae",
+    "dr firas zoghieb",
+    "dr firas dentist dubai",
+  ],
+  authors: [{ name: SITE_NAME, url: SITE_URL }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
+  },
   openGraph: {
     type: "website",
     siteName: SITE_NAME,
-    title: `${SITE_NAME} | Cosmetic Dentist`,
+    title: `${SITE_NAME} | Cosmetic Dentist Dubai`,
     description: SITE_DESCRIPTION,
     url: SITE_URL,
+    locale: SITE_LOCALE,
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE_NAME} | Cosmetic Dentist`,
+    title: `${SITE_NAME} | Cosmetic Dentist Dubai`,
     description: SITE_DESCRIPTION,
+    creator: "@dr.firaszoghieb",
   },
   alternates: {
     canonical: SITE_URL,
+    languages: {
+      "en": SITE_URL,
+      "en-AE": SITE_URL,
+      "x-default": SITE_URL,
+    },
   },
 };
 
@@ -63,8 +91,13 @@ export default async function RootLayout({
   const raw = await getSettings();
   const s = { ...DEFAULT_SETTINGS, ...raw };
   return (
-    <html lang="en">
+    <html lang="en-AE">
       <head>
+        {/* Geo meta tags — picked up by Bing, Yahoo, Apple Maps */}
+        <meta name="geo.region"    content={GEO_REGION} />
+        <meta name="geo.placename" content={GEO_PLACENAME} />
+        <meta name="geo.position"  content={`${GEO_LAT};${GEO_LNG}`} />
+        <meta name="ICBM"          content={`${GEO_LAT}, ${GEO_LNG}`} />
         <Script
           id="gtm-script"
           strategy="afterInteractive"

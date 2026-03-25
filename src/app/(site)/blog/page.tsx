@@ -3,21 +3,35 @@ export const revalidate = 3600;
 import { db } from "@/lib/db";
 import type { Metadata } from "next";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
+import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import BeforeAfter from "@/components/BeforeAfter";
 
-export const metadata: Metadata = {
-  title: "Dental Tips & Advice",
-  description: `Expert dental tips, advice and patient stories from ${SITE_NAME}.`,
-  alternates: { canonical: `${SITE_URL}/blog` },
-  openGraph: {
-    title: `Dental Tips & Advice | ${SITE_NAME}`,
-    description: `Expert dental tips, advice and patient stories from ${SITE_NAME}.`,
-    url: `${SITE_URL}/blog`,
-    type: "website",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const raw = await getSettings();
+  const s = { ...DEFAULT_SETTINGS, ...raw };
+  const title = s.seoBlogTitle || `Dental Tips & Advice | ${SITE_NAME}`;
+  const description = s.seoBlogDesc || `Expert dental tips, advice and patient stories from ${SITE_NAME}.`;
+  const url = `${SITE_URL}/blog`;
+  return {
+    title,
+    description,
+    ...(s.seoBlogKeywords && { keywords: s.seoBlogKeywords }),
+    alternates: { canonical: url },
+    openGraph: {
+      title: `${title} | ${SITE_NAME}`,
+      description,
+      url,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${title} | ${SITE_NAME}`,
+      description,
+    },
+  };
+}
 
 export default async function BlogPage() {
   const posts = await db.post.findMany({

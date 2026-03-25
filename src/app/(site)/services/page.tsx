@@ -1,16 +1,37 @@
 export const revalidate = 3600;
 
 import type { Metadata } from "next";
-import { SITE_NAME } from "@/lib/constants";
+import { SITE_NAME, SITE_URL } from "@/lib/constants";
+import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
 import Navbar from "@/components/Navbar";
 import ContactSection from "@/components/ContactSection";
 import ServicesGrid from "@/components/ServicesGrid";
 import BeforeAfter from "@/components/BeforeAfter";
 
-export const metadata: Metadata = {
-  title: `Our Services | ${SITE_NAME}`,
-  description: "Explore the full range of cosmetic dental treatments offered by Dr. Firas Zoghieb in Dubai.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const raw = await getSettings();
+  const s = { ...DEFAULT_SETTINGS, ...raw };
+  const title = s.seoServicesTitle || `Cosmetic Dentistry Services | ${SITE_NAME}`;
+  const description = s.seoServicesDesc || `Explore composite bonding, Invisalign, veneers, and smile makeovers by ${s.doctorName} in Dubai.`;
+  const url = `${SITE_URL}/services`;
+  return {
+    title,
+    description,
+    ...(s.seoServicesKeywords && { keywords: s.seoServicesKeywords }),
+    alternates: { canonical: url },
+    openGraph: {
+      title: `${title} | ${SITE_NAME}`,
+      description,
+      url,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${title} | ${SITE_NAME}`,
+      description,
+    },
+  };
+}
 
 export default async function ServicesPage() {
   return (

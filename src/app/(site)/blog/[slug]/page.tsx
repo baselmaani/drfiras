@@ -32,6 +32,8 @@ export async function generateMetadata({
   return {
     title,
     description,
+    ...(post.metaKeywords && { keywords: post.metaKeywords }),
+    authors: [{ name: SITE_NAME, url: SITE_URL }],
     alternates: { canonical: url },
     openGraph: {
       title: `${title} | ${SITE_NAME}`,
@@ -86,13 +88,14 @@ export default async function BlogPostPage({
             )}
           </div>
           <h1
+            data-speakable
             className="text-4xl md:text-5xl font-bold text-white mt-2 mb-5 leading-tight"
             style={{ fontFamily: "var(--font-playfair)" }}
           >
             {post.title}
           </h1>
           {post.excerpt && (
-            <p className="text-lg text-white/55 leading-relaxed">{post.excerpt}</p>
+            <p data-speakable className="text-lg text-white/55 leading-relaxed">{post.excerpt}</p>
           )}
         </div>
       </section>

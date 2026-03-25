@@ -2,6 +2,7 @@ export const revalidate = 3600;
 
 import type { Metadata } from "next";
 import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
+import { SITE_NAME, SITE_URL } from "@/lib/constants";
 import Navbar from "@/components/Navbar";
 import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
@@ -10,10 +11,25 @@ import BeforeAfter from "@/components/BeforeAfter";
 export async function generateMetadata(): Promise<Metadata> {
   const raw = await getSettings();
   const s = { ...DEFAULT_SETTINGS, ...raw };
+  const title = s.seoContactTitle || `Contact ${s.doctorName} | Cosmetic Dentist Dubai`;
+  const description = s.seoContactDesc || `Book a consultation with ${s.doctorName}, cosmetic dentist in Dubai.`;
+  const url = `${SITE_URL}/contact`;
   return {
-    title: s.seoContactTitle || "Contact Us | Dr. Firas",
-    description: s.seoContactDesc || "Get in touch with Dr. Firas' clinic in Dubai. Book a consultation or send us a message.",
+    title,
+    description,
     ...(s.seoContactKeywords && { keywords: s.seoContactKeywords }),
+    alternates: { canonical: url },
+    openGraph: {
+      title: `${title} | ${SITE_NAME}`,
+      description,
+      url,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${title} | ${SITE_NAME}`,
+      description,
+    },
   };
 }
 

@@ -4,16 +4,33 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
+import { SITE_NAME, SITE_URL } from "@/lib/constants";
 import Navbar from "@/components/Navbar";
 import BeforeAfter from "@/components/BeforeAfter";
+import { SpeakableJsonLd } from "@/components/JsonLd";
 
 export async function generateMetadata(): Promise<Metadata> {
   const raw = await getSettings();
   const s = { ...DEFAULT_SETTINGS, ...raw };
+  const title = s.seoAboutTitle || `About ${s.doctorName} | ${s.specialty} Dubai`;
+  const description = s.seoAboutDesc || s.aboutPara1;
+  const url = `${SITE_URL}/about`;
   return {
-    title: s.seoAboutTitle || `About ${s.doctorName} | ${s.specialty} Dubai`,
-    description: s.seoAboutDesc || s.aboutPara1,
+    title,
+    description,
     ...(s.seoAboutKeywords && { keywords: s.seoAboutKeywords }),
+    alternates: { canonical: url },
+    openGraph: {
+      title: `${title} | ${SITE_NAME}`,
+      description,
+      url,
+      type: "profile",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${title} | ${SITE_NAME}`,
+      description,
+    },
   };
 }
 
@@ -39,6 +56,7 @@ export default async function AboutPage() {
 
   return (
     <>
+      <SpeakableJsonLd url={`${SITE_URL}/about`} cssSelector={["h1", "h2", "[data-speakable]"]} />
       <Navbar />
 
       {/* Hero */}
