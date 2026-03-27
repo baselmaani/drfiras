@@ -10,44 +10,18 @@ export default async function Footer() {
   const whatsapp = s.whatsapp || "";
   const instagram = s.instagram || "#";
   const facebook = s.facebook || "#";
+  const footerCtaEyebrow = s.footerCtaEyebrow || "Take the first step";
+  const footerCtaTitle = s.footerCtaTitle || "Start Your Smile Journey Today";
+  const footerCtaDesc = s.footerCtaDesc || "";
+  const footerCtaBtn1Text = s.footerCtaBtn1Text || "Book Free Consultation";
+  const footerCtaBtn2Text = s.footerCtaBtn2Text || "WhatsApp Us";
+  const footerHours = s.footerHours || "";
+  const footerTagline = s.footerTagline || "";
 
   return (
     <footer id="contact" className="bg-[#080808] text-white">
-      {/* CTA Banner */}
-      <div className="bg-[#141414] border-t border-[#c9a84c]/20 py-14 px-4 sm:px-6 text-center">
-        <p className="text-[#c9a84c] text-[11px] font-semibold uppercase tracking-[0.28em] mb-3">Take the first step</p>
-        <h3
-          className="text-2xl md:text-3xl font-bold text-white mb-3"
-          style={{ fontFamily: "var(--font-playfair)" }}
-        >
-          Start Your Smile Journey Today
-        </h3>
-        <p className="text-white/45 text-sm mb-8 max-w-md mx-auto">
-          Book a free, no-obligation consultation with Dr. Firas and discover what
-          a confident, beautiful smile can do for you.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <a
-            href={email ? `mailto:${email}` : "#"}
-            className="bg-[#e85535] text-white px-8 py-3 rounded-full font-semibold text-sm hover:bg-[#d44428] transition-colors shadow-lg shadow-[#e85535]/15"
-          >
-            Book Free Consultation
-          </a>
-          {whatsapp && (
-            <a
-              href={whatsapp}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="border border-[#c9a84c]/40 text-[#c9a84c] px-8 py-3 rounded-full font-semibold text-sm hover:border-[#c9a84c] hover:bg-[#c9a84c]/5 transition-colors"
-            >
-              WhatsApp Us
-            </a>
-          )}
-        </div>
-      </div>
-
       {/* Main Footer */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14 grid md:grid-cols-3 gap-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14 grid md:grid-cols-3 gap-8 md:gap-12">
         {/* Brand */}
         <div>
           <div className="flex items-center gap-3 mb-4">
@@ -62,8 +36,7 @@ export default async function Footer() {
             </div>
           </div>
           <p className="text-white/60 text-sm leading-relaxed max-w-xs">
-            Helping patients achieve beautiful, natural-looking smiles through
-            gentle, minimally invasive cosmetic dentistry.
+            {footerTagline}
           </p>
           <div className="flex gap-4 mt-6">
             {/* Instagram */}
@@ -105,7 +78,7 @@ export default async function Footer() {
           </h4>
           <ul className="space-y-3 text-sm text-white/60">
             {[
-              { label: "About Dr. Firas", href: "#about" },
+              { label: "About Dr. Firas Zoghieb", href: "#about" },
               { label: "Treatments", href: "#expertise" },
               { label: "Before & After", href: "#before-after" },
               { label: "FAQ", href: "#faq" },
@@ -160,7 +133,7 @@ export default async function Footer() {
               <svg className="w-4 h-4 text-[#c9a84c] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span>Mon – Sat: 9:00 am – 7:00 pm</span>
+              <span>{footerHours}</span>
             </li>
           </ul>
         </div>
@@ -168,7 +141,7 @@ export default async function Footer() {
 
       {/* Bottom Bar */}
       <div className="border-t border-white/10 py-5 px-6 text-center text-white/40 text-xs">
-        <p>© {new Date().getFullYear()} Dr. Firas. All rights reserved.</p>
+        <p>© {new Date().getFullYear()} Dr. Firas Zoghieb. All rights reserved.</p>
       </div>
     </footer>
   );

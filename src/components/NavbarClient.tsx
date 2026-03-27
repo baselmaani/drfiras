@@ -54,7 +54,7 @@ function DropdownItem({ item }: { item: MenuItem }) {
     return (
       <Link
         href={item.href}
-        className="text-[13px] font-medium text-white/45 hover:text-[#c9a84c] transition-colors duration-200 tracking-wide"
+        className="text-[13px] font-medium text-white hover:text-[#c9a84c] transition-colors duration-200 tracking-wide"
       >
         {item.label}
       </Link>
@@ -65,7 +65,7 @@ function DropdownItem({ item }: { item: MenuItem }) {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-1 text-[13px] font-medium text-white/45 hover:text-[#c9a84c] transition-colors duration-200 tracking-wide"
+        className="flex items-center gap-1 text-[13px] font-medium text-white hover:text-[#c9a84c] transition-colors duration-200 tracking-wide"
       >
         {item.label}
         <svg
@@ -99,10 +99,11 @@ interface NavbarClientProps {
   phone: string;
   whatsapp: string;
   instagram: string;
+  logoUrl?: string;
   menuItems: MenuItem[];
 }
 
-export default function NavbarClient({ phone, whatsapp, instagram, menuItems }: NavbarClientProps) {
+export default function NavbarClient({ phone, whatsapp, instagram, logoUrl, menuItems }: NavbarClientProps) {
   const [open, setOpen] = useState(false);
 
   const phoneHref = phone ? `tel:${phone.replace(/\s/g, "")}` : "#";
@@ -127,17 +128,27 @@ export default function NavbarClient({ phone, whatsapp, instagram, menuItems }: 
           </nav>
 
           {/* Center: Logo */}
-          <Link href="/" className="flex flex-col items-center mx-auto lg:mx-0 group" aria-label="Dr. Firas – Home">
-            <div className="relative">
-              <div className="absolute inset-[-4px] rounded-full border border-[#c9a84c]/10 group-hover:border-[#c9a84c]/22 transition-colors duration-300" />
-              <div className="w-10 h-10 rounded-full border border-[#c9a84c]/40 group-hover:border-[#c9a84c]/70 flex items-center justify-center transition-colors duration-300 bg-[#c9a84c]/[0.03]">
-                <span className="text-[#c9a84c] font-bold text-[13px] tracking-tight" style={{ fontFamily: "var(--font-playfair)" }}>DF</span>
-              </div>
-            </div>
-            <div className="text-center mt-1.5">
-              <p className="text-white/80 text-[10px] tracking-[0.28em] uppercase leading-none font-medium">Dr. Firas</p>
-              <p className="text-[#c9a84c]/50 text-[8px] tracking-[0.2em] uppercase leading-none mt-0.5">Cosmetic Dentist</p>
-            </div>
+          <Link href="/" className="flex flex-row items-center gap-3 mx-auto lg:mx-0 group" aria-label="Dr. Firas Zoghieb – Home">
+            {logoUrl ? (
+              <img
+                src={logoUrl}
+                alt="Dr. Firas Zoghieb logo"
+                className="h-10 w-auto object-contain"
+              />
+            ) : (
+              <>
+                <div className="relative flex-shrink-0">
+                  <div className="absolute inset-[-4px] rounded-full border border-[#c9a84c]/10 group-hover:border-[#c9a84c]/22 transition-colors duration-300" />
+                  <div className="w-10 h-10 rounded-full border border-[#c9a84c]/40 group-hover:border-[#c9a84c]/70 flex items-center justify-center transition-colors duration-300 bg-[#c9a84c]/[0.03]">
+                    <span className="text-[#c9a84c] font-bold text-[13px] tracking-tight" style={{ fontFamily: "var(--font-playfair)" }}>DF</span>
+                  </div>
+                </div>
+                <div className="text-left">
+                  <p className="text-white font-semibold text-[13px] leading-none whitespace-nowrap" style={{ fontFamily: "var(--font-playfair)" }}>Dr. Firas Zoghieb</p>
+                  <p className="text-[#c9a84c]/70 text-[10px] tracking-[0.15em] uppercase leading-none mt-1">Cosmetic Dentist</p>
+                </div>
+              </>
+            )}
           </Link>
 
           {/* Right nav – desktop */}
@@ -145,9 +156,9 @@ export default function NavbarClient({ phone, whatsapp, instagram, menuItems }: 
             {rightItems.map((item) => (
               <DropdownItem key={item.id} item={item} />
             ))}
-            <a href={phoneHref} className="flex items-center gap-1.5 border border-[#c9a84c]/45 text-[#c9a84c] text-[12px] font-medium px-5 py-2 rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200 tracking-wide">
+            <a href="/contact" className="flex items-center gap-1.5 border border-[#c9a84c]/45 text-[#c9a84c] text-[12px] font-medium px-5 py-2 rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200 tracking-wide">
               <PhoneIcon />
-              Call Us
+              Book Now
             </a>
             <a href={waHref} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 border border-[#c9a84c]/45 text-[#c9a84c] text-[12px] font-medium px-5 py-2 rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200 tracking-wide">
               <WAIcon className="w-3.5 h-3.5" />

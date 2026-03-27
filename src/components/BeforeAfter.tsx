@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
 
 const FALLBACK = [
   { id: 1, title: "Composite Bonding", treatment: "Composite Bonding", beforeImage: null },
@@ -40,6 +41,9 @@ function BeforeAfterCard({ title, treatment, beforeImage }: {
 type BAItem = { id: number; title: string; treatment: string; beforeImage: string | null };
 
 export default async function BeforeAfter() {
+  const raw = await getSettings();
+  const s = { ...DEFAULT_SETTINGS, ...raw };
+
   let items: BAItem[];
   try {
     const dbItems = await db.beforeAfter.findMany({
@@ -58,17 +62,16 @@ export default async function BeforeAfter() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-14">
           <p className="text-[#c9a84c] text-[11px] font-semibold uppercase tracking-[0.28em] mb-3">
-            Real Results
+            {s.beforeAfterEyebrow}
           </p>
           <h2
             className="text-3xl md:text-4xl font-bold text-white mb-4"
             style={{ fontFamily: "var(--font-playfair)" }}
           >
-            Before &amp; After
+            {s.beforeAfterHeading}
           </h2>
           <p className="text-white/40 max-w-xl mx-auto text-[15px] leading-relaxed">
-            See the life-changing smile transformations Dr. Firas has achieved for
-            his patients.
+            {s.beforeAfterDesc}
           </p>
         </div>
 

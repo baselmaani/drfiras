@@ -17,16 +17,16 @@ export default async function ContactSection() {
         {/* Header */}
         <div className="text-center mb-12">
           <p className="text-[#c9a84c] text-[11px] font-semibold uppercase tracking-[0.28em] mb-3">
-            Get in Touch
+            {s.contactEyebrow}
           </p>
           <h2
             className="text-3xl md:text-4xl font-bold text-white"
             style={{ fontFamily: "var(--font-playfair)" }}
           >
-            Book a Consultation
+            {s.contactHeading}
           </h2>
           <p className="text-white/45 text-sm mt-3 max-w-md mx-auto">
-            Fill in the form and Dr. Firas&apos; team will get back to you within 24 hours.
+            {s.contactDesc}
           </p>
         </div>
 

@@ -41,7 +41,7 @@ export default async function Expertise() {
             Areas of Expertise
           </h2>
           <p className="text-white/40 max-w-xl mx-auto text-[15px] leading-relaxed">
-            Dr. Firas offers a full range of cosmetic and restorative dental
+            Dr. Firas Zoghieb offers a full range of cosmetic and restorative dental
             treatments tailored to help you achieve the smile you deserve.
           </p>
         </div>

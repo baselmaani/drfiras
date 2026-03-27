@@ -35,12 +35,32 @@ const components = [
         ),
       },
       {
+        href: "/dashboard/content/services-section",
+        title: "Services Section",
+        desc: "Edit the eyebrow label, heading and description above the services grid",
+        icon: (
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h10" />
+          </svg>
+        ),
+      },
+      {
         href: "/dashboard/before-after",
         title: "Before & After",
         desc: "Upload before & after case photos shown in the gallery",
         icon: (
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+        ),
+      },
+      {
+        href: "/dashboard/content/before-after-section",
+        title: "Before & After Section",
+        desc: "Edit the eyebrow label, heading and description above the before & after gallery",
+        icon: (
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h10" />
           </svg>
         ),
       },
@@ -138,6 +158,16 @@ const components = [
         icon: (
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h10M4 18h14" />
+          </svg>
+        ),
+      },
+      {
+        href: "/dashboard/content/footer",
+        title: "Footer",
+        desc: "CTA banner, tagline, working hours and button labels",
+        icon: (
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 20h16M4 16h16M4 12h10" />
           </svg>
         ),
       },

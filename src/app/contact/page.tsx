@@ -1,4 +1,4 @@
-export const revalidate = 3600;
+export const revalidate = 60;
 
 import type { Metadata } from "next";
 import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";

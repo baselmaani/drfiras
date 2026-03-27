@@ -1,4 +1,4 @@
-export const revalidate = 3600;
+export const revalidate = 60;
 
 import { db } from "@/lib/db";
 import { notFound } from "next/navigation";
@@ -75,7 +75,7 @@ export default async function BlogPostPage({
 
       {/* Article Header */}
       <section className="pt-32 pb-12 border-b border-white/[0.06]">
-        <div className="max-w-3xl mx-auto px-6">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-3 mb-5">
             {post.publishedAt && (
               <time className="text-xs text-white/40 uppercase tracking-widest">
@@ -102,7 +102,7 @@ export default async function BlogPostPage({
 
       {/* Cover Image */}
       {post.coverImage && (
-        <div className="max-w-4xl mx-auto px-6 pt-10">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-10">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={post.coverImage}
@@ -114,7 +114,7 @@ export default async function BlogPostPage({
 
       {/* Article Content */}
       <article className="py-12 pb-24 border-t border-white/[0.06]">
-        <div className="max-w-3xl mx-auto px-6">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <div
             className="[&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-white [&_h2]:mt-8 [&_h2]:mb-3 [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:text-white/90 [&_h3]:mt-6 [&_h3]:mb-2 [&_p]:text-white/55 [&_p]:text-[16px] [&_p]:leading-relaxed [&_p]:mb-4 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-4 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-4 [&_li]:text-white/55 [&_li]:mb-1 [&_strong]:text-white/80 [&_strong]:font-semibold [&_a]:text-[#c9a84c] [&_a]:underline [&_blockquote]:border-l-4 [&_blockquote]:border-[#c9a84c] [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-white/45 [&_hr]:border-white/10 [&_hr]:my-8"
             dangerouslySetInnerHTML={{ __html: post.content }}

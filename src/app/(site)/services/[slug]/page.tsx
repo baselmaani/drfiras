@@ -1,4 +1,4 @@
-export const revalidate = 3600;
+export const revalidate = 60;
 
 import { db } from "@/lib/db";
 import { notFound } from "next/navigation";
@@ -88,7 +88,7 @@ export default async function ServicePage({
           }}
         />
 
-        <div className="max-w-6xl mx-auto px-6">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 pt-8 text-[13px] text-white/35">
             <Link href="/" className="hover:text-[#c9a84c] transition-colors">Home</Link>
@@ -170,7 +170,7 @@ export default async function ServicePage({
       {/* Content */}
       {service.content && (
         <section className="bg-[#111] border-t border-white/[0.06]">
-          <div className="max-w-4xl mx-auto px-6 py-20">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-20">
             <div className="flex items-center gap-4 mb-10">
               <div className="w-8 h-[2px] bg-[#c9a84c]" />
               <p className="text-[#c9a84c] text-[11px] font-semibold uppercase tracking-[0.28em]">
@@ -199,7 +199,7 @@ export default async function ServicePage({
       {/* Case Images Gallery */}
       {caseImages.length > 0 && (
         <section className="py-20 bg-[#0d0d0d] border-t border-white/[0.06]">
-          <div className="max-w-6xl mx-auto px-6">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6">
             <div className="text-center mb-12">
               <p className="text-[#c9a84c] text-[11px] font-semibold uppercase tracking-[0.28em] mb-3">
                 Real Results
@@ -251,7 +251,7 @@ export default async function ServicePage({
 
       {/* CTA */}
       <section className="py-24 bg-[#0d0d0d] border-t border-white/[0.06]">
-        <div className="max-w-2xl mx-auto px-6 text-center">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
           <div className="inline-flex items-center gap-2 bg-[#c9a84c]/10 border border-[#c9a84c]/20 rounded-full px-5 py-2 mb-8">
             <div className="w-1.5 h-1.5 rounded-full bg-[#c9a84c]" />
             <span className="text-[#c9a84c] text-[11px] font-semibold uppercase tracking-[0.22em]">
@@ -265,7 +265,7 @@ export default async function ServicePage({
             Ready to Transform Your Smile?
           </h2>
           <p className="text-white/45 mb-10 text-base leading-relaxed">
-            Book a consultation with Dr. Firas and discover if{" "}
+            Book a consultation with Dr. Firas Zoghieb and discover if{" "}
             <span className="text-white/70 font-medium">{service.title}</span> is right for you.
           </p>
           <div className="flex flex-wrap justify-center gap-3">

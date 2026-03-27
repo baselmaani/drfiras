@@ -70,28 +70,6 @@ export default async function About() {
               </li>
             ))}
           </ul>
-
-          {/* Stats row */}
-          <div className="mt-10 grid grid-cols-3 gap-2 sm:gap-4">
-            {[
-              { number: s.aboutStat1Number, label: s.aboutStat1Label },
-              { number: s.aboutStat2Number, label: s.aboutStat2Label },
-              { number: s.aboutStat3Number, label: s.aboutStat3Label },
-            ].map((stat) => (
-              <div
-                key={stat.label}
-                className="text-center bg-[#1a1a1a] rounded-xl p-4 border border-white/[0.06]"
-              >
-                <p
-                  className="text-2xl font-bold text-[#c9a84c]"
-                  style={{ fontFamily: "var(--font-playfair)" }}
-                >
-                  {stat.number}
-                </p>
-                <p className="text-xs text-white/40 mt-1">{stat.label}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </section>

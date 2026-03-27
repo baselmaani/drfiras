@@ -5,6 +5,6 @@ import NavbarClient from "./NavbarClient";
 export default async function Navbar() {
   const [raw, menuItems] = await Promise.all([getSettings(), getMenuItems()]);
   const s = { ...DEFAULT_SETTINGS, ...raw };
-  return <NavbarClient phone={s.phone} whatsapp={s.whatsapp} instagram={s.instagram} menuItems={menuItems} />;
+  return <NavbarClient phone={s.phone} whatsapp={s.whatsapp} instagram={s.instagram} logoUrl={s.logoUrl} menuItems={menuItems} />;
 }
 

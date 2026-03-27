@@ -33,7 +33,6 @@ export default async function Hero() {
 
           {/* Eyebrow */}
           <div className="flex items-center gap-3 mb-7">
-            <div className="h-px w-8 bg-[#c9a84c] flex-shrink-0" />
             <p className="text-[#c9a84c] text-[11px] font-semibold uppercase tracking-[0.3em]">
               {s.heroEyebrow}
             </p>
@@ -41,7 +40,7 @@ export default async function Hero() {
 
           {/* Heading */}
           <h1
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.04] mb-7"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.04] mb-7 whitespace-nowrap"
             style={{ fontFamily: "var(--font-playfair)" }}
           >
             {s.heroHeading}
@@ -52,6 +51,19 @@ export default async function Hero() {
             {s.heroBody}
           </p>
 
+          {/* CTA Callout */}
+          <div className="mb-8 border border-[#c9a84c]/20 rounded-2xl p-5 bg-[#c9a84c]/[0.04]">
+            <p className="text-[#c9a84c] text-[10px] font-semibold uppercase tracking-[0.28em] mb-1.5">
+              {s.footerCtaEyebrow}
+            </p>
+            <p className="text-white font-semibold text-base mb-1" style={{ fontFamily: "var(--font-playfair)" }}>
+              {s.footerCtaTitle}
+            </p>
+            <p className="text-white/40 text-[13px] leading-relaxed">
+              {s.footerCtaDesc}
+            </p>
+          </div>
+
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row gap-4">
             <a
@@ -59,12 +71,6 @@ export default async function Hero() {
               className="bg-[#e85535] text-white px-8 py-3.5 rounded-full font-semibold text-sm hover:bg-[#d44428] active:scale-[0.98] transition-all duration-200 text-center shadow-xl shadow-[#e85535]/20"
             >
               {s.heroCta1Text}
-            </a>
-            <a
-              href={s.heroCta2Link}
-              className="border border-[#c9a84c]/35 text-[#c9a84c]/80 px-8 py-3.5 rounded-full font-medium text-sm hover:bg-[#c9a84c]/8 hover:border-[#c9a84c]/60 transition-all duration-200 text-center"
-            >
-              {s.heroCta2Text}
             </a>
           </div>
 
@@ -123,21 +129,10 @@ export default async function Hero() {
                 </div>
               )}
 
-              {/* Name overlay at bottom */}
-              <div className="absolute bottom-0 left-0 right-0 px-6 py-5 bg-gradient-to-t from-[#0d0d0d]/80 to-transparent text-center">
-                <p className="text-white/80 font-bold text-sm tracking-wide" style={{ fontFamily: "var(--font-playfair)" }}>
-                  {s.doctorName}
-                </p>
-              </div>
+
             </div>
 
-            {/* Stat card */}
-            <div className="absolute -bottom-4 -left-8 md:-left-14 bg-[#141414] border border-[#2a2a2a] rounded-2xl px-5 py-3.5 shadow-2xl backdrop-blur-sm">
-              <p className="text-[#c9a84c] font-bold text-xl leading-none" style={{ fontFamily: "var(--font-playfair)" }}>
-                {s.heroStatNumber}
-              </p>
-              <p className="text-white/35 text-[11px] mt-1 tracking-wide">{s.heroStatLabel}</p>
-            </div>
+
           </div>
         </div>
 

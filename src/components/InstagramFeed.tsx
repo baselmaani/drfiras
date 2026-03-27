@@ -93,11 +93,7 @@ export default async function InstagramFeed() {
             {/* Avatar with gradient ring */}
             <div className="relative flex-shrink-0">
               <div
-                className="w-16 h-16 rounded-full p-[2px]"
-                style={{
-                  background:
-                    "linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)",
-                }}
+                className="w-16 h-16 rounded-full p-[2px] bg-[linear-gradient(45deg,#f09433_0%,#e6683c_25%,#dc2743_50%,#cc2366_75%,#bc1888_100%)]"
               >
                 <div className="w-full h-full rounded-full bg-[#141414] flex items-center justify-center">
                   <span className="text-white font-bold text-lg">DF</span>
@@ -130,11 +126,7 @@ export default async function InstagramFeed() {
               href={profileUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-shrink-0 inline-flex items-center gap-2 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-opacity hover:opacity-90"
-              style={{
-                background:
-                  "linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)",
-              }}
+              className="flex-shrink-0 inline-flex items-center gap-2 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-opacity hover:opacity-90 bg-[linear-gradient(45deg,#f09433_0%,#e6683c_25%,#dc2743_50%,#cc2366_75%,#bc1888_100%)]"
             >
               <InstagramIcon className="w-4 h-4" />
               Follow
@@ -181,11 +173,7 @@ export default async function InstagramFeed() {
             href={profileUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2.5 text-white font-semibold px-8 py-3.5 rounded-full text-sm transition-opacity hover:opacity-90 shadow-lg"
-            style={{
-              background:
-                "linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)",
-            }}
+            className="inline-flex items-center gap-2.5 text-white font-semibold px-8 py-3.5 rounded-full text-sm transition-opacity hover:opacity-90 shadow-lg bg-[linear-gradient(45deg,#f09433_0%,#e6683c_25%,#dc2743_50%,#cc2366_75%,#bc1888_100%)]"
           >
             <InstagramIcon className="w-5 h-5" />
             Follow @{handle} on Instagram

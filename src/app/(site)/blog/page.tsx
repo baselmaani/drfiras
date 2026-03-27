@@ -1,4 +1,4 @@
-export const revalidate = 3600;
+export const revalidate = 60;
 
 import { db } from "@/lib/db";
 import type { Metadata } from "next";
@@ -51,72 +51,77 @@ export default async function BlogPage() {
     <>
       <Navbar />
 
-      {/* Header */}
-      <section className="pt-32 pb-12 bg-[#f7f9fc]">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <h1
-            className="text-4xl md:text-5xl font-bold text-[#1b4f72] mb-4"
-            style={{ fontFamily: "var(--font-playfair)" }}
-          >
-            Dental Tips &amp; Advice
-          </h1>
-          <p className="text-xl text-gray-600">
-            Expert insights on cosmetic dentistry, oral health and smile transformation.
-          </p>
-        </div>
-      </section>
+      <main className="bg-[#0d0d0d] min-h-screen">
+        {/* Header */}
+        <section className="pt-[100px] pb-14 border-b border-white/[0.06]">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6">
+            <p className="text-[#c9a84c] text-[11px] font-semibold uppercase tracking-[0.28em] mb-3">
+              Latest Articles
+            </p>
+            <h1
+              className="text-4xl md:text-5xl font-bold text-white mb-4"
+              style={{ fontFamily: "var(--font-playfair)" }}
+            >
+              Dental Tips &amp; Advice
+            </h1>
+            <p className="text-white/50 text-base md:text-lg max-w-xl leading-relaxed">
+              Expert insights on cosmetic dentistry, oral health and smile transformation.
+            </p>
+          </div>
+        </section>
 
-      {/* Posts Grid */}
-      <section className="py-16">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          {posts.length === 0 ? (
-            <p className="text-gray-500 text-center py-20">No  published yet. Check back soon.</p>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {posts.map((post) => (
-                <article key={post.id} className="group">
-                  {post.coverImage && (
-                    <Link href={`/blog/${post.slug}`}>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={post.coverImage}
-                        alt={post.title}
-                        className="w-full h-48 object-cover rounded-2xl mb-4 group-hover:opacity-90 transition-opacity"
-                      />
-                    </Link>
-                  )}
-                  <div>
-                    {post.publishedAt && (
-                      <time className="text-xs text-gray-400 uppercase tracking-wide">
-                        {new Date(post.publishedAt).toLocaleDateString("en-GB", {
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric",
-                        })}
-                      </time>
+        {/* Posts Grid */}
+        <section className="py-16">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6">
+            {posts.length === 0 ? (
+              <p className="text-white/40 text-center py-20">No posts published yet. Check back soon.</p>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {posts.map((post) => (
+                  <article key={post.id} className="group bg-[#141414] border border-white/[0.06] hover:border-[#c9a84c]/40 rounded-2xl overflow-hidden transition-all duration-300 flex flex-col">
+                    {post.coverImage && (
+                      <Link href={`/blog/${post.slug}`} className="block overflow-hidden">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={post.coverImage}
+                          alt={post.title}
+                          className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                      </Link>
                     )}
-                    <h2
-                      className="text-xl font-bold text-[#1b4f72] mt-2 mb-2 group-hover:text-[#c9a84c] transition-colors"
-                      style={{ fontFamily: "var(--font-playfair)" }}
-                    >
-                      <Link href={`/blog/${post.slug}`}>{post.title}</Link>
-                    </h2>
-                    {post.excerpt && (
-                      <p className="text-gray-600 text-sm line-clamp-3">{post.excerpt}</p>
-                    )}
-                    <Link
-                      href={`/blog/${post.slug}`}
-                      className="inline-block mt-3 text-[#c9a84c] text-sm font-medium hover:underline"
-                    >
-                      Read more →
-                    </Link>
-                  </div>
-                </article>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
+                    <div className="p-5 flex flex-col flex-1">
+                      {post.publishedAt && (
+                        <time className="text-xs text-white/35 uppercase tracking-wide">
+                          {new Date(post.publishedAt).toLocaleDateString("en-GB", {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric",
+                          })}
+                        </time>
+                      )}
+                      <h2
+                        className="text-lg font-bold text-white mt-2 mb-2 group-hover:text-[#c9a84c] transition-colors leading-snug"
+                        style={{ fontFamily: "var(--font-playfair)" }}
+                      >
+                        <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+                      </h2>
+                      {post.excerpt && (
+                        <p className="text-white/45 text-sm line-clamp-3 leading-relaxed flex-1">{post.excerpt}</p>
+                      )}
+                      <Link
+                        href={`/blog/${post.slug}`}
+                        className="inline-block mt-4 text-[#c9a84c] text-sm font-medium hover:underline"
+                      >
+                        Read more →
+                      </Link>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      </main>
       <BeforeAfter />
     </>
   );

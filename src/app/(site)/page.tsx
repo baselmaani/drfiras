@@ -1,17 +1,14 @@
-export const revalidate = 3600;
+export const revalidate = 60;
 
 import type { Metadata } from "next";
 import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import AtAGlance from "@/components/AtAGlance";
 import About from "@/components/About";
 import ServicesGrid from "@/components/ServicesGrid";
 import BeforeAfter from "@/components/BeforeAfter";
 import ContactSection from "@/components/ContactSection";
-import GoogleReviews from "@/components/GoogleReviews";
-import InstagramFeed from "@/components/InstagramFeed";
 import FAQSection from "@/components/FAQSection";
 import Footer from "@/components/Footer";
 import { FAQJsonLd, HomepageJsonLd } from "@/components/JsonLd";
@@ -57,8 +54,6 @@ export default async function Home() {
       <BeforeAfter />
       <ContactSection />
       <About />
-      <GoogleReviews />
-      <InstagramFeed />
       <FAQSection />
     </>
   );

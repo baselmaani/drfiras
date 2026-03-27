@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { updateSettings } from "@/lib/actions/settings";
+import { ImageUpload } from "@/components/dashboard/ImageUpload";
 
 type Settings = Record<string, string>;
 
@@ -68,6 +69,15 @@ export function SettingsForm({ initialData }: { initialData: Settings }) {
         <h2 className="text-base font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-100">
           Clinic Info
         </h2>
+        <div className="mb-5">
+          <label className="block text-sm font-medium text-gray-700 mb-2">Logo</label>
+          <ImageUpload
+            name="logoUrl"
+            defaultValue={initialData["logoUrl"] ?? ""}
+            label="Upload Logo"
+          />
+          <p className="text-xs text-gray-400 mt-1.5">Recommended: transparent PNG or SVG, at least 200px tall. Leave empty to use the default text logo.</p>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {field("doctorName", "Doctor Name", "text", "Dr. Firas")}
           {field("specialty", "Specialty / Title", "text", "Cosmetic Dentist")}

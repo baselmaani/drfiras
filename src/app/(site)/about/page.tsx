@@ -1,4 +1,4 @@
-export const revalidate = 3600;
+export const revalidate = 60;
 
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -80,7 +80,7 @@ export default async function AboutPage() {
       {/* Stats */}
       <section className="bg-[#141414] border-b border-white/[0.06] py-10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-3 gap-4 text-center">
+          <div className="grid grid-cols-3 gap-2 sm:gap-4 text-center">
             {[
               { number: s.aboutStat1Number, label: s.aboutStat1Label },
               { number: s.aboutStat2Number, label: s.aboutStat2Label },
@@ -88,12 +88,12 @@ export default async function AboutPage() {
             ].map((stat) => (
               <div key={stat.label} className="py-4">
                 <p
-                  className="text-3xl md:text-4xl font-bold text-[#c9a84c]"
+                  className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#c9a84c]"
                   style={{ fontFamily: "var(--font-playfair)" }}
                 >
                   {stat.number}
                 </p>
-                <p className="text-white/40 text-xs mt-1 uppercase tracking-wide">{stat.label}</p>
+                <p className="text-white/40 text-[10px] sm:text-xs mt-1 uppercase tracking-wide">{stat.label}</p>
               </div>
             ))}
           </div>

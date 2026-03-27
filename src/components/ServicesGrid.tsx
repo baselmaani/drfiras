@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -24,27 +25,30 @@ export default async function ServicesGrid({ showHeading = true }: { showHeading
     services = FALLBACK;
   }
 
+  const raw = await getSettings();
+  const s = { ...DEFAULT_SETTINGS, ...raw };
+
   return (
     <section id="expertise" className="py-20 bg-[#0d0d0d]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         {showHeading && (
           <div className="text-center mb-14">
             <p className="text-[#c9a84c] text-[11px] font-semibold uppercase tracking-[0.28em] mb-3">
-              What We Offer
+              {s.servicesEyebrow}
             </p>
             <h2
               className="text-3xl md:text-4xl font-bold text-white mb-4"
               style={{ fontFamily: "var(--font-playfair)" }}
             >
-              Our Services
+              {s.servicesHeading}
             </h2>
             <p className="text-white/40 max-w-xl mx-auto text-[15px] leading-relaxed">
-              Dr. Firas offers a full range of cosmetic and restorative dental treatments tailored to help you achieve the smile you deserve.
+              {s.servicesDesc}
             </p>
           </div>
         )}
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid sm:grid-cols-2 gap-6">
           {services.map((service) => (
             <Link
               key={service.id}

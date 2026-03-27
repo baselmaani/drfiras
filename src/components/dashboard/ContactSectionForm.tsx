@@ -18,6 +18,23 @@ export function ContactSectionForm({ values }: { values: Values }) {
         <div className="bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-xl">Saved successfully.</div>
       )}
 
+      {/* Section heading */}
+      <div className="border border-gray-100 rounded-2xl p-5 space-y-4 bg-gray-50">
+        <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Section Heading</h3>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">Eyebrow label</label>
+          <input name="contactEyebrow" defaultValue={values.contactEyebrow ?? "Get in Touch"} className={cls} placeholder="e.g. Get in Touch" />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">Heading</label>
+          <input name="contactHeading" defaultValue={values.contactHeading ?? "Book a Consultation"} className={cls} placeholder="e.g. Book a Consultation" />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">Description</label>
+          <textarea name="contactDesc" rows={2} defaultValue={values.contactDesc ?? ""} className={`${cls} resize-none`} />
+        </div>
+      </div>
+
       {/* Clinic contact details */}
       <div className="border border-gray-100 rounded-2xl p-5 space-y-4 bg-gray-50">
         <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Clinic Contact Details</h3>

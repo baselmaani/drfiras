@@ -35,5 +35,8 @@ export async function updateSettings(
   revalidatePath("/dashboard/content/google-reviews");
   revalidatePath("/dashboard/content/instagram");
   revalidatePath("/dashboard/content/navbar");
+  revalidatePath("/dashboard/content/footer");
+  revalidatePath("/dashboard/content/services-section");
+  revalidatePath("/dashboard/content/before-after-section");
   return { success: true };
 }
