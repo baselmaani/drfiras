@@ -13,6 +13,7 @@ export const DEFAULT_SETTINGS: Record<string, string> = {
   email: "info@drfiraszoghieb.com",
   address: "Happiness St, Al Wasl, Dubai",
   instagram: "https://www.instagram.com/dr.firaszoghieb",
+  tiktok: "",
   facebook: "",
   whatsapp: "https://wa.me/971508696919",
   bookingUrl: "#book",
@@ -102,6 +103,6 @@ export const DEFAULT_SETTINGS: Record<string, string> = {
   footerCtaDesc: "Book a free, no-obligation consultation with Dr. Firas and discover what a confident, beautiful smile can do for you.",
   footerCtaBtn1Text: "Book Free Consultation",
   footerCtaBtn2Text: "WhatsApp Us",
-  footerHours: "Mon – Sat: 9:00 am – 7:00 pm",
+  footerHours: "Tue – Sun: 11:00 am – 8:00 pm",
   footerTagline: "Helping patients achieve beautiful, natural-looking smiles through gentle, minimally invasive cosmetic dentistry.",
 };

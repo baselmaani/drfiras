@@ -33,7 +33,7 @@ export default async function Hero() {
 
           {/* Eyebrow */}
           <div className="flex items-center gap-3 mb-7">
-            <p className="text-[#c9a84c] text-[11px] font-semibold uppercase tracking-[0.3em]">
+            <p className="text-white text-[11px] font-semibold uppercase tracking-[0.3em]">
               {s.heroEyebrow}
             </p>
           </div>
