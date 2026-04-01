@@ -122,7 +122,6 @@ export default async function BlogPage() {
           </div>
         </section>
       </main>
-      <BeforeAfter />
     </>
   );
 }

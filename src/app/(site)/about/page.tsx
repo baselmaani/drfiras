@@ -221,8 +221,6 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <BeforeAfter />
-
       {/* CTA */}
       <section className="bg-[#0d0d0d] border-t border-white/[0.06] py-20">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">

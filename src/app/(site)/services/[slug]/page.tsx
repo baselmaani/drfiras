@@ -117,9 +117,6 @@ export default async function ServicePage({
                   {service.icon}
                 </div>
               )}
-              <p className="text-[#c9a84c] text-[11px] font-semibold uppercase tracking-[0.28em] mb-3">
-                Treatment
-              </p>
               <h1
                 data-speakable
                 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold text-white mb-5 leading-[1.1]"
@@ -254,7 +251,7 @@ export default async function ServicePage({
         </section>
       )}
 
-      <BeforeAfter />
+      {service.slug === "composite-bonding" && <BeforeAfter />}
 
       {/* FAQ */}
       {faqItems.length > 0 && <FAQ items={faqItems} />}

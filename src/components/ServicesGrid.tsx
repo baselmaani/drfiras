@@ -48,21 +48,23 @@ export default async function ServicesGrid({ showHeading = true }: { showHeading
           </div>
         )}
 
-        <div className="grid sm:grid-cols-2 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {services.map((service) => (
             <Link
               key={service.id}
               href={`/services/${service.slug}`}
-              className="group rounded-2xl overflow-hidden border border-[#1e1e1e] hover:border-[#c9a84c]/50 transition-all duration-300 bg-[#141414]"
+              className="group rounded-2xl overflow-hidden border border-[#1e1e1e] hover:border-[#c9a84c]/70 transition-all duration-300 bg-[#111]"
             >
               {/* Image */}
-              <div className="relative aspect-[16/9] bg-[#111] overflow-hidden">
+              <div className="bg-[#111] overflow-hidden">
                 {service.heroImage ? (
                   <Image
                     src={service.heroImage}
                     alt={service.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    width={0}
+                    height={0}
+                    sizes="100vw"
+                    className="w-full h-auto transition-transform duration-500 group-hover:scale-105"
                     unoptimized
                   />
                 ) : (
@@ -79,19 +81,16 @@ export default async function ServicesGrid({ showHeading = true }: { showHeading
               </div>
 
               {/* Content */}
-              <div className="p-5">
+              <div className="px-4 py-3 text-center">
                 <h3
-                  className="text-base font-semibold text-white/90 mb-2 group-hover:text-[#c9a84c] transition-colors"
+                  className="text-base font-semibold text-white/90 group-hover:text-[#c9a84c] transition-colors"
                   style={{ fontFamily: "var(--font-playfair)" }}
                 >
                   {service.title}
                 </h3>
-                <p className="text-white/35 text-sm leading-relaxed line-clamp-2">
-                  {service.description}
-                </p>
-                <span className="inline-flex items-center gap-1.5 mt-4 text-[#c9a84c] text-xs font-medium">
+                <span className="inline-flex items-center justify-center gap-1 mt-1.5 text-[#c9a84c] text-xs font-medium">
                   Learn more
-                  <svg className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3 h-3 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </span>

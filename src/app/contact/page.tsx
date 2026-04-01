@@ -150,7 +150,6 @@ export default async function ContactPage() {
           </div>
         </div>
       </section>
-      <BeforeAfter />
       <Footer />
     </>
   );

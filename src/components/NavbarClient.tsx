@@ -178,13 +178,11 @@ export default function NavbarClient({ phone, whatsapp, instagram, tiktok, logoU
               <CalendarIcon />
               Book Now
             </a>
-            <a href={waHref} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 border border-[#c9a84c]/45 text-[#c9a84c] text-[12px] font-medium px-5 py-2 rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200 tracking-wide">
+            <a href={waHref} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="flex items-center justify-center w-8 h-8 border border-[#c9a84c]/45 text-[#c9a84c] rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200">
               <WAIcon className="w-3.5 h-3.5" />
-              WhatsApp
             </a>
-            <a href={igHref} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 border border-[#c9a84c]/45 text-[#c9a84c] text-[12px] font-medium px-5 py-2 rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200 tracking-wide">
+            <a href={igHref} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="flex items-center justify-center w-8 h-8 border border-[#c9a84c]/45 text-[#c9a84c] rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200">
               <IGIcon className="w-3.5 h-3.5" />
-              Instagram
             </a>
             {tiktok && (
               <a href={ttHref} target="_blank" rel="noopener noreferrer" aria-label="TikTok" className="flex items-center justify-center w-8 h-8 border border-[#c9a84c]/45 text-[#c9a84c] rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200">
@@ -233,13 +231,11 @@ export default function NavbarClient({ phone, whatsapp, instagram, tiktok, logoU
               <PhoneIcon />
               Call Us
             </a>
-            <a href={waHref} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 border border-[#c9a84c]/45 text-[#c9a84c] text-[12px] font-medium px-5 py-2 rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200 tracking-wide">
-              <WAIcon className="w-3.5 h-3.5" />
-              WhatsApp
+            <a href={waHref} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="flex items-center justify-center w-10 h-10 border border-[#c9a84c]/45 text-[#c9a84c] rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200 mx-auto">
+              <WAIcon className="w-4 h-4" />
             </a>
-            <a href={igHref} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 border border-[#c9a84c]/45 text-[#c9a84c] text-[12px] font-medium px-5 py-2 rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200 tracking-wide">
-              <IGIcon className="w-3.5 h-3.5" />
-              Instagram
+            <a href={igHref} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="flex items-center justify-center w-10 h-10 border border-[#c9a84c]/45 text-[#c9a84c] rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200 mx-auto">
+              <IGIcon className="w-4 h-4" />
             </a>
             {tiktok && (
               <a href={ttHref} target="_blank" rel="noopener noreferrer" aria-label="TikTok" className="flex items-center justify-center w-10 h-10 border border-[#c9a84c]/45 text-[#c9a84c] rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200 mx-auto">

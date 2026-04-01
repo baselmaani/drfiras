@@ -1,5 +1,6 @@
 import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
 import Image from "next/image";
+import Link from "next/link";
 
 export default async function Hero() {
   const raw = await getSettings();
@@ -33,7 +34,7 @@ export default async function Hero() {
 
           {/* Eyebrow */}
           <div className="flex items-center gap-3 mb-7">
-            <p className="text-white text-[11px] font-semibold uppercase tracking-[0.3em]">
+            <p className="text-[#c9a84c] text-[14px] font-semibold uppercase tracking-[0.3em]">
               {s.heroEyebrow}
             </p>
           </div>
@@ -52,7 +53,7 @@ export default async function Hero() {
           </p>
 
           {/* CTA Callout */}
-          <div className="mb-8 border border-[#c9a84c]/20 rounded-2xl p-5 bg-[#c9a84c]/[0.04]">
+          <Link href="/contact" className="block mb-8 border border-[#c9a84c]/20 rounded-2xl p-5 bg-[#c9a84c]/[0.04] hover:bg-[#c9a84c]/[0.08] hover:border-[#c9a84c]/40 transition-all duration-200 cursor-pointer">
             <p className="text-[#c9a84c] text-[10px] font-semibold uppercase tracking-[0.28em] mb-1.5">
               {s.footerCtaEyebrow}
             </p>
@@ -62,7 +63,7 @@ export default async function Hero() {
             <p className="text-white/40 text-[13px] leading-relaxed">
               {s.footerCtaDesc}
             </p>
-          </div>
+          </Link>
 
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row gap-4">

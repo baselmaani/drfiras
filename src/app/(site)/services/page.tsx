@@ -57,7 +57,6 @@ export default async function ServicesPage() {
         </section>
 
         <ServicesGrid showHeading={false} />
-        <BeforeAfter />
       </main>
       <ContactSection />
     </>
