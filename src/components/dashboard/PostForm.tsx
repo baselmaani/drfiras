@@ -3,6 +3,8 @@ import { useActionState, useState, useCallback } from "react";
 import type { Post } from "@/generated/prisma/client";
 import { ImageUpload } from "./ImageUpload";
 import { RichTextEditor } from "./RichTextEditor";
+import { InlineFAQManager } from "./InlineFAQManager";
+import type { FAQItem } from "./InlineFAQManager";
 
 type ActionState = { error: string } | null;
 type PostAction = (prevState: ActionState, formData: FormData) => Promise<ActionState>;
@@ -78,6 +80,11 @@ export function PostForm({
   // content is driven by RichTextEditor key re-mount
   const [contentDefault, setContentDefault] = useState(post?.content ?? "");
   const [contentKey, setContentKey]         = useState(0);
+
+  let initialFaqItems: FAQItem[] = [];
+  if (post?.faqItems) {
+    try { initialFaqItems = JSON.parse(post.faqItems); } catch { /* keep empty */ }
+  }
 
   // ── JSON import panel ───────────────────────────────────────────────────
   const [showJson, setShowJson]   = useState(false);
@@ -314,6 +321,13 @@ export function PostForm({
             defaultValue={ogImage}
           />
         </div>
+      </div>
+
+      {/* FAQ Items */}
+      <div className="border border-gray-100 rounded-2xl p-5 space-y-4 bg-gray-50">
+        <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">FAQ Items</h3>
+        <p className="text-xs text-gray-400">Add frequently asked questions shown at the bottom of this post.</p>
+        <InlineFAQManager initial={initialFaqItems} name="faqItems" />
       </div>
 
       <label className="flex items-center gap-3 cursor-pointer">

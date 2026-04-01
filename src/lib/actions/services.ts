@@ -38,6 +38,7 @@ export async function createService(
         metaDesc: (formData.get("metaDesc") as string) || null,
         metaKeywords: (formData.get("metaKeywords") as string) || null,
         ogImage: (formData.get("ogImage") as string) || null,
+        faqItems: (formData.get("faqItems") as string) || null,
       },
     });
   } catch {
@@ -80,6 +81,7 @@ export async function updateService(
         metaDesc: (formData.get("metaDesc") as string) || null,
         metaKeywords: (formData.get("metaKeywords") as string) || null,
         ogImage: (formData.get("ogImage") as string) || null,
+        faqItems: (formData.get("faqItems") as string) || null,
       },
     });
   } catch (e) {

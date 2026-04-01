@@ -3,6 +3,8 @@ import { useActionState, useState } from "react";
 import type { Service } from "@/generated/prisma/client";
 import { ImageUpload } from "./ImageUpload";
 import { RichTextEditor } from "./RichTextEditor";
+import { InlineFAQManager } from "./InlineFAQManager";
+import type { FAQItem } from "./InlineFAQManager";
 
 type ActionState = { error: string } | null;
 type ServiceAction = (prevState: ActionState, formData: FormData) => Promise<ActionState>;
@@ -62,6 +64,11 @@ export function ServiceForm({
   let initialCaseImages: string[] = [];
   if (service?.caseImages) {
     try { initialCaseImages = JSON.parse(service.caseImages); } catch { /* keep empty */ }
+  }
+
+  let initialFaqItems: FAQItem[] = [];
+  if (service?.faqItems) {
+    try { initialFaqItems = JSON.parse(service.faqItems); } catch { /* keep empty */ }
   }
 
   return (
@@ -210,6 +217,13 @@ export function ServiceForm({
           <p className="text-xs text-gray-400 mb-1">Used for social sharing previews. Leave blank to use hero image.</p>
           <ImageUpload name="ogImage" defaultValue={service?.ogImage ?? ""} />
         </div>
+      </div>
+
+      {/* FAQ Items */}
+      <div className="border border-gray-100 rounded-2xl p-5 space-y-4 bg-gray-50">
+        <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">FAQ Items</h3>
+        <p className="text-xs text-gray-400">Add frequently asked questions shown on this service page.</p>
+        <InlineFAQManager initial={initialFaqItems} name="faqItems" />
       </div>
 
       {/* Published */}

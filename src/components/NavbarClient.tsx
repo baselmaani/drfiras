@@ -187,9 +187,8 @@ export default function NavbarClient({ phone, whatsapp, instagram, tiktok, logoU
               Instagram
             </a>
             {tiktok && (
-              <a href={ttHref} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 border border-[#c9a84c]/45 text-[#c9a84c] text-[12px] font-medium px-5 py-2 rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200 tracking-wide">
+              <a href={ttHref} target="_blank" rel="noopener noreferrer" aria-label="TikTok" className="flex items-center justify-center w-8 h-8 border border-[#c9a84c]/45 text-[#c9a84c] rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200">
                 <TikTokIcon className="w-3.5 h-3.5" />
-                TikTok
               </a>
             )}
           </nav>
@@ -243,9 +242,8 @@ export default function NavbarClient({ phone, whatsapp, instagram, tiktok, logoU
               Instagram
             </a>
             {tiktok && (
-              <a href={ttHref} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 border border-[#c9a84c]/45 text-[#c9a84c] text-[12px] font-medium px-5 py-2 rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200 tracking-wide">
-                <TikTokIcon className="w-3.5 h-3.5" />
-                TikTok
+              <a href={ttHref} target="_blank" rel="noopener noreferrer" aria-label="TikTok" className="flex items-center justify-center w-10 h-10 border border-[#c9a84c]/45 text-[#c9a84c] rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200 mx-auto">
+                <TikTokIcon className="w-4 h-4" />
               </a>
             )}
           </div>

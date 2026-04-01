@@ -4,11 +4,12 @@ import { db } from "@/lib/db";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
-import { ServiceJsonLd } from "@/components/JsonLd";
+import { ServiceJsonLd, FAQJsonLd } from "@/components/JsonLd";
 import Link from "next/link";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import BeforeAfter from "@/components/BeforeAfter";
+import FAQ from "@/components/FAQ";
 
 export async function generateStaticParams() {
   const services = await db.service.findMany({
@@ -66,6 +67,11 @@ export default async function ServicePage({
     try { caseImages = JSON.parse(service.caseImages); } catch { /* keep empty */ }
   }
 
+  let faqItems: { question: string; answer: string }[] = [];
+  if (service.faqItems) {
+    try { faqItems = JSON.parse(service.faqItems); } catch { /* keep empty */ }
+  }
+
   return (
     <>
       <Navbar />
@@ -75,6 +81,7 @@ export default async function ServicePage({
         url={`${SITE_URL}/services/${service.slug}`}
         image={service.heroImage ?? service.ogImage ?? undefined}
       />
+      {faqItems.length > 0 && <FAQJsonLd items={faqItems} />}
 
       {/* Hero */}
       <section className="relative bg-[#0d0d0d] pt-[68px] overflow-hidden">
@@ -248,6 +255,9 @@ export default async function ServicePage({
       )}
 
       <BeforeAfter />
+
+      {/* FAQ */}
+      {faqItems.length > 0 && <FAQ items={faqItems} />}
 
       {/* CTA */}
       <section className="py-24 bg-[#0d0d0d] border-t border-white/[0.06]">

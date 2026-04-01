@@ -38,6 +38,7 @@ export async function createPost(
         metaDesc: (formData.get("metaDesc") as string) || null,
         metaKeywords: (formData.get("metaKeywords") as string) || null,
         ogImage: (formData.get("ogImage") as string) || null,
+        faqItems: (formData.get("faqItems") as string) || null,
       },
     });
   } catch {
@@ -81,6 +82,7 @@ export async function updatePost(
         metaDesc: (formData.get("metaDesc") as string) || null,
         metaKeywords: (formData.get("metaKeywords") as string) || null,
         ogImage: (formData.get("ogImage") as string) || null,
+        faqItems: (formData.get("faqItems") as string) || null,
       },
     });
   } catch {

@@ -109,6 +109,7 @@ export function SettingsForm({ initialData }: { initialData: Settings }) {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {field("instagram", "Instagram URL", "url", "https://instagram.com/drfiras")}
+          {field("tiktok", "TikTok URL", "url", "https://tiktok.com/@drfiras")}
           {field("facebook", "Facebook URL", "url", "https://facebook.com/drfiras")}
           {field("whatsapp", "WhatsApp Link", "url", "https://wa.me/447700000000")}
           {field("bookingUrl", "Online Booking URL", "url", "https://calendly.com/drfiras")}

@@ -25,6 +25,7 @@ model Service {
   metaDesc    String?
   metaKeywords String?
   ogImage     String?
+  faqItems    String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -55,6 +56,7 @@ model Post {
   metaDesc    String?
   metaKeywords String?
   ogImage     String?
+  faqItems    String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }

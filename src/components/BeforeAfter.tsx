@@ -49,7 +49,7 @@ export default async function BeforeAfter() {
     const dbItems = await db.beforeAfter.findMany({
       where: { published: true },
       orderBy: { order: "asc" },
-      take: 4,
+      take: 6,
       select: { id: true, title: true, treatment: true, beforeImage: true },
     });
     items = dbItems.length > 0 ? dbItems : FALLBACK;

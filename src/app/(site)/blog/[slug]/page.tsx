@@ -4,9 +4,10 @@ import { db } from "@/lib/db";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
-import { ArticleJsonLd } from "@/components/JsonLd";
+import { ArticleJsonLd, FAQJsonLd } from "@/components/JsonLd";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
+import FAQ from "@/components/FAQ";
 
 export async function generateStaticParams() {
   const posts = await db.post.findMany({
@@ -61,6 +62,11 @@ export default async function BlogPostPage({
   const post = await db.post.findUnique({ where: { slug, published: true } });
   if (!post) notFound();
 
+  let faqItems: { question: string; answer: string }[] = [];
+  if (post.faqItems) {
+    try { faqItems = JSON.parse(post.faqItems); } catch { /* keep empty */ }
+  }
+
   return (
     <div className="bg-[#0d0d0d] min-h-screen">
       <Navbar />
@@ -72,6 +78,7 @@ export default async function BlogPostPage({
         publishedAt={post.publishedAt}
         updatedAt={post.updatedAt}
       />
+      {faqItems.length > 0 && <FAQJsonLd items={faqItems} />}
 
       {/* Article Header */}
       <section className="pt-32 pb-12 border-b border-white/[0.06]">
@@ -131,6 +138,9 @@ export default async function BlogPostPage({
           </div>
         </div>
       </article>
+
+      {/* FAQ */}
+      {faqItems.length > 0 && <FAQ items={faqItems} />}
     </div>
   );
 }
