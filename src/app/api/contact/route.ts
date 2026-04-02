@@ -87,6 +87,43 @@ export async function POST(req: NextRequest) {
       `,
     });
 
+    // Auto-reply to the user
+    await transporter.sendMail({
+      from,
+      to: `${name} <${email}>`,
+      subject: `Thank you for contacting Dr. Firas Zoghieb`,
+      html: `
+        <div style="font-family:sans-serif;max-width:600px;margin:0 auto;background:#0d0d0d;padding:40px 32px;border-radius:16px;">
+          <div style="text-align:center;margin-bottom:32px;">
+            <p style="color:#c9a84c;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;margin:0 0 8px;">Dr. Firas Zoghieb</p>
+            <h1 style="color:#ffffff;font-size:24px;margin:0;font-weight:700;">Thank You, ${name}!</h1>
+          </div>
+
+          <div style="background:#161616;border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:24px;margin-bottom:24px;">
+            <p style="color:rgba(255,255,255,0.7);font-size:15px;line-height:1.7;margin:0 0 12px;">
+              Thank you for reaching out to Dr. Firas Zoghieb's clinic. We have received your message and our team will be in touch with you as soon as possible.
+            </p>
+            <p style="color:rgba(255,255,255,0.7);font-size:15px;line-height:1.7;margin:0;">
+              We typically respond within <strong style="color:#c9a84c;">24 hours</strong>. If your enquiry is urgent, feel free to contact us directly on WhatsApp.
+            </p>
+          </div>
+
+          <div style="text-align:center;margin-bottom:32px;">
+            <a href="https://wa.me/971508696919" style="display:inline-block;background:#25d366;color:#ffffff;text-decoration:none;font-size:14px;font-weight:600;padding:12px 28px;border-radius:100px;">
+              💬 Chat on WhatsApp
+            </a>
+          </div>
+
+          <hr style="border:none;border-top:1px solid rgba(255,255,255,0.06);margin:0 0 24px;" />
+
+          <p style="color:rgba(255,255,255,0.3);font-size:12px;text-align:center;margin:0;">
+            Dr. Firas Zoghieb · Cosmetic Dentist Dubai<br/>
+            Happiness St, Al Wasl, Dubai
+          </p>
+        </div>
+      `,
+    });
+
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("[contact]", err);

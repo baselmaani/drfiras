@@ -64,6 +64,7 @@ export default async function ContactSection() {
                     href={`https://wa.me/${whatsapp.replace(/\D/g, "")}`}
                     target="_blank"
                     rel="noopener noreferrer"
+                    data-gtm-whatsapp="true"
                     className="mt-2 flex items-center gap-2 text-[#c9a84c] hover:text-[#b8943d] transition-colors text-sm font-medium"
                   >
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">

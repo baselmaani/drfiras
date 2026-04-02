@@ -178,7 +178,7 @@ export default function NavbarClient({ phone, whatsapp, instagram, tiktok, logoU
               <CalendarIcon />
               Book Now
             </a>
-            <a href={waHref} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="flex items-center justify-center w-8 h-8 border border-[#c9a84c]/45 text-[#c9a84c] rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200">
+            <a href={waHref} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" data-gtm-whatsapp="true" onClick={() => { (window as any).dataLayer = (window as any).dataLayer || []; (window as any).dataLayer.push({ event: 'whatsapp_click', click_location: 'navbar' }); }} className="flex items-center justify-center w-8 h-8 border border-[#c9a84c]/45 text-[#c9a84c] rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200">
               <WAIcon className="w-3.5 h-3.5" />
             </a>
             <a href={igHref} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="flex items-center justify-center w-8 h-8 border border-[#c9a84c]/45 text-[#c9a84c] rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200">
@@ -231,7 +231,7 @@ export default function NavbarClient({ phone, whatsapp, instagram, tiktok, logoU
               <PhoneIcon />
               Call Us
             </a>
-            <a href={waHref} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="flex items-center justify-center w-10 h-10 border border-[#c9a84c]/45 text-[#c9a84c] rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200 mx-auto">
+            <a href={waHref} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" data-gtm-whatsapp="true" onClick={() => { (window as any).dataLayer = (window as any).dataLayer || []; (window as any).dataLayer.push({ event: 'whatsapp_click', click_location: 'navbar_mobile' }); }} className="flex items-center justify-center w-10 h-10 border border-[#c9a84c]/45 text-[#c9a84c] rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200 mx-auto">
               <WAIcon className="w-4 h-4" />
             </a>
             <a href={igHref} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="flex items-center justify-center w-10 h-10 border border-[#c9a84c]/45 text-[#c9a84c] rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200 mx-auto">

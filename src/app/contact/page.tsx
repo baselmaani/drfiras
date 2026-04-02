@@ -99,6 +99,7 @@ export default async function ContactPage() {
                 href={`https://wa.me/${whatsapp.replace(/\D/g, "")}`}
                 target="_blank"
                 rel="noopener noreferrer"
+                data-gtm-whatsapp="true"
                 className="flex items-center gap-2 hover:text-[#c9a84c] transition-colors"
               >
                 <svg className="w-4 h-4 text-[#c9a84c]" fill="currentColor" viewBox="0 0 24 24">

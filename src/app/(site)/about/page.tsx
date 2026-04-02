@@ -34,13 +34,6 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const credentials = [
-  { icon: "🎓", title: "BDS (Honours)", sub: "Bachelor of Dental Surgery with Honours" },
-  { icon: "🏅", title: "MSc Cosmetic Dentistry", sub: "Master of Science in Cosmetic Dentistry" },
-  { icon: "✅", title: "Certified Invisalign Provider", sub: "Accredited aligner therapy specialist" },
-  { icon: "🦷", title: "Composite Bonding Expert", sub: "Advanced postgraduate certification" },
-];
-
 const whyChoose = [
   "Hundreds of composite bonding smile makeovers completed",
   "Expert in minimally invasive, natural smile transformations",
@@ -74,29 +67,6 @@ export default async function AboutPage() {
           <p className="text-white/50 text-base max-w-2xl mx-auto leading-relaxed">
             {s.specialty} in Dubai — dedicated to creating beautiful, natural-looking smiles through minimally invasive care.
           </p>
-        </div>
-      </section>
-
-      {/* Stats */}
-      <section className="bg-[#141414] border-b border-white/[0.06] py-10">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-3 gap-2 sm:gap-4 text-center">
-            {[
-              { number: s.aboutStat1Number, label: s.aboutStat1Label },
-              { number: s.aboutStat2Number, label: s.aboutStat2Label },
-              { number: s.aboutStat3Number, label: s.aboutStat3Label },
-            ].map((stat) => (
-              <div key={stat.label} className="py-4">
-                <p
-                  className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#c9a84c]"
-                  style={{ fontFamily: "var(--font-playfair)" }}
-                >
-                  {stat.number}
-                </p>
-                <p className="text-white/40 text-[10px] sm:text-xs mt-1 uppercase tracking-wide">{stat.label}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -142,13 +112,6 @@ export default async function AboutPage() {
 
           {/* Text */}
           <div>
-            <p className="text-[#c9a84c] text-[11px] font-semibold uppercase tracking-[0.28em] mb-3">Biography</p>
-            <h2
-              className="text-3xl md:text-4xl font-bold text-white mb-8"
-              style={{ fontFamily: "var(--font-playfair)" }}
-            >
-              My Story
-            </h2>
             <div className="space-y-5 text-white/50 leading-[1.85] text-[15px]">
               {s.aboutPara1 && <p>{s.aboutPara1}</p>}
               {s.aboutPara2 && <p>{s.aboutPara2}</p>}
@@ -161,35 +124,6 @@ export default async function AboutPage() {
             >
               Book a Consultation
             </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Credentials */}
-      <section className="bg-[#141414] border-t border-white/[0.06] py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-10">
-            <p className="text-[#c9a84c] text-[11px] font-semibold uppercase tracking-[0.28em] mb-3">Qualifications</p>
-            <h2
-              className="text-3xl md:text-4xl font-bold text-white"
-              style={{ fontFamily: "var(--font-playfair)" }}
-            >
-              Credentials
-            </h2>
-          </div>
-          <div className="grid sm:grid-cols-2 gap-4">
-            {credentials.map((c) => (
-              <div
-                key={c.title}
-                className="bg-[#0d0d0d] border border-white/[0.06] rounded-2xl px-5 py-4 flex items-center gap-4"
-              >
-                <span className="text-2xl">{c.icon}</span>
-                <div>
-                  <p className="text-white font-semibold text-sm">{c.title}</p>
-                  <p className="text-white/40 text-xs mt-0.5">{c.sub}</p>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </section>
