@@ -7,6 +7,7 @@ import Navbar from "@/components/Navbar";
 import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
 import BeforeAfter from "@/components/BeforeAfter";
+import FAQ from "@/components/FAQ";
 
 export async function generateMetadata(): Promise<Metadata> {
   const raw = await getSettings();
@@ -42,6 +43,7 @@ export default async function ContactPage() {
   const email = s.email || "";
   const address = s.address || "";
   const whatsapp = s.whatsapp || "";
+  const googleBusinessUrl = s.googleBusinessUrl || "";
 
   return (
     <>
@@ -91,7 +93,11 @@ export default async function ContactPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-                {address}
+                {googleBusinessUrl ? (
+                  <a href={googleBusinessUrl} target="_blank" rel="noopener noreferrer" className="hover:text-[#c9a84c] transition-colors">{address}</a>
+                ) : (
+                  address
+                )}
               </span>
             )}
             {whatsapp && (
@@ -119,7 +125,7 @@ export default async function ContactPage() {
           <div className="grid md:grid-cols-2 gap-8 items-stretch">
             {/* Form */}
             <div className="bg-[#141414] border border-white/[0.06] rounded-2xl p-6 sm:p-8">
-              <ContactForm phone={phone} email={email} address={address} />
+              <ContactForm phone={phone} email={email} address={address} googleBusinessUrl={googleBusinessUrl} />
             </div>
 
             {/* Map */}
@@ -151,6 +157,8 @@ export default async function ContactPage() {
           </div>
         </div>
       </section>
+      <BeforeAfter />
+      {(() => { let items: {question:string;answer:string}[] = []; try { if (s.contactFaqItems) items = JSON.parse(s.contactFaqItems); } catch {} return items.length > 0 ? <FAQ items={items} /> : null; })()}
       <Footer />
     </>
   );

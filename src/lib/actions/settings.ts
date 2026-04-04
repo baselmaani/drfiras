@@ -29,6 +29,7 @@ export async function updateSettings(
   revalidatePath("/dashboard/content/hero");
   revalidatePath("/dashboard/content/about");
   revalidatePath("/dashboard/content/faq");
+  revalidatePath("/dashboard/content/page-faqs");
   revalidatePath("/dashboard/content/at-a-glance");
   revalidatePath("/dashboard/content/pages-seo");
   revalidatePath("/dashboard/content/contact");

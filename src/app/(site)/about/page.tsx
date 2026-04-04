@@ -7,7 +7,9 @@ import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
 import Navbar from "@/components/Navbar";
 import BeforeAfter from "@/components/BeforeAfter";
+import ContactSection from "@/components/ContactSection";
 import { SpeakableJsonLd } from "@/components/JsonLd";
+import FAQ from "@/components/FAQ";
 
 export async function generateMetadata(): Promise<Metadata> {
   const raw = await getSettings();
@@ -155,6 +157,11 @@ export default async function AboutPage() {
         </div>
       </section>
 
+      <BeforeAfter />
+
+      {/* FAQ */}
+      {(() => { let items: {question:string;answer:string}[] = []; try { if (s.aboutFaqItems) items = JSON.parse(s.aboutFaqItems); } catch {} return items.length > 0 ? <FAQ items={items} /> : null; })()}
+
       {/* CTA */}
       <section className="bg-[#0d0d0d] border-t border-white/[0.06] py-20">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
@@ -183,6 +190,8 @@ export default async function AboutPage() {
           </div>
         </div>
       </section>
+
+      <ContactSection />
     </>
   );
 }

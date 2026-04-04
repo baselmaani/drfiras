@@ -6,7 +6,7 @@ export type FAQItem = { question: string; answer: string };
 
 const EMPTY: FAQItem = { question: "", answer: "" };
 
-export function FAQManager({ initial }: { initial: FAQItem[] }) {
+export function FAQManager({ initial, settingKey = "faqItems" }: { initial: FAQItem[]; settingKey?: string }) {
   const [items, setItems] = useState<FAQItem[]>(initial);
   const [editing, setEditing] = useState<number | null>(null);
   const [draft, setDraft] = useState<FAQItem>(EMPTY);
@@ -16,7 +16,7 @@ export function FAQManager({ initial }: { initial: FAQItem[] }) {
 
   function save() {
     const fd = new FormData();
-    fd.append("faqItems", JSON.stringify(items));
+    fd.append(settingKey, JSON.stringify(items));
     startTransition(async () => {
       const result = await updateSettings(null, fd);
       setMessage(result.success ? "Saved!" : (result.error ?? "Error"));

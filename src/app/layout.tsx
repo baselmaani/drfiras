@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import { Playfair_Display, Inter, Manrope } from "next/font/google";
+import { GTMScript } from "@/components/GTMScript";
 import "./globals.css";
 import { DentistJsonLd } from "@/components/JsonLd";
 import { SITE_NAME, SITE_URL, SITE_DESCRIPTION, SITE_LOCALE, GEO_LAT, GEO_LNG, GEO_REGION, GEO_PLACENAME } from "@/lib/constants";
@@ -98,15 +98,16 @@ export default async function RootLayout({
         <meta name="geo.placename" content={GEO_PLACENAME} />
         <meta name="geo.position"  content={`${GEO_LAT};${GEO_LNG}`} />
         <meta name="ICBM"          content={`${GEO_LAT}, ${GEO_LNG}`} />
-        <Script
-          id="gtm-script"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-PRHXJHHC');`,
-          }}
-        />
+        {s.faviconUrl && (
+          <>
+            <link rel="icon" href={s.faviconUrl} />
+            <link rel="shortcut icon" href={s.faviconUrl} />
+            <link rel="apple-touch-icon" href={s.faviconUrl} />
+          </>
+        )}
       </head>
       <body className={`${playfair.variable} ${inter.variable} ${manrope.variable} antialiased`}>
+        <GTMScript />
         {/* GTM noscript fallback */}
         <noscript>
           <iframe

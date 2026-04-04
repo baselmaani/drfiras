@@ -78,6 +78,15 @@ export function SettingsForm({ initialData }: { initialData: Settings }) {
           />
           <p className="text-xs text-gray-400 mt-1.5">Recommended: transparent PNG or SVG, at least 200px tall. Leave empty to use the default text logo.</p>
         </div>
+        <div className="mb-5">
+          <label className="block text-sm font-medium text-gray-700 mb-2">Favicon (Browser Tab Icon)</label>
+          <ImageUpload
+            name="faviconUrl"
+            defaultValue={initialData["faviconUrl"] ?? ""}
+            label="Upload Favicon"
+          />
+          <p className="text-xs text-gray-400 mt-1.5">Recommended: square PNG, at least 32×32px. Shown in the browser tab.</p>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {field("doctorName", "Doctor Name", "text", "Dr. Firas")}
           {field("specialty", "Specialty / Title", "text", "Cosmetic Dentist")}
@@ -126,6 +135,7 @@ export function SettingsForm({ initialData }: { initialData: Settings }) {
         </p>
         <div className="space-y-4">
           {field("formEmail", "Form Destination Email", "email", "hello@drfiras.com")}
+          {field("googleBusinessUrl", "Google Business Profile URL", "url", "https://maps.app.goo.gl/...")}
           {field("mapUrl", "Google Maps Embed URL", "url", "https://maps.google.com/maps?q=...&output=embed")}
         </div>
         <p className="mt-3 text-xs text-gray-400">

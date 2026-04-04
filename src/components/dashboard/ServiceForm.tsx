@@ -149,10 +149,10 @@ export function ServiceForm({
         <ImageUpload name="heroImage" defaultValue={service?.heroImage ?? ""} />
       </div>
 
-      {/* Case Images Gallery */}
+      {/* Before & After Images */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1.5">Case Images Gallery</label>
-        <p className="text-xs text-gray-400 mb-2">Upload before/after or result photos for this service.</p>
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">Before &amp; After Images</label>
+        <p className="text-xs text-gray-400 mb-2">Upload before/after photos for this service. These replace the global Before &amp; After section on this service&apos;s page.</p>
         <CaseImagesManager initial={initialCaseImages} name="caseImages" />
       </div>
 

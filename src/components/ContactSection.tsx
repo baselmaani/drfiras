@@ -10,6 +10,7 @@ export default async function ContactSection() {
   const email = s.email || "";
   const address = s.address || "";
   const whatsapp = s.whatsapp || "";
+  const googleBusinessUrl = s.googleBusinessUrl || "";
 
   return (
     <section id="book" className="bg-[#0d0d0d] border-t border-white/[0.06] py-20">
@@ -33,7 +34,7 @@ export default async function ContactSection() {
         <div className="grid md:grid-cols-2 gap-8 items-stretch">
           {/* ── Left: Contact Form ───────────────────── */}
           <div className="bg-[#141414] border border-white/[0.06] rounded-2xl p-6 sm:p-8">
-            <ContactForm phone={phone} email={email} address={address} />
+            <ContactForm phone={phone} email={email} address={address} googleBusinessUrl={googleBusinessUrl} />
           </div>
 
           {/* ── Right: Google Map ─────────────────────── */}

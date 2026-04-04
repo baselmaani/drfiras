@@ -9,6 +9,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import BeforeAfter from "@/components/BeforeAfter";
+import ContactSection from "@/components/ContactSection";
 import FAQ from "@/components/FAQ";
 
 export async function generateStaticParams() {
@@ -200,8 +201,8 @@ export default async function ServicePage({
         </section>
       )}
 
-      {/* Case Images Gallery */}
-      {caseImages.length > 0 && (
+      {/* Before & After / Case Images */}
+      {caseImages.length > 0 ? (
         <section className="py-20 bg-[#0d0d0d] border-t border-white/[0.06]">
             <div className="max-w-6xl mx-auto px-4 sm:px-6">
             <div className="text-center mb-12">
@@ -212,7 +213,7 @@ export default async function ServicePage({
                 className="text-3xl md:text-4xl font-bold text-white"
                 style={{ fontFamily: "var(--font-playfair)" }}
               >
-                Case Gallery
+                Before &amp; After
               </h2>
             </div>
             <div
@@ -232,7 +233,7 @@ export default async function ServicePage({
                 >
                   <Image
                     src={img}
-                    alt={`${service.title} — case ${i + 1}`}
+                    alt={`${service.title} — before & after ${i + 1}`}
                     fill
                     className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
                     sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 320px"
@@ -249,9 +250,9 @@ export default async function ServicePage({
             </div>
           </div>
         </section>
+      ) : (
+        <BeforeAfter />
       )}
-
-      {service.slug === "composite-bonding" && <BeforeAfter />}
 
       {/* FAQ */}
       {faqItems.length > 0 && <FAQ items={faqItems} />}
@@ -291,6 +292,8 @@ export default async function ServicePage({
           </div>
         </div>
       </section>
+
+      <ContactSection />
     </>
   );
 }

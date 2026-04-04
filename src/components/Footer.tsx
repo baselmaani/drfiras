@@ -18,6 +18,7 @@ export default async function Footer() {
   const footerCtaBtn2Text = s.footerCtaBtn2Text || "WhatsApp Us";
   const footerHours = s.footerHours || "";
   const footerTagline = s.footerTagline || "";
+  const googleBusinessUrl = s.googleBusinessUrl || "";
 
   return (
     <footer id="contact" className="bg-[#080808] text-white">
@@ -26,15 +27,22 @@ export default async function Footer() {
         {/* Brand */}
         <div>
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
-              <span className="text-white font-bold text-sm">DF</span>
-            </div>
-            <div>
-              <p className="font-bold text-white text-lg leading-tight" style={{ fontFamily: "var(--font-playfair)" }}>
-                Dr. Firas Zoghieb
-              </p>
-              <p className="text-white/50 text-xs">Cosmetic Dentist</p>
-            </div>
+            {s.logoUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={s.logoUrl} alt={s.doctorName} className="h-10 w-auto object-contain" />
+            ) : (
+              <>
+                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
+                  <span className="text-white font-bold text-sm">DF</span>
+                </div>
+                <div>
+                  <p className="font-bold text-white text-lg leading-tight" style={{ fontFamily: "var(--font-playfair)" }}>
+                    {s.doctorName}
+                  </p>
+                  <p className="text-white/50 text-xs">{s.specialty}</p>
+                </div>
+              </>
+            )}
           </div>
           <p className="text-white/60 text-sm leading-relaxed max-w-xs">
             {footerTagline}
@@ -127,7 +135,11 @@ export default async function Footer() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-              <span>{address || "Dubai"}</span>
+              {googleBusinessUrl ? (
+                <a href={googleBusinessUrl} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">{address || "Dubai"}</a>
+              ) : (
+                <span>{address || "Dubai"}</span>
+              )}
             </li>
             <li className="flex items-center gap-3">
               <svg className="w-4 h-4 text-[#c9a84c] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">

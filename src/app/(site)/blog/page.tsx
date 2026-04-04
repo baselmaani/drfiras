@@ -7,6 +7,8 @@ import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import BeforeAfter from "@/components/BeforeAfter";
+import ContactSection from "@/components/ContactSection";
+import FAQ from "@/components/FAQ";
 
 export async function generateMetadata(): Promise<Metadata> {
   const raw = await getSettings();
@@ -46,6 +48,11 @@ export default async function BlogPage() {
       publishedAt: true,
     },
   });
+
+  const raw = await getSettings();
+  const s = { ...DEFAULT_SETTINGS, ...raw };
+  let blogFaqItems: {question:string;answer:string}[] = [];
+  try { if (s.blogFaqItems) blogFaqItems = JSON.parse(s.blogFaqItems); } catch {}
 
   return (
     <>
@@ -121,7 +128,11 @@ export default async function BlogPage() {
             )}
           </div>
         </section>
+
+        <BeforeAfter />
+        {blogFaqItems.length > 0 && <FAQ items={blogFaqItems} />}
       </main>
+      <ContactSection />
     </>
   );
 }

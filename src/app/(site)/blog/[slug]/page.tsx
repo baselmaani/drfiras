@@ -7,6 +7,7 @@ import { SITE_NAME, SITE_URL } from "@/lib/constants";
 import { ArticleJsonLd, FAQJsonLd } from "@/components/JsonLd";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
+import ContactSection from "@/components/ContactSection";
 import FAQ from "@/components/FAQ";
 
 export async function generateStaticParams() {
@@ -141,6 +142,7 @@ export default async function BlogPostPage({
 
       {/* FAQ */}
       {faqItems.length > 0 && <FAQ items={faqItems} />}
+      <ContactSection />
     </div>
   );
 }
