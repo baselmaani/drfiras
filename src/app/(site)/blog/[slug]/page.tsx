@@ -81,44 +81,49 @@ export default async function BlogPostPage({
       />
       {faqItems.length > 0 && <FAQJsonLd items={faqItems} />}
 
-      {/* Article Header */}
-      <section className="pt-32 pb-12 border-b border-white/[0.06]">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center gap-3 mb-5">
-            {post.publishedAt && (
-              <time className="text-xs text-white/40 uppercase tracking-widest">
-                {new Date(post.publishedAt).toLocaleDateString("en-GB", {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                })}
-              </time>
+      {/* Hero — two-column: image | title */}
+      <section className="pt-28 pb-12 border-b border-white/[0.06]">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className={`flex flex-col ${post.coverImage ? "lg:flex-row" : ""} items-center gap-10 lg:gap-16`}>
+
+            {/* Title column — first in DOM so it renders above image on mobile */}
+            <div className={`w-full ${post.coverImage ? "lg:w-1/2 lg:order-2" : "max-w-3xl mx-auto text-center"} flex flex-col justify-center`}>
+              {post.publishedAt && (
+                <time className="text-xs text-white/40 uppercase tracking-widest mb-4 block">
+                  {new Date(post.publishedAt).toLocaleDateString("en-GB", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </time>
+              )}
+              <h1
+                data-speakable
+                className="text-4xl md:text-5xl font-bold text-white leading-tight mb-5"
+                style={{ fontFamily: "var(--font-playfair)" }}
+              >
+                {post.title}
+              </h1>
+              {post.excerpt && (
+                <p data-speakable className="text-lg text-white/55 leading-relaxed">{post.excerpt}</p>
+              )}
+            </div>
+
+            {/* Image column — order-1 on desktop so it sits on the left */}
+            {post.coverImage && (
+              <div className="w-full lg:w-1/2 lg:order-1 flex-shrink-0">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={post.coverImage}
+                  alt={post.title}
+                  className="w-full rounded-2xl object-contain"
+                />
+              </div>
             )}
+
           </div>
-          <h1
-            data-speakable
-            className="text-4xl md:text-5xl font-bold text-white mt-2 mb-5 leading-tight"
-            style={{ fontFamily: "var(--font-playfair)" }}
-          >
-            {post.title}
-          </h1>
-          {post.excerpt && (
-            <p data-speakable className="text-lg text-white/55 leading-relaxed">{post.excerpt}</p>
-          )}
         </div>
       </section>
-
-      {/* Cover Image */}
-      {post.coverImage && (
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-10">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={post.coverImage}
-            alt={post.title}
-            className="w-full rounded-2xl object-cover max-h-[480px]"
-          />
-        </div>
-      )}
 
       {/* Article Content */}
       <article className="py-12 pb-24 border-t border-white/[0.06]">

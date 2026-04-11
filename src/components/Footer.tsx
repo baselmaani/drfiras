@@ -29,7 +29,13 @@ export default async function Footer() {
           <div className="flex items-center gap-3 mb-4">
             {s.logoUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={s.logoUrl} alt={s.doctorName} className="h-10 w-auto object-contain" />
+              <>
+                <img src={s.logoUrl} alt={s.doctorName} className="h-16 w-auto object-contain" />
+                <div>
+                  <p className="font-bold text-white text-lg leading-tight" style={{ fontFamily: "var(--font-playfair)" }}>{s.doctorName}</p>
+                  <p className="text-white/50 text-xs">{s.specialty}</p>
+                </div>
+              </>
             ) : (
               <>
                 <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">

@@ -87,12 +87,12 @@ export default async function BlogPage() {
                 {posts.map((post) => (
                   <article key={post.id} className="group bg-[#141414] border border-white/[0.06] hover:border-[#c9a84c]/40 rounded-2xl overflow-hidden transition-all duration-300 flex flex-col">
                     {post.coverImage && (
-                      <Link href={`/blog/${post.slug}`} className="block overflow-hidden">
+                      <Link href={`/blog/${post.slug}`} className="block overflow-hidden bg-[#1a1a1a]">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={post.coverImage}
                           alt={post.title}
-                          className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
+                          className="w-full object-contain group-hover:scale-105 transition-transform duration-500"
                         />
                       </Link>
                     )}

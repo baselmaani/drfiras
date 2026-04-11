@@ -117,10 +117,12 @@ interface NavbarClientProps {
   instagram: string;
   tiktok?: string;
   logoUrl?: string;
+  doctorName?: string;
+  specialty?: string;
   menuItems: MenuItem[];
 }
 
-export default function NavbarClient({ phone, whatsapp, instagram, tiktok, logoUrl, menuItems }: NavbarClientProps) {
+export default function NavbarClient({ phone, whatsapp, instagram, tiktok, logoUrl, doctorName, specialty, menuItems }: NavbarClientProps) {
   const [open, setOpen] = useState(false);
 
   const phoneHref = phone ? `tel:${phone.replace(/\s/g, "")}` : "#";
@@ -136,7 +138,7 @@ export default function NavbarClient({ phone, whatsapp, instagram, tiktok, logoU
     <header className="fixed top-0 left-0 right-0 z-50">
       {/* ── Main Navbar ──────────────────────────────────────────── */}
       <div className="bg-[#0d0d0d]/95 backdrop-blur-xl border-b border-white/[0.06]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-[68px] flex items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-[80px] flex items-center">
 
           {/* Left nav – desktop */}
           <nav className="hidden lg:flex items-center gap-8 flex-1" aria-label="Primary navigation">
@@ -146,13 +148,19 @@ export default function NavbarClient({ phone, whatsapp, instagram, tiktok, logoU
           </nav>
 
           {/* Center: Logo */}
-          <Link href="/" className="flex flex-row items-center gap-3 mx-auto lg:mx-0 group" aria-label="Dr. Firas Zoghieb – Home">
+          <Link href="/" className="flex flex-row items-center gap-0 mx-auto lg:mx-0 group" aria-label="Dr. Firas Zoghieb – Home">
             {logoUrl ? (
-              <img
-                src={logoUrl}
-                alt="Dr. Firas Zoghieb logo"
-                className="h-10 w-auto object-contain"
-              />
+              <>
+                <img
+                  src={logoUrl}
+                  alt={doctorName ?? "Dr. Firas Zoghieb logo"}
+                  className="h-[72px] w-auto object-contain"
+                />
+                <div className="text-left">
+                  <p className="text-white font-semibold text-[13px] leading-none whitespace-nowrap" style={{ fontFamily: "var(--font-playfair)" }}>{doctorName ?? "Dr. Firas Zoghieb"}</p>
+                  <p className="text-[#c9a84c]/70 text-[10px] tracking-[0.15em] uppercase leading-none mt-1">{specialty ?? "Cosmetic Dentist"}</p>
+                </div>
+              </>
             ) : (
               <>
                 <div className="relative flex-shrink-0">
