@@ -189,6 +189,9 @@ export default function NavbarClient({ phone, whatsapp, instagram, tiktok, logoU
             <a href={waHref} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" data-gtm-whatsapp="true" onClick={() => { (window as any).dataLayer = (window as any).dataLayer || []; (window as any).dataLayer.push({ event: 'whatsapp_click', click_location: 'navbar' }); }} className="flex items-center justify-center w-8 h-8 border border-[#c9a84c]/45 text-[#c9a84c] rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200">
               <WAIcon className="w-3.5 h-3.5" />
             </a>
+            <a href={phoneHref} aria-label="Call us" onClick={() => { (window as any).dataLayer = (window as any).dataLayer || []; (window as any).dataLayer.push({ event: 'call_click', click_location: 'navbar' }); }} className="flex items-center justify-center w-8 h-8 border border-[#c9a84c]/45 text-[#c9a84c] rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200">
+              <PhoneIcon />
+            </a>
             <a href={igHref} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="flex items-center justify-center w-8 h-8 border border-[#c9a84c]/45 text-[#c9a84c] rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200">
               <IGIcon className="w-3.5 h-3.5" />
             </a>
@@ -235,7 +238,7 @@ export default function NavbarClient({ phone, whatsapp, instagram, tiktok, logoU
             </div>
           ))}
           <div className="flex flex-col gap-3 pt-4">
-            <a href={phoneHref} className="flex items-center justify-center gap-2 border border-[#c9a84c]/45 text-[#c9a84c] text-[12px] font-medium px-5 py-2 rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200 tracking-wide">
+            <a href={phoneHref} onClick={() => { (window as any).dataLayer = (window as any).dataLayer || []; (window as any).dataLayer.push({ event: 'call_click', click_location: 'navbar_mobile' }); }} className="flex items-center justify-center gap-2 border border-[#c9a84c]/45 text-[#c9a84c] text-[12px] font-medium px-5 py-2 rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200 tracking-wide">
               <PhoneIcon />
               Call Us
             </a>

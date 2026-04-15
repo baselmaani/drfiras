@@ -11,23 +11,24 @@ datasource db {
 }
 
 model Service {
-  id          Int      @id @default(autoincrement())
-  title       String
-  slug        String   @unique
-  description String
-  content     String?
-  icon        String?
-  heroImage   String?
-  caseImages  String?
-  order       Int      @default(0)
-  published   Boolean  @default(true)
-  metaTitle    String?
-  metaDesc    String?
-  metaKeywords String?
-  ogImage     String?
-  faqItems    String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            Int            @id @default(autoincrement())
+  title         String
+  slug          String         @unique
+  description   String
+  content       String?
+  icon          String?
+  heroImage     String?
+  caseImages    String?
+  order         Int            @default(0)
+  published     Boolean        @default(true)
+  metaTitle     String?
+  metaDesc      String?
+  metaKeywords  String?
+  ogImage       String?
+  faqItems      String?
+  galleryImages GalleryImage[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 }
 
 model BeforeAfter {
@@ -80,4 +81,17 @@ model MenuItem {
   enabled   Boolean    @default(true)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
+}
+
+model GalleryImage {
+  id          Int      @id @default(autoincrement())
+  title       String
+  image       String
+  description String?
+  serviceId   Int
+  service     Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  published   Boolean  @default(true)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
