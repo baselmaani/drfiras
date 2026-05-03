@@ -31,3 +31,35 @@ export async function GET(req: Request) {
 
   return NextResponse.json({ files, folders });
 }
+
+// Called by the client after a successful client-side upload to register the
+// file in the database. Works in both local dev and production.
+export async function POST(request: Request) {
+  const cookieStore = await cookies();
+  const session = cookieStore.get("admin-session");
+  if (!session || session.value !== "1") {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { url, name, size, mimeType, folderId } = await request.json();
+  if (!url || !name || !mimeType) {
+    return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+  }
+
+  const validFolderId =
+    folderId != null ? parseInt(String(folderId)) : null;
+
+  const record = await db.mediaFile.upsert({
+    where: { url },
+    update: { folderId: validFolderId },
+    create: {
+      url,
+      name,
+      size: size ?? 0,
+      mimeType,
+      folderId: validFolderId,
+    },
+  });
+
+  return NextResponse.json({ file: record });
+}

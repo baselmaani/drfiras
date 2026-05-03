@@ -1,5 +1,6 @@
 "use client";
 
+import { upload } from "@vercel/blob/client";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -18,17 +19,35 @@ export default function MediaUploader({ folderId }: { folderId?: number | null }
     setProgress({ done: 0, total: files.length });
 
     const errs: string[] = [];
-    // Upload sequentially to avoid overwhelming the server with large videos
     for (const file of files) {
       try {
-        const fd = new FormData();
-        fd.append("file", file);
-        if (folderId) fd.append("folderId", String(folderId));
-        const res = await fetch("/api/upload", { method: "POST", body: fd });
-        const data = await res.json();
-        if (!res.ok) errs.push(`${file.name}: ${data.error || "Upload failed"}`);
-      } catch {
-        errs.push(`${file.name}: Upload failed`);
+        // Upload directly to Vercel Blob (bypasses serverless 4.5 MB body limit)
+        const clientPayload = JSON.stringify({
+          folderId: folderId ?? null,
+          name: file.name,
+          size: file.size,
+        });
+        const blob = await upload(file.name, file, {
+          access: "public",
+          handleUploadUrl: "/api/upload",
+          clientPayload,
+        });
+
+        // Explicitly register in DB — works in local dev where Vercel webhook won't fire
+        await fetch("/api/media", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({
+            url: blob.url,
+            name: file.name,
+            size: file.size,
+            mimeType: file.type,
+            folderId: folderId ?? null,
+          }),
+        });
+      } catch (err) {
+        errs.push(`${file.name}: ${err instanceof Error ? err.message : "Upload failed"}`);
       }
       setProgress((p) => p ? { done: p.done + 1, total: p.total } : null);
     }

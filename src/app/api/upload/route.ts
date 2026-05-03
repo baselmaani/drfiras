@@ -1,59 +1,80 @@
-import { put } from "@vercel/blob";
+import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 
-export async function POST(req: Request) {
-  // Protect the upload endpoint — only authenticated admins
+/**
+ * Handles Vercel Blob client-side upload events:
+ *   1. blob.generate-client-token  – browser requests a short-lived upload token
+ *   2. blob.upload-completed       – Vercel notifies us after the file lands in Blob
+ *
+ * Files are uploaded directly from the browser to Vercel Blob, so they never
+ * pass through this serverless function body — no 4.5 MB size limit applies.
+ */
+export async function POST(request: Request): Promise<Response> {
   const cookieStore = await cookies();
   const session = cookieStore.get("admin-session");
-  if (!session || session.value !== "1") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const body = (await request.json()) as HandleUploadBody;
+
+  try {
+    const jsonResponse = await handleUpload({
+      body,
+      request,
+
+      onBeforeGenerateToken: async (_pathname, clientPayload) => {
+        if (!session || session.value !== "1") {
+          throw new Error("Unauthorized");
+        }
+        return {
+          allowedContentTypes: [
+            "image/jpeg",
+            "image/jpg",
+            "image/png",
+            "image/webp",
+            "image/gif",
+            "video/mp4",
+            "video/quicktime",
+            "video/webm",
+            "video/x-msvideo",
+            "video/x-matroska",
+          ],
+          maximumSizeInBytes: 500 * 1024 * 1024, // 500 MB
+          tokenPayload: clientPayload ?? "",
+        };
+      },
+
+      onUploadCompleted: async ({ blob, tokenPayload }) => {
+        // Called by Vercel servers after upload in production.
+        // In local dev this won't fire; the client calls POST /api/media directly instead.
+        try {
+          const payload = tokenPayload ? JSON.parse(tokenPayload) : {};
+          const folderId =
+            payload.folderId != null ? parseInt(String(payload.folderId)) : null;
+          const validFolderId = folderId && !isNaN(folderId) ? folderId : null;
+
+          await db.mediaFile.upsert({
+            where: { url: blob.url },
+            update: { folderId: validFolderId },
+            create: {
+              url: blob.url,
+              name: payload.name ?? blob.pathname.split("/").pop() ?? blob.pathname,
+              size: payload.size ?? 0,
+              mimeType: blob.contentType,
+              folderId: validFolderId,
+            },
+          });
+        } catch (err) {
+          console.error("onUploadCompleted DB error:", err);
+        }
+      },
+    });
+
+    return NextResponse.json(jsonResponse);
+  } catch (error) {
+    return NextResponse.json(
+      { error: (error as Error).message },
+      { status: 400 }
+    );
   }
-
-  const formData = await req.formData();
-  const file = formData.get("file") as File | null;
-
-  if (!file) {
-    return NextResponse.json({ error: "No file provided" }, { status: 400 });
-  }
-
-  // Validate file type
-  const allowedImageTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"];
-  const allowedVideoTypes = ["video/mp4", "video/quicktime", "video/webm", "video/x-msvideo", "video/x-matroska"];
-  const allowedTypes = [...allowedImageTypes, ...allowedVideoTypes];
-  if (!allowedTypes.includes(file.type)) {
-    return NextResponse.json({ error: "Only images (JPEG, PNG, WebP, GIF) and videos (MP4, MOV, WebM, AVI, MKV) are allowed" }, { status: 400 });
-  }
-
-  // Images: 10 MB limit. Videos: 200 MB limit
-  const isVideo = allowedVideoTypes.includes(file.type);
-  const sizeLimit = isVideo ? 200 * 1024 * 1024 : 10 * 1024 * 1024;
-  if (file.size > sizeLimit) {
-    return NextResponse.json({ error: isVideo ? "Video must be under 200 MB" : "Image must be under 10 MB" }, { status: 400 });
-  }
-
-  const ext = file.name.split(".").pop()?.toLowerCase() ?? "jpg";
-  const safeName = `uploads/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-
-  const blob = await put(safeName, file, { access: "public" });
-
-  // Optional folder assignment
-  const folderIdRaw = formData.get("folderId");
-  const folderId = folderIdRaw ? parseInt(folderIdRaw as string) : null;
-
-  // Save to media library (upsert in case of duplicates)
-  const record = await db.mediaFile.upsert({
-    where: { url: blob.url },
-    update: { folderId },
-    create: {
-      url: blob.url,
-      name: file.name,
-      size: file.size,
-      mimeType: file.type,
-      folderId,
-    },
-  });
-
-  return NextResponse.json({ url: blob.url, file: record });
 }

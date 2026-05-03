@@ -1,5 +1,6 @@
 "use client";
 
+import { upload } from "@vercel/blob/client";
 import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 
@@ -117,18 +118,37 @@ export default function MediaPicker({ onSelect, onClose }: MediaPickerProps) {
     const added: MediaFile[] = [];
     for (const file of uploadFiles) {
       try {
-        const fd = new FormData();
-        fd.append("file", file);
-        if (currentFolder !== null) fd.append("folderId", String(currentFolder));
-        const res = await fetch("/api/upload", { method: "POST", body: fd, credentials: "include" });
-        const data = await res.json();
-        if (!res.ok) {
-          errs.push(`${file.name}: ${data.error || "Upload failed"}`);
-        } else if (data.file) {
-          added.push({ ...data.file, createdAt: data.file.createdAt ?? new Date().toISOString() });
+        // Upload directly to Vercel Blob (bypasses serverless 4.5 MB body limit)
+        const clientPayload = JSON.stringify({
+          folderId: currentFolder ?? null,
+          name: file.name,
+          size: file.size,
+        });
+        const blob = await upload(file.name, file, {
+          access: "public",
+          handleUploadUrl: "/api/upload",
+          clientPayload,
+        });
+
+        // Explicitly register in DB and get the full record
+        const regRes = await fetch("/api/media", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({
+            url: blob.url,
+            name: file.name,
+            size: file.size,
+            mimeType: file.type,
+            folderId: currentFolder ?? null,
+          }),
+        });
+        const regData = await regRes.json();
+        if (regData.file) {
+          added.push({ ...regData.file, createdAt: regData.file.createdAt ?? new Date().toISOString() });
         }
-      } catch {
-        errs.push(`${file.name}: Upload failed`);
+      } catch (err) {
+        errs.push(`${file.name}: ${err instanceof Error ? err.message : "Upload failed"}`);
       }
     }
     if (errs.length) setUploadError(errs.join(" · "));
