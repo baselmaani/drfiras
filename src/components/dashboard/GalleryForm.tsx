@@ -12,6 +12,7 @@ type GalleryImageItem = {
   title: string;
   image: string;
   description: string | null;
+  subcategory: string | null;
   serviceId: number;
   order: number;
   published: boolean;
@@ -67,6 +68,19 @@ export function GalleryForm({
             ))}
           </select>
         </div>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">
+          Subcategory
+          <span className="ml-2 text-gray-400 font-normal text-xs">(optional — e.g. "Chipped Teeth", "Gapped Teeth")</span>
+        </label>
+        <input
+          name="subcategory"
+          defaultValue={item?.subcategory ?? ""}
+          className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1b4f72]/30 focus:border-[#1b4f72]"
+          placeholder="e.g. Chipped Teeth"
+        />
       </div>
 
       <ImageUpload

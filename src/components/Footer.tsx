@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
 
 export default async function Footer() {
@@ -108,20 +109,19 @@ export default async function Footer() {
           </h4>
           <ul className="space-y-3 text-sm text-white/60">
             {[
-              { label: "Book Consultation", href: "#book" },
-              { label: "Before & After", href: "#before-after" },
-              { label: "Treatments", href: "#expertise" },
-              { label: "About", href: "#about" },
-              { label: "FAQ", href: "#faq" },
+              { label: "Services", href: "/services" },
+              { label: "Gallery", href: "/gallery" },
+              { label: "Contact", href: "/contact" },
+              { label: "About", href: "/about" },
             ].map((link) => (
               <li key={link.label}>
-                <a
+                <Link
                   href={link.href}
                   className="hover:text-white transition-colors flex items-center gap-2"
                 >
                   <span className="text-[#c9a84c]">›</span>
                   {link.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>

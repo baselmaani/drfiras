@@ -1,6 +1,7 @@
 import { put } from "@vercel/blob";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import { db } from "@/lib/db";
 
 export async function POST(req: Request) {
   // Protect the upload endpoint — only authenticated admins
@@ -18,14 +19,18 @@ export async function POST(req: Request) {
   }
 
   // Validate file type
-  const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"];
+  const allowedImageTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"];
+  const allowedVideoTypes = ["video/mp4", "video/quicktime", "video/webm", "video/x-msvideo", "video/x-matroska"];
+  const allowedTypes = [...allowedImageTypes, ...allowedVideoTypes];
   if (!allowedTypes.includes(file.type)) {
-    return NextResponse.json({ error: "Only JPEG, PNG, WebP and GIF images are allowed" }, { status: 400 });
+    return NextResponse.json({ error: "Only images (JPEG, PNG, WebP, GIF) and videos (MP4, MOV, WebM, AVI, MKV) are allowed" }, { status: 400 });
   }
 
-  // Limit to 10 MB
-  if (file.size > 10 * 1024 * 1024) {
-    return NextResponse.json({ error: "File size must be under 10 MB" }, { status: 400 });
+  // Images: 10 MB limit. Videos: 200 MB limit
+  const isVideo = allowedVideoTypes.includes(file.type);
+  const sizeLimit = isVideo ? 200 * 1024 * 1024 : 10 * 1024 * 1024;
+  if (file.size > sizeLimit) {
+    return NextResponse.json({ error: isVideo ? "Video must be under 200 MB" : "Image must be under 10 MB" }, { status: 400 });
   }
 
   const ext = file.name.split(".").pop()?.toLowerCase() ?? "jpg";
@@ -33,5 +38,22 @@ export async function POST(req: Request) {
 
   const blob = await put(safeName, file, { access: "public" });
 
-  return NextResponse.json({ url: blob.url });
+  // Optional folder assignment
+  const folderIdRaw = formData.get("folderId");
+  const folderId = folderIdRaw ? parseInt(folderIdRaw as string) : null;
+
+  // Save to media library (upsert in case of duplicates)
+  const record = await db.mediaFile.upsert({
+    where: { url: blob.url },
+    update: { folderId },
+    create: {
+      url: blob.url,
+      name: file.name,
+      size: file.size,
+      mimeType: file.type,
+      folderId,
+    },
+  });
+
+  return NextResponse.json({ url: blob.url, file: record });
 }

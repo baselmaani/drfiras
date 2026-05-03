@@ -1,5 +1,8 @@
 "use client";
 import { useState, useRef } from "react";
+import dynamic from "next/dynamic";
+
+const MediaPicker = dynamic(() => import("./MediaPicker"), { ssr: false });
 
 interface ImageUploadProps {
   name: string;
@@ -13,6 +16,7 @@ export function ImageUpload({ name, defaultValue = "", label, required, onUpload
   const [url, setUrl] = useState(defaultValue);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
+  const [pickerOpen, setPickerOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
@@ -28,12 +32,18 @@ export function ImageUpload({ name, defaultValue = "", label, required, onUpload
       if (!res.ok) throw new Error(data.error || "Upload failed");
       setUrl(data.url);
       onUpload?.(data.url);
-      // reset file input so same file can be re-selected
       if (fileInputRef.current) fileInputRef.current.value = "";
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Upload failed");
     } finally {
       setUploading(false);
+    }
+  }
+
+  function handlePickerSelect(pickedUrls: string[]) {
+    if (pickedUrls.length > 0) {
+      setUrl(pickedUrls[0]);
+      onUpload?.(pickedUrls[0]);
     }
   }
 
@@ -48,14 +58,15 @@ export function ImageUpload({ name, defaultValue = "", label, required, onUpload
       {/* Hidden input carries the URL into the form submission */}
       <input type="hidden" name={name} value={url} />
 
-      <div className="flex gap-2">
+      <div className="flex gap-2 flex-wrap">
         <input
           type="url"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           placeholder="https://... or upload below"
-          className="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1b4f72]/30 focus:border-[#1b4f72]"
+          className="flex-1 min-w-0 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1b4f72]/30 focus:border-[#1b4f72]"
         />
+        {/* Upload from device */}
         <button
           type="button"
           onClick={() => fileInputRef.current?.click()}
@@ -79,6 +90,17 @@ export function ImageUpload({ name, defaultValue = "", label, required, onUpload
             </>
           )}
         </button>
+        {/* Pick from library */}
+        <button
+          type="button"
+          onClick={() => setPickerOpen(true)}
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[#c9a84c]/50 text-sm font-medium text-[#8a6f2e] hover:bg-[#c9a84c]/10 hover:border-[#c9a84c] transition-colors whitespace-nowrap"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          Library
+        </button>
       </div>
 
       <input
@@ -97,6 +119,13 @@ export function ImageUpload({ name, defaultValue = "", label, required, onUpload
           src={url}
           alt="Preview"
           className="mt-2 h-32 w-auto rounded-xl object-cover border border-gray-100 max-w-full"
+        />
+      )}
+
+      {pickerOpen && (
+        <MediaPicker
+          onSelect={handlePickerSelect}
+          onClose={() => setPickerOpen(false)}
         />
       )}
     </div>

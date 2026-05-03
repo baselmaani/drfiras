@@ -65,9 +65,16 @@ export default async function GalleryPage() {
               </div>
               <div className="p-3">
                 <p className="font-semibold text-gray-800 text-xs">{item.title}</p>
-                <span className="inline-block mt-1 text-[10px] px-2 py-0.5 rounded-full bg-[#1b4f72]/10 text-[#1b4f72] font-medium">
-                  {item.service.title}
-                </span>
+                <div className="flex flex-wrap gap-1 mt-1">
+                  <span className="inline-block text-[10px] px-2 py-0.5 rounded-full bg-[#1b4f72]/10 text-[#1b4f72] font-medium">
+                    {item.service.title}
+                  </span>
+                  {item.subcategory && (
+                    <span className="inline-block text-[10px] px-2 py-0.5 rounded-full bg-[#c9a84c]/15 text-[#8a6f2e] font-medium">
+                      {item.subcategory}
+                    </span>
+                  )}
+                </div>
                 <div className="flex items-center gap-2 mt-2">
                   <Link
                     href={`/dashboard/gallery/${item.id}/edit`}

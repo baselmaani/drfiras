@@ -48,6 +48,28 @@ export default async function GalleryPage() {
     }),
   ]);
 
+  // Build grouped structure: service → subcategories (ordered by min image order)
+  const grouped = services
+    .filter((sv) => items.some((i) => i.service.id === sv.id))
+    .map((sv) => {
+      const serviceItems = items.filter((i) => i.service.id === sv.id);
+
+      // Collect subcategory groups preserving insertion order (already sorted by `order`)
+      const subcatMap = new Map<string, typeof serviceItems>();
+      for (const item of serviceItems) {
+        const key = item.subcategory?.trim() || "__none__";
+        if (!subcatMap.has(key)) subcatMap.set(key, []);
+        subcatMap.get(key)!.push(item);
+      }
+
+      const subcats = Array.from(subcatMap.entries()).map(([key, imgs]) => ({
+        subcategory: key === "__none__" ? null : key,
+        items: imgs,
+      }));
+
+      return { service: sv, subcats };
+    });
+
   return (
     <>
       <Navbar />
@@ -73,7 +95,7 @@ export default async function GalleryPage() {
       {/* Gallery */}
       <section className="bg-[#0f0f0f] py-10 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <GalleryGrid items={items} services={services} />
+          <GalleryGrid grouped={grouped} />
         </div>
       </section>
     </>
