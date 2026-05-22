@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { getSettings } from "@/lib/settings";
+import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
 import { SITE_URL, GOOGLE_MAPS_CID } from "@/lib/constants";
 
 export const dynamic = "force-dynamic";
@@ -10,13 +10,13 @@ export async function GET() {
     db.service.findMany({
       where: { published: true },
       orderBy: { order: "asc" },
-      select: { title: true, slug: true, description: true, metaKeywords: true },
+      select: { title: true, slug: true, description: true, metaKeywords: true, faqItems: true },
     }),
     db.post.findMany({
       where: { published: true },
       orderBy: { publishedAt: "desc" },
       take: 20,
-      select: { title: true, slug: true, excerpt: true, metaKeywords: true },
+      select: { title: true, slug: true, excerpt: true, metaKeywords: true, faqItems: true },
     }),
     db.beforeAfter.findMany({
       where: { published: true },
@@ -36,6 +36,8 @@ export async function GET() {
 
   // Header
   lines.push(`# ${doctorName} — ${specialty} Dubai`, "");
+  lines.push(`> Short index. Full content (all service pages + blog posts): ${SITE_URL}/llms-full.txt`);
+  lines.push("");
 
   // Hero intro (short, AI-friendly summary)
   if (settings.heroBody) {
@@ -44,12 +46,16 @@ export async function GET() {
     lines.push("");
   }
 
-  // About
+  // About (fall back to DEFAULT_SETTINGS when CMS fields are empty)
   lines.push("## About");
-  if (settings.aboutPara1) lines.push(settings.aboutPara1);
-  if (settings.aboutPara2) lines.push("", settings.aboutPara2);
-  if (settings.aboutPara3) lines.push("", settings.aboutPara3);
-  if (settings.aboutPara4) lines.push("", settings.aboutPara4);
+  const aboutPara1 = settings.aboutPara1 || DEFAULT_SETTINGS.aboutPara1;
+  const aboutPara2 = settings.aboutPara2 || DEFAULT_SETTINGS.aboutPara2;
+  const aboutPara3 = settings.aboutPara3 || DEFAULT_SETTINGS.aboutPara3;
+  const aboutPara4 = settings.aboutPara4 || DEFAULT_SETTINGS.aboutPara4;
+  if (aboutPara1) lines.push(aboutPara1);
+  if (aboutPara2) lines.push("", aboutPara2);
+  if (aboutPara3) lines.push("", aboutPara3);
+  if (aboutPara4) lines.push("", aboutPara4);
   lines.push("");
 
   // Key Stats
@@ -73,9 +79,13 @@ export async function GET() {
   if (glanceRaw) {
     try {
       const items: { label: string; value: string }[] = JSON.parse(glanceRaw);
-      if (items.length > 0) {
+      // Filter out placeholder entries (e.g., GDC Number: 123456 — not valid in UAE)
+      const validItems = items.filter(
+        (item) => !(item.label === "GDC Number" && /^\d+$/.test(item.value))
+      );
+      if (validItems.length > 0) {
         lines.push("## At a Glance");
-        for (const item of items) lines.push(`- ${item.label}: ${item.value}`);
+        for (const item of validItems) lines.push(`- ${item.label}: ${item.value}`);
         lines.push("");
       }
     } catch { /* skip if malformed */ }
@@ -108,13 +118,33 @@ export async function GET() {
   }
   lines.push("");
 
-  // Credentials
+  // Per-service FAQs
+  for (const s of services) {
+    if (!s.faqItems) continue;
+    try {
+      const faqs: { question: string; answer: string }[] = JSON.parse(s.faqItems);
+      if (faqs.length > 0) {
+        lines.push(`### FAQs — ${s.title}`);
+        for (const faq of faqs) {
+          lines.push(`Q: ${faq.question}`);
+          lines.push(`A: ${faq.answer}`);
+          lines.push("");
+        }
+      }
+    } catch { /* skip */ }
+  }
+
+  // Credentials (E-E-A-T)
   lines.push("## Credentials");
   lines.push("- BDS (Honours) — Bachelor of Dental Surgery with Honours");
   lines.push("- MSc Cosmetic Dentistry — Master of Science in Cosmetic Dentistry");
-  lines.push("- Certified Invisalign Provider");
+  lines.push("- Licensed by the Dubai Health Authority (DHA)");
+  lines.push("- Certified Invisalign Provider — accredited by Align Technology");
   lines.push("- Advanced Composite Bonding Certification");
+  lines.push("- Member of the British Dental Association (BDA)");
   if (settings.heroStatNumber) lines.push(`- ${settings.heroStatNumber} smile transformations completed`);
+  lines.push("- Specialises in minimally invasive cosmetic dentistry — no unnecessary drilling");
+  lines.push("- Fluent in English and Arabic");
   lines.push("");
 
   // Before & After Cases
@@ -135,6 +165,7 @@ export async function GET() {
   for (const s of services) {
     lines.push(`- ${s.title}: ${SITE_URL}/services/${s.slug}`);
   }
+  lines.push(`- Invisalign Dubai: ${SITE_URL}/services/invisalign-dubai`);
   lines.push(`- Blog: ${SITE_URL}/blog`);
   lines.push(`- Contact: ${SITE_URL}/contact`);
   lines.push("");
@@ -147,6 +178,22 @@ export async function GET() {
       lines.push(`- ${p.title}${excerpt}: ${SITE_URL}/blog/${p.slug}`);
     }
     lines.push("");
+  }
+
+  // Per-post FAQs
+  for (const p of posts) {
+    if (!p.faqItems) continue;
+    try {
+      const faqs: { question: string; answer: string }[] = JSON.parse(p.faqItems);
+      if (faqs.length > 0) {
+        lines.push(`### FAQs — ${p.title}`);
+        for (const faq of faqs) {
+          lines.push(`Q: ${faq.question}`);
+          lines.push(`A: ${faq.answer}`);
+          lines.push("");
+        }
+      }
+    } catch { /* skip */ }
   }
 
   // FAQs — key in DB is "faqItems"

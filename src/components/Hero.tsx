@@ -41,6 +41,7 @@ export default async function Hero() {
 
           {/* Heading */}
           <h1
+            data-speakable
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.04] mb-7 whitespace-nowrap"
             style={{ fontFamily: "var(--font-playfair)" }}
           >
@@ -48,7 +49,7 @@ export default async function Hero() {
           </h1>
 
           {/* Subparagraph */}
-          <p className="text-[15px] md:text-base text-white/50 leading-[1.8] mb-10 max-w-md">
+          <p data-speakable className="text-[15px] md:text-base text-white/50 leading-[1.8] mb-10 max-w-md">
             {s.heroBody}
           </p>
 

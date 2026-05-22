@@ -7,7 +7,6 @@ import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
 import Navbar from "@/components/Navbar";
 import BeforeAfter from "@/components/BeforeAfter";
-import ContactSection from "@/components/ContactSection";
 import { SpeakableJsonLd } from "@/components/JsonLd";
 import FAQ from "@/components/FAQ";
 
@@ -26,12 +25,14 @@ export async function generateMetadata(): Promise<Metadata> {
       title: `${title} | ${SITE_NAME}`,
       description,
       url,
-      type: "profile",
+      type: "website",
+      ...(s.heroImageUrl && { images: [{ url: s.heroImageUrl, width: 1200, height: 630 }] }),
     },
     twitter: {
       card: "summary_large_image",
       title: `${title} | ${SITE_NAME}`,
       description,
+      ...(s.heroImageUrl && { images: [s.heroImageUrl] }),
     },
   };
 }
@@ -48,6 +49,11 @@ const whyChoose = [
 export default async function AboutPage() {
   const raw = await getSettings();
   const s = { ...DEFAULT_SETTINGS, ...raw };
+
+  let aboutFaqItems: { question: string; answer: string }[] = [];
+  if (s.aboutFaqItems) {
+    try { aboutFaqItems = JSON.parse(s.aboutFaqItems); } catch { /* keep empty */ }
+  }
 
   return (
     <>
@@ -157,10 +163,8 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <BeforeAfter />
-
       {/* FAQ */}
-      {(() => { let items: {question:string;answer:string}[] = []; try { if (s.aboutFaqItems) items = JSON.parse(s.aboutFaqItems); } catch {} return items.length > 0 ? <FAQ items={items} /> : null; })()}
+      {aboutFaqItems.length > 0 && <FAQ items={aboutFaqItems} />}
 
       {/* CTA */}
       <section className="bg-[#0d0d0d] border-t border-white/[0.06] py-20">
@@ -190,8 +194,6 @@ export default async function AboutPage() {
           </div>
         </div>
       </section>
-
-      <ContactSection />
     </>
   );
 }

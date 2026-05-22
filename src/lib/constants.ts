@@ -3,7 +3,7 @@ export const SITE_URL =
 
 export const SITE_NAME = "Dr. Firas Zoghieb";
 export const SITE_DESCRIPTION =
-  "Dr. Firas Zoghieb is a specialist cosmetic dentist in Dubai offering composite bonding, Invisalign, veneers, and complete smile makeovers.";
+  "Transform your smile with Dr. Firas Zoghieb — Dubai's composite bonding specialist. Expert in Invisalign & veneers. Minimally invasive. Free consultation. Al Wasl, Dubai.";
 export const SITE_LOCALE = "en_AE";
 
 // Dubai geo coordinates (Happiness St, Al Wasl)

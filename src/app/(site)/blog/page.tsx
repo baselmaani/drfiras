@@ -9,6 +9,7 @@ import Navbar from "@/components/Navbar";
 import BeforeAfter from "@/components/BeforeAfter";
 import ContactSection from "@/components/ContactSection";
 import FAQ from "@/components/FAQ";
+import { BlogListingJsonLd } from "@/components/JsonLd";
 
 export async function generateMetadata(): Promise<Metadata> {
   const raw = await getSettings();
@@ -26,11 +27,13 @@ export async function generateMetadata(): Promise<Metadata> {
       description,
       url,
       type: "website",
+      ...(s.heroImageUrl && { images: [{ url: s.heroImageUrl, width: 1200, height: 630 }] }),
     },
     twitter: {
       card: "summary_large_image",
       title: `${title} | ${SITE_NAME}`,
       description,
+      ...(s.heroImageUrl && { images: [s.heroImageUrl] }),
     },
   };
 }
@@ -51,11 +54,14 @@ export default async function BlogPage() {
 
   const raw = await getSettings();
   const s = { ...DEFAULT_SETTINGS, ...raw };
+  const title = s.seoBlogTitle || `Dental Tips & Advice | ${SITE_NAME}`;
+  const description = s.seoBlogDesc || `Expert dental tips, advice and patient stories from ${SITE_NAME}.`;
   let blogFaqItems: {question:string;answer:string}[] = [];
   try { if (s.blogFaqItems) blogFaqItems = JSON.parse(s.blogFaqItems); } catch {}
 
   return (
     <>
+      <BlogListingJsonLd name={title} description={description} />
       <Navbar />
 
       <main className="bg-[#0d0d0d] min-h-screen">

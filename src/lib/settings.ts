@@ -7,7 +7,6 @@ export async function getSettings(): Promise<Record<string, string>> {
 
 export const DEFAULT_SETTINGS: Record<string, string> = {
   logoUrl: "",
-  faviconUrl: "",
   doctorName: "Dr. Firas Zoghieb",
   specialty: "Cosmetic Dentist",
   phone: "+971 50 869 6919",
@@ -19,7 +18,6 @@ export const DEFAULT_SETTINGS: Record<string, string> = {
   whatsapp: "https://wa.me/971508696919",
   bookingUrl: "#book",
   mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3610.0318346663325!2d55.2604608!3d25.202148899999997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f43fbe12b69c9%3A0xc08db524c295ac73!2sDr.%20Firas%20%7C%20Composite%20Bonding%20-%20Dubai!5e0!3m2!1ssv!2sae!4v1774281488941!5m2!1ssv!2sae",
-  googleBusinessUrl: "https://maps.app.goo.gl/your-business-profile",
   formEmail: "",
   // SMTP
   smtpHost: "",
@@ -71,9 +69,8 @@ export const DEFAULT_SETTINGS: Record<string, string> = {
   faqItems: "",
   // Per-page FAQ items
   aboutFaqItems: "",
-  contactFaqItems: "",
   servicesFaqItems: "",
-  blogFaqItems: "",
+  contactFaqItems: "",
   // At a Glance items (JSON array of {label, value})
   glanceItems: "",
   // Page-level SEO

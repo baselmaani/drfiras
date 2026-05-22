@@ -34,7 +34,7 @@ export const viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} | Cosmetic Dentist Dubai`,
+    default: `${SITE_NAME} | Composite Bonding & Cosmetic Dentist Dubai`,
     template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
@@ -62,16 +62,18 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: SITE_NAME,
-    title: `${SITE_NAME} | Cosmetic Dentist Dubai`,
+    title: `${SITE_NAME} | Composite Bonding & Cosmetic Dentist Dubai`,
     description: SITE_DESCRIPTION,
     url: SITE_URL,
     locale: SITE_LOCALE,
+    images: [{ url: `${SITE_URL}/og.jpg`, width: 1200, height: 630, alt: `${SITE_NAME} | Composite Bonding & Cosmetic Dentist Dubai` }],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE_NAME} | Cosmetic Dentist Dubai`,
+    title: `${SITE_NAME} | Composite Bonding & Cosmetic Dentist Dubai`,
     description: SITE_DESCRIPTION,
     creator: "@dr.firaszoghieb",
+    images: [`${SITE_URL}/og.jpg`],
   },
   alternates: {
     canonical: SITE_URL,
@@ -97,7 +99,11 @@ export default async function RootLayout({
         <meta name="geo.region"    content={GEO_REGION} />
         <meta name="geo.placename" content={GEO_PLACENAME} />
         <meta name="geo.position"  content={`${GEO_LAT};${GEO_LNG}`} />
+        <meta name="geo.country"   content="AE" />
         <meta name="ICBM"          content={`${GEO_LAT}, ${GEO_LNG}`} />
+        {/* Facebook OG place tags — used for geo-discovery and map pins */}
+        <meta property="place:location:latitude"  content={String(GEO_LAT)} />
+        <meta property="place:location:longitude" content={String(GEO_LNG)} />
         {s.faviconUrl && (
           <>
             <link rel="icon" href={s.faviconUrl} />

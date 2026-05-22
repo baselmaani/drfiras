@@ -40,6 +40,8 @@ export default function ContactForm({ phone, email, address, googleBusinessUrl }
       } else {
         setStatus("success");
         (e.target as HTMLFormElement).reset();
+        (window as any).dataLayer = (window as any).dataLayer || [];
+        (window as any).dataLayer.push({ event: 'form_submit', form_name: 'contact' });
       }
     } catch {
       setErrorMsg("Network error. Please try again.");
@@ -109,7 +111,7 @@ export default function ContactForm({ phone, email, address, googleBusinessUrl }
       {/* Contact info below button */}
       <div className="pt-2 border-t border-white/[0.06] grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-white/40">
         {phone && (
-          <a href={`tel:${phone}`} className="flex items-center gap-2 hover:text-white/70 transition-colors">
+          <a href={`tel:${phone}`} data-gtm-call="true" onClick={() => { (window as any).dataLayer = (window as any).dataLayer || []; (window as any).dataLayer.push({ event: 'call_click', click_location: 'contact_form' }); }} className="flex items-center gap-2 hover:text-white/70 transition-colors">
             <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
             </svg>

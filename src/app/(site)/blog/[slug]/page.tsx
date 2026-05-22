@@ -44,6 +44,7 @@ export async function generateMetadata({
       type: "article",
       ...(post.ogImage && { images: [{ url: post.ogImage }] }),
       ...(post.publishedAt && { publishedTime: post.publishedAt.toISOString() }),
+      modifiedTime: post.updatedAt.toISOString(),
     },
     twitter: {
       card: "summary_large_image",

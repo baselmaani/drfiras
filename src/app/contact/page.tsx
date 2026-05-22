@@ -8,6 +8,7 @@ import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
 import BeforeAfter from "@/components/BeforeAfter";
 import FAQ from "@/components/FAQ";
+import { ContactPageJsonLd } from "@/components/JsonLd";
 
 export async function generateMetadata(): Promise<Metadata> {
   const raw = await getSettings();
@@ -25,11 +26,13 @@ export async function generateMetadata(): Promise<Metadata> {
       description,
       url,
       type: "website",
+      ...(s.heroImageUrl && { images: [{ url: s.heroImageUrl, width: 1200, height: 630 }] }),
     },
     twitter: {
       card: "summary_large_image",
       title: `${title} | ${SITE_NAME}`,
       description,
+      ...(s.heroImageUrl && { images: [s.heroImageUrl] }),
     },
   };
 }
@@ -37,16 +40,23 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function ContactPage() {
   const raw = await getSettings();
   const s = { ...DEFAULT_SETTINGS, ...raw };
+  const title = s.seoContactTitle || `Contact ${s.doctorName} | Cosmetic Dentist Dubai`;
+  const description = s.seoContactDesc || `Book a consultation with ${s.doctorName}, cosmetic dentist in Dubai.`;
 
   const mapUrl = s.mapUrl || "";
   const phone = s.phone || "";
   const email = s.email || "";
   const address = s.address || "";
   const whatsapp = s.whatsapp || "";
-  const googleBusinessUrl = s.googleBusinessUrl || "";
+
+  let contactFaqItems: { question: string; answer: string }[] = [];
+  if (s.contactFaqItems) {
+    try { contactFaqItems = JSON.parse(s.contactFaqItems); } catch { /* keep empty */ }
+  }
 
   return (
     <>
+      <ContactPageJsonLd name={title} description={description} />
       <Navbar />
 
       {/* Hero */}
@@ -72,7 +82,7 @@ export default async function ContactPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="flex flex-wrap justify-center gap-8 text-sm text-white/50">
             {phone && (
-              <a href={`tel:${phone}`} className="flex items-center gap-2 hover:text-[#c9a84c] transition-colors">
+              <a href={`tel:${phone}`} data-gtm-call="true" className="flex items-center gap-2 hover:text-[#c9a84c] transition-colors">
                 <svg className="w-4 h-4 text-[#c9a84c]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
@@ -93,11 +103,7 @@ export default async function ContactPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-                {googleBusinessUrl ? (
-                  <a href={googleBusinessUrl} target="_blank" rel="noopener noreferrer" className="hover:text-[#c9a84c] transition-colors">{address}</a>
-                ) : (
-                  address
-                )}
+                {address}
               </span>
             )}
             {whatsapp && (
@@ -125,7 +131,7 @@ export default async function ContactPage() {
           <div className="grid md:grid-cols-2 gap-8 items-stretch">
             {/* Form */}
             <div className="bg-[#141414] border border-white/[0.06] rounded-2xl p-6 sm:p-8">
-              <ContactForm phone={phone} email={email} address={address} googleBusinessUrl={googleBusinessUrl} />
+              <ContactForm phone={phone} email={email} address={address} />
             </div>
 
             {/* Map */}
@@ -157,8 +163,7 @@ export default async function ContactPage() {
           </div>
         </div>
       </section>
-      <BeforeAfter />
-      {(() => { let items: {question:string;answer:string}[] = []; try { if (s.contactFaqItems) items = JSON.parse(s.contactFaqItems); } catch {} return items.length > 0 ? <FAQ items={items} /> : null; })()}
+      {contactFaqItems.length > 0 && <FAQ items={contactFaqItems} />}
       <Footer />
     </>
   );

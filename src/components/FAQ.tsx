@@ -35,6 +35,31 @@ const DEFAULT_FAQS: FAQItem[] = [
       "Composite bonding uses resin applied directly to the tooth — no preparation of the natural tooth is usually needed, and it is reversible. Veneers are thin porcelain or composite shells that are attached to the front surface of teeth. Porcelain veneers require a small amount of enamel removal and are more durable and stain-resistant long-term.",
   },
   {
+    question: "How much does composite bonding cost in Dubai?",
+    answer:
+      "The cost of composite bonding in Dubai varies depending on how many teeth are treated and the complexity of the case. During your free consultation, Dr. Firas Zoghieb will assess your smile and provide a clear, transparent quote with no hidden fees.",
+  },
+  {
+    question: "Is composite bonding covered by dental insurance in the UAE?",
+    answer:
+      "Composite bonding is considered a cosmetic procedure and is not typically covered by standard dental insurance plans in the UAE. However, some comprehensive plans may offer partial coverage. We recommend checking with your insurer directly — our team is happy to help with documentation if needed.",
+  },
+  {
+    question: "Can I get composite bonding done on the same day as my consultation?",
+    answer:
+      "In many cases, yes. Dr. Firas Zoghieb often completes composite bonding in a single appointment, which can sometimes follow the initial consultation on the same day. This depends on the number of teeth being treated and the complexity of your case — it will be discussed at your consultation.",
+  },
+  {
+    question: "Is composite bonding reversible?",
+    answer:
+      "Yes, composite bonding is one of the most reversible cosmetic dental treatments available. Because the resin is applied directly onto the tooth without removing natural enamel in most cases, the process is non-destructive. The bonding can also be repaired, reshaped, or replaced if needed in the future.",
+  },
+  {
+    question: "What should I avoid after composite bonding treatment?",
+    answer:
+      "For the first 48 hours after composite bonding, avoid staining foods and drinks such as coffee, tea, red wine, and turmeric. Long-term, avoid biting nails, chewing pens, or eating hard foods directly with the bonded teeth. Regular polishing at check-up visits helps keep the bonding looking its best.",
+  },
+  {
     question: "How do I book a free consultation?",
     answer:
       "You can book a free consultation by clicking the 'Book Free Consultation' button anywhere on this page, calling our clinic directly, or messaging us on WhatsApp. We will confirm your appointment quickly and answer any questions you may have beforehand.",
@@ -93,11 +118,14 @@ export default function FAQ({ items }: { items?: FAQItem[] }) {
                 </span>
               </button>
 
-              {openIndex === index && (
-                <div className="px-6 pb-5 text-white/45 text-[15px] leading-relaxed border-t border-[#1e1e1e] pt-4">
-                  {faq.answer}
-                </div>
-              )}
+              <div
+                className={`px-6 pb-5 text-white/45 text-[15px] leading-relaxed border-t border-[#1e1e1e] pt-4 ${
+                  openIndex === index ? "" : "hidden"
+                }`}
+                data-speakable
+              >
+                {faq.answer}
+              </div>
             </div>
           ))}
         </div>

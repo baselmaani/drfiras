@@ -8,6 +8,7 @@ import ContactSection from "@/components/ContactSection";
 import ServicesGrid from "@/components/ServicesGrid";
 import BeforeAfter from "@/components/BeforeAfter";
 import FAQ from "@/components/FAQ";
+import { ServicesListingJsonLd } from "@/components/JsonLd";
 
 export async function generateMetadata(): Promise<Metadata> {
   const raw = await getSettings();
@@ -25,11 +26,13 @@ export async function generateMetadata(): Promise<Metadata> {
       description,
       url,
       type: "website",
+      ...(s.heroImageUrl && { images: [{ url: s.heroImageUrl, width: 1200, height: 630 }] }),
     },
     twitter: {
       card: "summary_large_image",
       title: `${title} | ${SITE_NAME}`,
       description,
+      ...(s.heroImageUrl && { images: [s.heroImageUrl] }),
     },
   };
 }
@@ -37,17 +40,39 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function ServicesPage() {
   const raw = await getSettings();
   const s = { ...DEFAULT_SETTINGS, ...raw };
-  let servicesFaqItems: {question:string;answer:string}[] = [];
-  try { if (s.servicesFaqItems) servicesFaqItems = JSON.parse(s.servicesFaqItems); } catch {}
+  const title = s.seoServicesTitle || `Cosmetic Dentistry Services | ${SITE_NAME}`;
+  const description = s.seoServicesDesc || `Explore composite bonding, Invisalign, veneers, and smile makeovers by ${s.doctorName} in Dubai.`;
+
+  let servicesFaqItems: { question: string; answer: string }[] = [];
+  if (s.servicesFaqItems) {
+    try { servicesFaqItems = JSON.parse(s.servicesFaqItems); } catch { /* keep empty */ }
+  }
 
   return (
     <>
+      <ServicesListingJsonLd name={title} description={description} />
       <Navbar />
       <main className="bg-[#0d0d0d] min-h-screen pt-[68px]">
-        <ServicesGrid showHeading={true} />
-      </main>
+        {/* Header */}
+        <section className="py-20 text-center border-b border-white/[0.06]">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6">
+            <p className="text-[#c9a84c] text-[11px] font-semibold uppercase tracking-[0.28em] mb-3">
+              What We Offer
+            </p>
+            <h1
+              className="text-4xl md:text-5xl font-bold text-white mb-5"
+              style={{ fontFamily: "var(--font-playfair)" }}
+            >
+              Our Services
+            </h1>
+            <p className="text-white/40 text-[15px] leading-relaxed">
+              From subtle enhancements to complete smile makeovers — discover how Dr. Firas can transform your smile.
+            </p>
+          </div>
+        </section>
 
-      <BeforeAfter />
+        <ServicesGrid showHeading={false} />
+      </main>
       {servicesFaqItems.length > 0 && <FAQ items={servicesFaqItems} />}
       <ContactSection />
     </>

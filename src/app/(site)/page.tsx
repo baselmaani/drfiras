@@ -16,8 +16,8 @@ import { FAQJsonLd, HomepageJsonLd } from "@/components/JsonLd";
 export async function generateMetadata(): Promise<Metadata> {
   const raw = await getSettings();
   const s = { ...DEFAULT_SETTINGS, ...raw };
-  const title = s.seoHomeTitle || `${s.doctorName} | ${s.specialty} Dubai`;
-  const description = s.seoHomeDesc || `${s.doctorName} is a ${s.specialty} in Dubai specialising in composite bonding, Invisalign, and veneers.`;
+  const title = s.seoHomeTitle || `${s.doctorName} | Composite Bonding Specialist — ${s.specialty} Dubai`;
+  const description = s.seoHomeDesc || `Transform your smile with ${s.doctorName} — Dubai’s composite bonding specialist. Invisalign & veneers. Minimally invasive. Free consultation.`;
   return {
     title,
     description,
@@ -28,11 +28,13 @@ export async function generateMetadata(): Promise<Metadata> {
       description,
       url: SITE_URL,
       type: "website",
+      ...(s.heroImageUrl && { images: [{ url: s.heroImageUrl, width: 1200, height: 630 }] }),
     },
     twitter: {
       card: "summary_large_image",
       title: `${title} | ${SITE_NAME}`,
       description,
+      ...(s.heroImageUrl && { images: [s.heroImageUrl] }),
     },
   };
 }
@@ -46,7 +48,7 @@ export default async function Home() {
   }
   return (
     <>
-      <HomepageJsonLd />
+      <HomepageJsonLd description={s.heroBody} />
       <FAQJsonLd items={faqItems} />
       <Navbar />
       <Hero />

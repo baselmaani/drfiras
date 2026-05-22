@@ -54,7 +54,7 @@ export function DentistJsonLd({
         ...(image && { image }),
         ...(image && { logo: { "@type": "ImageObject", url: image } }),
         medicalSpecialty: "Dentistry",
-        priceRange: "££",
+        priceRange: "$$$$",
         currenciesAccepted: "AED",
         paymentAccepted: "Cash, Credit Card, Insurance",
         knowsLanguage: ["en", "ar"],
@@ -76,7 +76,7 @@ export function DentistJsonLd({
           contactType: "customer service",
           ...(phone && { telephone: phone }),
           availableLanguage: ["English", "Arabic"],
-          areaServed: "AE",
+          areaServed: ["AE", "Dubai"],
           hoursAvailable: {
             "@type": "OpeningHoursSpecification",
             dayOfWeek: ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
@@ -318,7 +318,7 @@ export function SpeakableJsonLd({ url, cssSelector = ["h1", "h2", "[data-speakab
 
 // ── HomepageJsonLd ───────────────────────────────────────────────────────────
 // Standalone WebPage schema for the homepage with speakable + entity links.
-export function HomepageJsonLd() {
+export function HomepageJsonLd({ description }: { description?: string } = {}) {
   const schema = {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -326,6 +326,7 @@ export function HomepageJsonLd() {
     url: SITE_URL,
     name: `${SITE_NAME} | Cosmetic Dentist Dubai`,
     description:
+      description ??
       "Dr. Firas Zoghieb is a specialist cosmetic dentist in Dubai offering composite bonding, Invisalign, veneers, and complete smile makeovers.",
     inLanguage: "en",
     isPartOf: { "@id": `${SITE_URL}/#website` },
@@ -334,6 +335,106 @@ export function HomepageJsonLd() {
     speakable: {
       "@type": "SpeakableSpecification",
       cssSelector: ["h1", "h2", "[data-speakable]"],
+    },
+  };
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
+// ── ServicesListingJsonLd ────────────────────────────────────────────────────
+export function ServicesListingJsonLd({ name, description }: { name: string; description: string }) {
+  const url = `${SITE_URL}/services`;
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": `${url}#webpage`,
+    url,
+    name,
+    description,
+    inLanguage: "en",
+    isPartOf: { "@id": `${SITE_URL}/#website` },
+    about: { "@id": `${SITE_URL}/#dentist` },
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: ["h1", "h2", "[data-speakable]"],
+    },
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+        { "@type": "ListItem", position: 2, name: "Services", item: url },
+      ],
+    },
+  };
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
+// ── BlogListingJsonLd ────────────────────────────────────────────────────────
+export function BlogListingJsonLd({ name, description }: { name: string; description: string }) {
+  const url = `${SITE_URL}/blog`;
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "@id": `${url}#webpage`,
+    url,
+    name,
+    description,
+    inLanguage: "en",
+    isPartOf: { "@id": `${SITE_URL}/#website` },
+    author: { "@id": `${SITE_URL}/#person` },
+    publisher: { "@id": `${SITE_URL}/#dentist` },
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: ["h1", "h2", "[data-speakable]"],
+    },
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+        { "@type": "ListItem", position: 2, name: "Blog", item: url },
+      ],
+    },
+  };
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
+// ── ContactPageJsonLd ────────────────────────────────────────────────────────
+export function ContactPageJsonLd({ name, description }: { name: string; description: string }) {
+  const url = `${SITE_URL}/contact`;
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "@id": `${url}#webpage`,
+    url,
+    name,
+    description,
+    inLanguage: "en",
+    isPartOf: { "@id": `${SITE_URL}/#website` },
+    about: { "@id": `${SITE_URL}/#dentist` },
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: ["h1", "[data-speakable]"],
+    },
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+        { "@type": "ListItem", position: 2, name: "Contact", item: url },
+      ],
     },
   };
   return (

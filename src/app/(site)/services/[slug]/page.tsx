@@ -9,8 +9,8 @@ import Link from "next/link";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import BeforeAfter from "@/components/BeforeAfter";
-import ContactSection from "@/components/ContactSection";
 import FAQ from "@/components/FAQ";
+import ContactSection from "@/components/ContactSection";
 
 export async function generateStaticParams() {
   const services = await db.service.findMany({
@@ -201,8 +201,8 @@ export default async function ServicePage({
         </section>
       )}
 
-      {/* Before & After / Case Images */}
-      {caseImages.length > 0 ? (
+      {/* Case Images Gallery */}
+      {caseImages.length > 0 && (
         <section className="py-20 bg-[#0d0d0d] border-t border-white/[0.06]">
             <div className="max-w-6xl mx-auto px-4 sm:px-6">
             <div className="text-center mb-12">
@@ -213,7 +213,7 @@ export default async function ServicePage({
                 className="text-3xl md:text-4xl font-bold text-white"
                 style={{ fontFamily: "var(--font-playfair)" }}
               >
-                Before &amp; After
+                Case Gallery
               </h2>
             </div>
             <div
@@ -233,7 +233,7 @@ export default async function ServicePage({
                 >
                   <Image
                     src={img}
-                    alt={`${service.title} — before & after ${i + 1}`}
+                    alt={`${service.title} — case ${i + 1}`}
                     fill
                     className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
                     sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 320px"
@@ -250,48 +250,12 @@ export default async function ServicePage({
             </div>
           </div>
         </section>
-      ) : (
-        <BeforeAfter />
       )}
+
+      <BeforeAfter />
 
       {/* FAQ */}
       {faqItems.length > 0 && <FAQ items={faqItems} />}
-
-      {/* CTA */}
-      <section className="py-24 bg-[#0d0d0d] border-t border-white/[0.06]">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
-          <div className="inline-flex items-center gap-2 bg-[#c9a84c]/10 border border-[#c9a84c]/20 rounded-full px-5 py-2 mb-8">
-            <div className="w-1.5 h-1.5 rounded-full bg-[#c9a84c]" />
-            <span className="text-[#c9a84c] text-[11px] font-semibold uppercase tracking-[0.22em]">
-              Take the First Step
-            </span>
-          </div>
-          <h2
-            className="text-3xl md:text-4xl font-bold text-white mb-5 leading-tight"
-            style={{ fontFamily: "var(--font-playfair)" }}
-          >
-            Ready to Transform Your Smile?
-          </h2>
-          <p className="text-white/45 mb-10 text-base leading-relaxed">
-            Book a consultation with Dr. Firas Zoghieb and discover if{" "}
-            <span className="text-white/70 font-medium">{service.title}</span> is right for you.
-          </p>
-          <div className="flex flex-wrap justify-center gap-3">
-            <Link
-              href="/#book"
-              className="inline-flex items-center gap-2 border border-[#c9a84c] text-[#c9a84c] hover:bg-[#c9a84c]/10 px-10 py-4 rounded-full font-semibold transition-colors text-sm"
-            >
-              Book a Consultation
-            </Link>
-            <Link
-              href="/services"
-              className="inline-flex items-center gap-2 border border-[#c9a84c]/40 text-[#c9a84c]/70 hover:border-[#c9a84c] hover:text-[#c9a84c] px-10 py-4 rounded-full font-medium text-sm transition-colors"
-            >
-              Explore Other Treatments
-            </Link>
-          </div>
-        </div>
-      </section>
 
       <ContactSection />
     </>
