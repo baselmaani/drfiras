@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
 import { ArticleJsonLd, FAQJsonLd } from "@/components/JsonLd";
 import Link from "next/link";
+import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import ContactSection from "@/components/ContactSection";
 import FAQ from "@/components/FAQ";
@@ -112,12 +113,14 @@ export default async function BlogPostPage({
 
             {/* Image column — order-1 on desktop so it sits on the left */}
             {post.coverImage && (
-              <div className="w-full lg:w-1/2 lg:order-1 flex-shrink-0">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+              <div className="w-full lg:w-1/2 lg:order-1 flex-shrink-0 relative aspect-[4/3]">
+                <Image
                   src={post.coverImage}
                   alt={post.title}
-                  className="w-full rounded-2xl object-contain"
+                  fill
+                  className="rounded-2xl object-contain"
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                 />
               </div>
             )}

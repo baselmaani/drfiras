@@ -1,13 +1,14 @@
 import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
 import { FAQManager, type FAQItem } from "@/components/dashboard/FAQManager";
+import { DEFAULT_FAQS } from "@/components/FAQ";
 
 export default async function FAQPage() {
   const raw = await getSettings();
   const s = { ...DEFAULT_SETTINGS, ...raw };
 
-  let initial: FAQItem[] = [];
+  let initial: FAQItem[] = DEFAULT_FAQS;
   if (s.faqItems) {
-    try { initial = JSON.parse(s.faqItems) as FAQItem[]; } catch { /* keep empty */ }
+    try { initial = JSON.parse(s.faqItems) as FAQItem[]; } catch { /* keep defaults */ }
   }
 
   return (

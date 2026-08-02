@@ -13,16 +13,16 @@ import FAQ from "@/components/FAQ";
 export async function generateMetadata(): Promise<Metadata> {
   const raw = await getSettings();
   const s = { ...DEFAULT_SETTINGS, ...raw };
-  const title = s.seoAboutTitle || `About ${s.doctorName} | ${s.specialty} Dubai`;
+  const title = s.seoAboutTitle || `About ${s.doctorName} | ${s.specialty}, Dubai`;
   const description = s.seoAboutDesc || s.aboutPara1;
   const url = `${SITE_URL}/about`;
   return {
-    title,
+    title: { absolute: title },
     description,
     ...(s.seoAboutKeywords && { keywords: s.seoAboutKeywords }),
     alternates: { canonical: url },
     openGraph: {
-      title: `${title} | ${SITE_NAME}`,
+      title,
       description,
       url,
       type: "website",
@@ -30,7 +30,7 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     twitter: {
       card: "summary_large_image",
-      title: `${title} | ${SITE_NAME}`,
+      title,
       description,
       ...(s.heroImageUrl && { images: [s.heroImageUrl] }),
     },

@@ -121,7 +121,7 @@ export default async function ServicePage({
               <h1
                 data-speakable
                 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold text-white mb-5 leading-[1.1]"
-                style={{ fontFamily: "var(--font-playfair))" }}
+                style={{ fontFamily: "var(--font-playfair)" }}
               >
                 {service.title}
               </h1>

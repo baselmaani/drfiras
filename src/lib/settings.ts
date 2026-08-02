@@ -27,6 +27,7 @@ export const DEFAULT_SETTINGS: Record<string, string> = {
   smtpFrom: "",
   // Google Reviews
   googleReviewsEnabled: "true",
+  googlePlaceId: "",
   googleRating: "5.0",
   googleReviewCount: "1",
   googleReviewsUrl: "",
@@ -71,16 +72,17 @@ export const DEFAULT_SETTINGS: Record<string, string> = {
   aboutFaqItems: "",
   servicesFaqItems: "",
   contactFaqItems: "",
+  blogFaqItems: "",
   // At a Glance items (JSON array of {label, value})
   glanceItems: "",
   // Page-level SEO
   seoHomeTitle: "",
   seoHomeDesc: "",
   seoHomeKeywords: "",
-  seoBlogTitle: "Dental Tips & Advice | Dr. Firas Zoghieb",
+  seoBlogTitle: "Dental Tips & Advice",
   seoBlogDesc: "Read expert dental tips and cosmetic dentistry advice from Dr. Firas Zoghieb, Dubai cosmetic dentist.",
   seoBlogKeywords: "",
-  seoServicesTitle: "Our Services | Dr. Firas Zoghieb",
+  seoServicesTitle: "Our Services",
   seoServicesDesc: "Explore the full range of cosmetic dental treatments offered by Dr. Firas Zoghieb.",
   seoServicesKeywords: "",
   // Services section heading
@@ -98,7 +100,7 @@ export const DEFAULT_SETTINGS: Record<string, string> = {
   seoAboutTitle: "",
   seoAboutDesc: "",
   seoAboutKeywords: "",
-  seoContactTitle: "Contact Us | Dr. Firas Zoghieb",
+  seoContactTitle: "Contact Us",
   seoContactDesc: "Get in touch with Dr. Firas' clinic in Dubai. Book a consultation or send us a message.",
   seoContactKeywords: "",
   // Footer section

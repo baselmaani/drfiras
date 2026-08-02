@@ -1,4 +1,6 @@
 import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
+import { getLiveGoogleReviews } from "@/lib/googlePlaces";
+import { ReviewAvatar } from "@/components/ReviewAvatar";
 import Link from "next/link";
 
 interface Review {
@@ -6,6 +8,9 @@ interface Review {
   rating: number;
   text: string;
   date: string;
+  photoUrl?: string;
+  profileUrl?: string;
+  reviewImageUrl?: string;
 }
 
 const DEFAULT_REVIEWS: Review[] = [
@@ -88,68 +93,70 @@ function GoogleLogo() {
   );
 }
 
-function getInitials(name: string) {
-  return name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
-}
-
-const AVATAR_COLORS = [
-  "bg-blue-500",
-  "bg-purple-500",
-  "bg-emerald-500",
-  "bg-amber-500",
-  "bg-rose-500",
-  "bg-cyan-500",
-];
-
 export default async function GoogleReviews() {
   const dbSettings = await getSettings();
   const settings = { ...DEFAULT_SETTINGS, ...dbSettings };
 
   if (settings.googleReviewsEnabled === "false") return null;
 
-  const rating = parseFloat(settings.googleRating ?? "5.0");
-  const reviewCount = settings.googleReviewCount ?? "100+";
-  const reviewsUrl = settings.googleReviewsUrl ?? "#";
+  const live = settings.googlePlaceId
+    ? await getLiveGoogleReviews(settings.googlePlaceId)
+    : null;
 
+  let rating = parseFloat(settings.googleRating ?? "5.0");
+  let reviewCount: string = settings.googleReviewCount ?? "100+";
   let reviews: Review[] = DEFAULT_REVIEWS;
-  const stored = settings.googleReviews;
-  if (stored) {
-    try {
-      const parsed = JSON.parse(stored);
-      if (Array.isArray(parsed) && parsed.length > 0) reviews = parsed;
-    } catch {
-      // fall back to defaults
+  let isLive = false;
+
+  if (live && live.reviews.length > 0) {
+    rating = live.rating;
+    reviewCount = String(live.reviewCount);
+    reviews = live.reviews.map((r) => ({
+      name: r.name,
+      rating: r.rating,
+      text: r.text,
+      date: r.relativeTime,
+      photoUrl: r.photoUrl,
+      profileUrl: r.profileUrl,
+      reviewImageUrl: settings[`reviewPhoto__${r.reviewId}`] || undefined,
+    }));
+    isLive = true;
+  } else {
+    const stored = settings.googleReviews;
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) reviews = parsed;
+      } catch {
+        // fall back to defaults
+      }
     }
   }
 
+  const reviewsUrl = live?.mapsUri ?? settings.googleReviewsUrl ?? "#";
   const displayReviews = reviews.slice(0, 6);
 
   return (
-    <section className="py-20 bg-[#0f0f0f]">
+    <section className="py-24 bg-[#0f0f0f]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         {/* Section header */}
-        <div className="text-center mb-14">
+        <div className="text-center mb-16">
           <p className="text-[#c9a84c] text-[11px] font-semibold uppercase tracking-[0.28em] mb-3">
             Patient Reviews
           </p>
           <h2
-            className="text-3xl md:text-4xl font-bold text-white mb-6"
+            className="text-3xl md:text-4xl font-bold mb-8 bg-gradient-to-r from-[#f3e3bb] via-[#c9a84c] to-[#f3e3bb] bg-clip-text text-transparent"
             style={{ fontFamily: "var(--font-playfair)" }}
           >
             What Our Patients Say
           </h2>
 
           {/* Rating badge */}
-          <div className="inline-flex items-center gap-4 bg-[#141414] border border-[#232323] rounded-2xl px-6 py-4">
+          <div className="inline-flex items-center gap-4 bg-gradient-to-b from-white/[0.07] to-white/[0.02] backdrop-blur-md border border-[#c9a84c]/20 rounded-2xl px-7 py-5 shadow-[0_0_50px_-12px_rgba(201,168,76,0.4)]">
             <GoogleLogo />
             <div className="text-left">
               <div className="flex items-center gap-2">
-                <span className="text-2xl font-bold text-white">{rating.toFixed(1)}</span>
+                <span className="text-3xl font-bold text-white">{rating.toFixed(1)}</span>
                 <div className="flex gap-0.5">
                   {[1, 2, 3, 4, 5].map((s) => (
                     <svg
@@ -164,43 +171,80 @@ export default async function GoogleReviews() {
                   ))}
                 </div>
               </div>
-              <p className="text-sm text-white/35 mt-0.5">{reviewCount} Google reviews</p>
+              <p className="text-sm text-white/35 mt-0.5">
+                {reviewCount} Google reviews
+                {isLive && <span className="text-[#34A853]"> · Live</span>}
+              </p>
             </div>
           </div>
         </div>
 
         {/* Review cards */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
-          {displayReviews.map((review, i) => (
-            <div
-              key={i}
-              className="bg-[#141414] rounded-2xl p-6 flex flex-col gap-4 border border-[#1e1e1e] hover:border-[#232323] transition-colors"
-            >
-              {/* Header: avatar + name + stars */}
-              <div className="flex items-center gap-3">
-                <div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-semibold flex-shrink-0 ${
-                    AVATAR_COLORS[i % AVATAR_COLORS.length]
-                  }`}
+          {displayReviews.map((review, i) => {
+            const card = (
+              <div className="relative overflow-hidden bg-[#141414] rounded-2xl p-6 flex flex-col gap-4 border border-[#1e1e1e] hover:border-[#c9a84c]/25 hover:-translate-y-1 hover:shadow-[0_20px_45px_-18px_rgba(201,168,76,0.3)] transition-all duration-300 h-full">
+                {/* Decorative quote glyph */}
+                <svg
+                  className="absolute -top-3 right-4 w-16 h-16 text-white/[0.04]"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
                 >
-                  {getInitials(review.name)}
+                  <path d="M9.983 3v7.391c0 5.704-3.731 9.57-8.983 10.609l-.995-2.151c2.432-.917 3.995-3.638 3.995-5.849h-4v-10h9.983zm14.017 0v7.391c0 5.704-3.748 9.571-9 10.609l-.996-2.151c2.433-.917 3.996-3.638 3.996-5.849h-3.983v-10h9.983z" />
+                </svg>
+
+                {/* Header: avatar + name + stars */}
+                <div className="relative flex items-center gap-3">
+                  <ReviewAvatar name={review.name} photoUrl={review.photoUrl} colorIndex={i} />
+                  <div className="min-w-0">
+                    <p className="font-semibold text-white/80 text-sm truncate">{review.name}</p>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <StarRating rating={review.rating} />
+                      {isLive && (
+                        <span className="inline-flex items-center gap-1 text-[10px] font-medium text-[#c9a84c] bg-[#c9a84c]/10 border border-[#c9a84c]/20 px-1.5 py-0.5 rounded-full">
+                          ✓ Verified
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="ml-auto flex-shrink-0">
+                    <GoogleLogo />
+                  </div>
                 </div>
-                <div className="min-w-0">
-                  <p className="font-semibold text-white/80 text-sm truncate">{review.name}</p>
-                  <StarRating rating={review.rating} />
-                </div>
-                <div className="ml-auto flex-shrink-0">
-                  <GoogleLogo />
-                </div>
+
+                {/* Photo the patient attached to their review */}
+                {review.reviewImageUrl && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={review.reviewImageUrl}
+                    alt={`Photo shared by ${review.name}`}
+                    className="relative w-full h-44 object-cover rounded-xl"
+                  />
+                )}
+
+                {/* Review text */}
+                <p className="relative text-white/45 text-sm leading-relaxed flex-1">&ldquo;{review.text}&rdquo;</p>
+
+                {/* Date */}
+                <p className="relative text-xs text-white/25">{review.date}</p>
               </div>
+            );
 
-              {/* Review text */}
-              <p className="text-white/45 text-sm leading-relaxed flex-1">&ldquo;{review.text}&rdquo;</p>
-
-              {/* Date */}
-              <p className="text-xs text-white/25">{review.date}</p>
-            </div>
-          ))}
+            return review.profileUrl ? (
+              <Link
+                key={i}
+                href={review.profileUrl}
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                className="block"
+              >
+                {card}
+              </Link>
+            ) : (
+              <div key={i}>{card}</div>
+            );
+          })}
         </div>
 
         {/* CTA */}
@@ -210,11 +254,17 @@ export default async function GoogleReviews() {
               href={reviewsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2.5 border border-[#c9a84c]/40 text-[#c9a84c] px-7 py-3 rounded-full font-semibold text-sm hover:border-[#c9a84c] hover:bg-[#c9a84c]/5 transition-colors"
+              className="group inline-flex items-center gap-2.5 border border-[#c9a84c]/40 text-[#c9a84c] px-7 py-3 rounded-full font-semibold text-sm hover:border-[#c9a84c] hover:bg-[#c9a84c]/10 hover:shadow-[0_10px_35px_-12px_rgba(201,168,76,0.45)] transition-all duration-300"
             >
               <GoogleLogo />
               Read all {reviewCount} reviews on Google
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <svg
+                className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
               </svg>
             </Link>

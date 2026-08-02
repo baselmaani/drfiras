@@ -68,12 +68,23 @@ export default async function Hero() {
 
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row gap-4">
-            <a
-              href={s.heroCta1Link}
-              className="bg-[#e85535] text-white px-8 py-3.5 rounded-full font-semibold text-sm hover:bg-[#d44428] active:scale-[0.98] transition-all duration-200 text-center shadow-xl shadow-[#e85535]/20"
-            >
-              {s.heroCta1Text}
-            </a>
+            {/^https?:\/\//.test(s.heroCta1Link) ? (
+              <a
+                href={s.heroCta1Link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-[#e85535] text-white px-8 py-3.5 rounded-full font-semibold text-sm hover:bg-[#d44428] active:scale-[0.98] transition-all duration-200 text-center shadow-xl shadow-[#e85535]/20"
+              >
+                {s.heroCta1Text}
+              </a>
+            ) : (
+              <Link
+                href={s.heroCta1Link}
+                className="bg-[#e85535] text-white px-8 py-3.5 rounded-full font-semibold text-sm hover:bg-[#d44428] active:scale-[0.98] transition-all duration-200 text-center shadow-xl shadow-[#e85535]/20"
+              >
+                {s.heroCta1Text}
+              </Link>
+            )}
           </div>
 
           {/* Dot accent */}

@@ -5,6 +5,7 @@ import "./globals.css";
 import { DentistJsonLd } from "@/components/JsonLd";
 import { SITE_NAME, SITE_URL, SITE_DESCRIPTION, SITE_LOCALE, GEO_LAT, GEO_LNG, GEO_REGION, GEO_PLACENAME } from "@/lib/constants";
 import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
+import { getLiveGoogleReviews } from "@/lib/googlePlaces";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -92,6 +93,9 @@ export default async function RootLayout({
 }>) {
   const raw = await getSettings();
   const s = { ...DEFAULT_SETTINGS, ...raw };
+  const live = s.googlePlaceId ? await getLiveGoogleReviews(s.googlePlaceId) : null;
+  const reviewRating = live ? String(live.rating) : s.googleRating;
+  const reviewCount = live ? String(live.reviewCount) : s.googleReviewCount;
   return (
     <html lang="en-AE">
       <head>
@@ -130,8 +134,8 @@ export default async function RootLayout({
           email={s.email}
           address={s.address}
           instagram={s.instagram}
-          rating={s.googleRating}
-          reviewCount={s.googleReviewCount}
+          rating={reviewRating}
+          reviewCount={reviewCount}
         />
         {children}
       </body>

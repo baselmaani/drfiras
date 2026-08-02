@@ -8,6 +8,7 @@ import Hero from "@/components/Hero";
 import About from "@/components/About";
 import ServicesGrid from "@/components/ServicesGrid";
 import BeforeAfter from "@/components/BeforeAfter";
+import GoogleReviews from "@/components/GoogleReviews";
 import ContactSection from "@/components/ContactSection";
 import FAQSection from "@/components/FAQSection";
 import Footer from "@/components/Footer";
@@ -16,15 +17,15 @@ import { FAQJsonLd, HomepageJsonLd } from "@/components/JsonLd";
 export async function generateMetadata(): Promise<Metadata> {
   const raw = await getSettings();
   const s = { ...DEFAULT_SETTINGS, ...raw };
-  const title = s.seoHomeTitle || `${s.doctorName} | Composite Bonding Specialist — ${s.specialty} Dubai`;
+  const title = s.seoHomeTitle || `${s.doctorName} | Composite Bonding & Cosmetic Dentist Dubai`;
   const description = s.seoHomeDesc || `Transform your smile with ${s.doctorName} — Dubai’s composite bonding specialist. Invisalign & veneers. Minimally invasive. Free consultation.`;
   return {
-    title,
+    title: { absolute: title },
     description,
     keywords: s.seoHomeKeywords || "cosmetic dentist dubai, composite bonding dubai, invisalign dubai, veneers dubai",
     alternates: { canonical: SITE_URL },
     openGraph: {
-      title: `${title} | ${SITE_NAME}`,
+      title,
       description,
       url: SITE_URL,
       type: "website",
@@ -32,7 +33,7 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     twitter: {
       card: "summary_large_image",
-      title: `${title} | ${SITE_NAME}`,
+      title,
       description,
       ...(s.heroImageUrl && { images: [s.heroImageUrl] }),
     },
@@ -54,6 +55,7 @@ export default async function Home() {
       <Hero />
       <ServicesGrid />
       <BeforeAfter />
+      <GoogleReviews />
       <ContactSection />
       <About />
       <FAQSection />

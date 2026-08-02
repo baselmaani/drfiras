@@ -14,18 +14,18 @@ export async function generateMetadata(): Promise<Metadata> {
   const description = `Browse real patient results from ${s.doctorName} — composite bonding, veneers, Invisalign & smile makeovers in Dubai.`;
   const url = `${SITE_URL}/gallery`;
   return {
-    title,
+    title: { absolute: title },
     description,
     alternates: { canonical: url },
     openGraph: {
-      title: `${title} | ${SITE_NAME}`,
+      title,
       description,
       url,
       type: "website",
     },
     twitter: {
       card: "summary_large_image",
-      title: `${title} | ${SITE_NAME}`,
+      title,
       description,
     },
   };

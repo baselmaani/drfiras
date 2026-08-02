@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
 import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
 import Link from "next/link";
+import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import BeforeAfter from "@/components/BeforeAfter";
 import ContactSection from "@/components/ContactSection";
@@ -14,7 +15,7 @@ import { BlogListingJsonLd } from "@/components/JsonLd";
 export async function generateMetadata(): Promise<Metadata> {
   const raw = await getSettings();
   const s = { ...DEFAULT_SETTINGS, ...raw };
-  const title = s.seoBlogTitle || `Dental Tips & Advice | ${SITE_NAME}`;
+  const title = s.seoBlogTitle || `Dental Tips & Advice`;
   const description = s.seoBlogDesc || `Expert dental tips, advice and patient stories from ${SITE_NAME}.`;
   const url = `${SITE_URL}/blog`;
   return {
@@ -54,7 +55,7 @@ export default async function BlogPage() {
 
   const raw = await getSettings();
   const s = { ...DEFAULT_SETTINGS, ...raw };
-  const title = s.seoBlogTitle || `Dental Tips & Advice | ${SITE_NAME}`;
+  const title = s.seoBlogTitle || `Dental Tips & Advice`;
   const description = s.seoBlogDesc || `Expert dental tips, advice and patient stories from ${SITE_NAME}.`;
   let blogFaqItems: {question:string;answer:string}[] = [];
   try { if (s.blogFaqItems) blogFaqItems = JSON.parse(s.blogFaqItems); } catch {}
@@ -93,12 +94,13 @@ export default async function BlogPage() {
                 {posts.map((post) => (
                   <article key={post.id} className="group bg-[#141414] border border-white/[0.06] hover:border-[#c9a84c]/40 rounded-2xl overflow-hidden transition-all duration-300 flex flex-col">
                     {post.coverImage && (
-                      <Link href={`/blog/${post.slug}`} className="block overflow-hidden bg-[#1a1a1a]">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
+                      <Link href={`/blog/${post.slug}`} className="block overflow-hidden bg-[#1a1a1a] relative aspect-[4/3]">
+                        <Image
                           src={post.coverImage}
                           alt={post.title}
-                          className="w-full object-contain group-hover:scale-105 transition-transform duration-500"
+                          fill
+                          className="object-contain group-hover:scale-105 transition-transform duration-500"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                         />
                       </Link>
                     )}
@@ -121,12 +123,6 @@ export default async function BlogPage() {
                       {post.excerpt && (
                         <p className="text-white/45 text-sm line-clamp-3 leading-relaxed flex-1">{post.excerpt}</p>
                       )}
-                      <Link
-                        href={`/blog/${post.slug}`}
-                        className="inline-block mt-4 text-[#c9a84c] text-sm font-medium hover:underline"
-                      >
-                        Read more →
-                      </Link>
                     </div>
                   </article>
                 ))}

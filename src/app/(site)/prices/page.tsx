@@ -7,7 +7,7 @@ import Navbar from "@/components/Navbar";
 import ContactSection from "@/components/ContactSection";
 
 export const metadata: Metadata = {
-  title: `Prices & Fees | ${SITE_NAME}`,
+  title: { absolute: `Prices & Fees | ${SITE_NAME}` },
   description: `Transparent pricing for cosmetic dentistry treatments at ${SITE_NAME}. View our price list for composite bonding, Invisalign, veneers, and more.`,
   alternates: { canonical: `${SITE_URL}/prices` },
   openGraph: {

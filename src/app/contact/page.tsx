@@ -13,7 +13,7 @@ import { ContactPageJsonLd } from "@/components/JsonLd";
 export async function generateMetadata(): Promise<Metadata> {
   const raw = await getSettings();
   const s = { ...DEFAULT_SETTINGS, ...raw };
-  const title = s.seoContactTitle || `Contact ${s.doctorName} | Cosmetic Dentist Dubai`;
+  const title = s.seoContactTitle || `Book a Consultation`;
   const description = s.seoContactDesc || `Book a consultation with ${s.doctorName}, cosmetic dentist in Dubai.`;
   const url = `${SITE_URL}/contact`;
   return {

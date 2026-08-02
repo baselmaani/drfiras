@@ -125,10 +125,10 @@ interface NavbarClientProps {
 export default function NavbarClient({ phone, whatsapp, instagram, tiktok, logoUrl, doctorName, specialty, menuItems }: NavbarClientProps) {
   const [open, setOpen] = useState(false);
 
-  const phoneHref = phone ? `tel:${phone.replace(/\s/g, "")}` : "#";
-  const waHref = whatsapp || "#";
-  const igHref = instagram || "#";
-  const ttHref = tiktok || "#";
+  const phoneHref = phone ? `tel:${phone.replace(/\s/g, "")}` : null;
+  const waHref = whatsapp || null;
+  const igHref = instagram || null;
+  const ttHref = tiktok || undefined;
 
   const leftItems = menuItems.filter((i) => i.position === "left" && i.enabled && !i.parentId);
   const rightItems = menuItems.filter((i) => i.position === "right" && i.enabled && !i.parentId);
@@ -182,19 +182,25 @@ export default function NavbarClient({ phone, whatsapp, instagram, tiktok, logoU
             {rightItems.map((item) => (
               <DropdownItem key={item.id} item={item} />
             ))}
-            <a href="/contact" className="flex items-center gap-1.5 border border-[#c9a84c]/45 text-[#c9a84c] text-[12px] font-medium px-5 py-2 rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200 tracking-wide">
+            <Link href="/contact" className="flex items-center gap-1.5 border border-[#c9a84c]/45 text-[#c9a84c] text-[12px] font-medium px-5 py-2 rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200 tracking-wide">
               <CalendarIcon />
               Book Now
-            </a>
-            <a href={waHref} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" data-gtm-whatsapp="true" onClick={() => { (window as any).dataLayer = (window as any).dataLayer || []; (window as any).dataLayer.push({ event: 'whatsapp_click', click_location: 'navbar' }); }} className="flex items-center justify-center w-8 h-8 border border-[#c9a84c]/45 text-[#c9a84c] rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200">
-              <WAIcon className="w-3.5 h-3.5" />
-            </a>
-            <a href={phoneHref} aria-label="Call us" onClick={() => { (window as any).dataLayer = (window as any).dataLayer || []; (window as any).dataLayer.push({ event: 'call_click', click_location: 'navbar' }); }} className="flex items-center justify-center w-8 h-8 border border-[#c9a84c]/45 text-[#c9a84c] rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200">
-              <PhoneIcon />
-            </a>
-            <a href={igHref} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="flex items-center justify-center w-8 h-8 border border-[#c9a84c]/45 text-[#c9a84c] rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200">
-              <IGIcon className="w-3.5 h-3.5" />
-            </a>
+            </Link>
+            {waHref && (
+              <a href={waHref} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" data-gtm-whatsapp="true" onClick={() => { (window as any).dataLayer = (window as any).dataLayer || []; (window as any).dataLayer.push({ event: 'whatsapp_click', click_location: 'navbar' }); }} className="flex items-center justify-center w-8 h-8 border border-[#c9a84c]/45 text-[#c9a84c] rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200">
+                <WAIcon className="w-3.5 h-3.5" />
+              </a>
+            )}
+            {phoneHref && (
+              <a href={phoneHref} aria-label="Call us" onClick={() => { (window as any).dataLayer = (window as any).dataLayer || []; (window as any).dataLayer.push({ event: 'call_click', click_location: 'navbar' }); }} className="flex items-center justify-center w-8 h-8 border border-[#c9a84c]/45 text-[#c9a84c] rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200">
+                <PhoneIcon />
+              </a>
+            )}
+            {igHref && (
+              <a href={igHref} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="flex items-center justify-center w-8 h-8 border border-[#c9a84c]/45 text-[#c9a84c] rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200">
+                <IGIcon className="w-3.5 h-3.5" />
+              </a>
+            )}
             {tiktok && (
               <a href={ttHref} target="_blank" rel="noopener noreferrer" aria-label="TikTok" className="flex items-center justify-center w-8 h-8 border border-[#c9a84c]/45 text-[#c9a84c] rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200">
                 <TikTokIcon className="w-3.5 h-3.5" />
@@ -238,16 +244,22 @@ export default function NavbarClient({ phone, whatsapp, instagram, tiktok, logoU
             </div>
           ))}
           <div className="flex flex-col gap-3 pt-4">
-            <a href={phoneHref} data-gtm-call="true" onClick={() => { (window as any).dataLayer = (window as any).dataLayer || []; (window as any).dataLayer.push({ event: 'call_click', click_location: 'navbar_mobile' }); }} className="flex items-center justify-center gap-2 border border-[#c9a84c]/45 text-[#c9a84c] text-[12px] font-medium px-5 py-2 rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200 tracking-wide">
-              <PhoneIcon />
-              Call Us
-            </a>
-            <a href={waHref} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" data-gtm-whatsapp="true" onClick={() => { (window as any).dataLayer = (window as any).dataLayer || []; (window as any).dataLayer.push({ event: 'whatsapp_click', click_location: 'navbar_mobile' }); }} className="flex items-center justify-center w-10 h-10 border border-[#c9a84c]/45 text-[#c9a84c] rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200 mx-auto">
-              <WAIcon className="w-4 h-4" />
-            </a>
-            <a href={igHref} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="flex items-center justify-center w-10 h-10 border border-[#c9a84c]/45 text-[#c9a84c] rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200 mx-auto">
-              <IGIcon className="w-4 h-4" />
-            </a>
+            {phoneHref && (
+              <a href={phoneHref} data-gtm-call="true" onClick={() => { (window as any).dataLayer = (window as any).dataLayer || []; (window as any).dataLayer.push({ event: 'call_click', click_location: 'navbar_mobile' }); }} className="flex items-center justify-center gap-2 border border-[#c9a84c]/45 text-[#c9a84c] text-[12px] font-medium px-5 py-2 rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200 tracking-wide">
+                <PhoneIcon />
+                Call Us
+              </a>
+            )}
+            {waHref && (
+              <a href={waHref} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" data-gtm-whatsapp="true" onClick={() => { (window as any).dataLayer = (window as any).dataLayer || []; (window as any).dataLayer.push({ event: 'whatsapp_click', click_location: 'navbar_mobile' }); }} className="flex items-center justify-center w-10 h-10 border border-[#c9a84c]/45 text-[#c9a84c] rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200 mx-auto">
+                <WAIcon className="w-4 h-4" />
+              </a>
+            )}
+            {igHref && (
+              <a href={igHref} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="flex items-center justify-center w-10 h-10 border border-[#c9a84c]/45 text-[#c9a84c] rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200 mx-auto">
+                <IGIcon className="w-4 h-4" />
+              </a>
+            )}
             {tiktok && (
               <a href={ttHref} target="_blank" rel="noopener noreferrer" aria-label="TikTok" className="flex items-center justify-center w-10 h-10 border border-[#c9a84c]/45 text-[#c9a84c] rounded-full hover:bg-[#c9a84c]/10 hover:border-[#c9a84c]/80 transition-all duration-200 mx-auto">
                 <TikTokIcon className="w-4 h-4" />

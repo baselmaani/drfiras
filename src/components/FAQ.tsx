@@ -3,7 +3,7 @@ import { useState } from "react";
 
 export type FAQItem = { question: string; answer: string };
 
-const DEFAULT_FAQS: FAQItem[] = [
+export const DEFAULT_FAQS: FAQItem[] = [
   {
     question: "What is composite bonding and how does it work?",
     answer:

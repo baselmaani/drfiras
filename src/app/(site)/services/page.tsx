@@ -13,7 +13,7 @@ import { ServicesListingJsonLd } from "@/components/JsonLd";
 export async function generateMetadata(): Promise<Metadata> {
   const raw = await getSettings();
   const s = { ...DEFAULT_SETTINGS, ...raw };
-  const title = s.seoServicesTitle || `Cosmetic Dentistry Services | ${SITE_NAME}`;
+  const title = s.seoServicesTitle || `Cosmetic Dentistry Services Dubai`;
   const description = s.seoServicesDesc || `Explore composite bonding, Invisalign, veneers, and smile makeovers by ${s.doctorName} in Dubai.`;
   const url = `${SITE_URL}/services`;
   return {
@@ -40,7 +40,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function ServicesPage() {
   const raw = await getSettings();
   const s = { ...DEFAULT_SETTINGS, ...raw };
-  const title = s.seoServicesTitle || `Cosmetic Dentistry Services | ${SITE_NAME}`;
+  const title = s.seoServicesTitle || `Cosmetic Dentistry Services Dubai`;
   const description = s.seoServicesDesc || `Explore composite bonding, Invisalign, veneers, and smile makeovers by ${s.doctorName} in Dubai.`;
 
   let servicesFaqItems: { question: string; answer: string }[] = [];

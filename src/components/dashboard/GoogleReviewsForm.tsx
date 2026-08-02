@@ -1,6 +1,7 @@
 "use client";
 import { useActionState, useState } from "react";
 import { updateSettings } from "@/lib/actions/settings";
+import { ImageUpload } from "@/components/dashboard/ImageUpload";
 
 type Values = Record<string, string>;
 
@@ -9,6 +10,13 @@ interface Review {
   rating: number;
   text: string;
   date: string;
+}
+
+interface LiveReviewSummary {
+  reviewId: string;
+  name: string;
+  snippet: string;
+  reviewUrl?: string;
 }
 
 const cls = "w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1b4f72]/30 bg-white";
@@ -51,7 +59,7 @@ function ReviewCard({
   );
 }
 
-export function GoogleReviewsForm({ values }: { values: Values }) {
+export function GoogleReviewsForm({ values, liveReviews = [] }: { values: Values; liveReviews?: LiveReviewSummary[] }) {
   const [state, formAction, pending] = useActionState(updateSettings, null);
 
   const [reviews, setReviews] = useState<Review[]>(() => {
@@ -104,23 +112,102 @@ export function GoogleReviewsForm({ values }: { values: Values }) {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">Overall Rating</label>
             <input name="googleRating" defaultValue={values.googleRating ?? "5.0"} className={cls} placeholder="5.0" />
+            <p className="text-xs text-gray-400 mt-1">Ignored once live reviews are connected below.</p>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">Review Count</label>
             <input name="googleReviewCount" defaultValue={values.googleReviewCount ?? ""} className={cls} placeholder="248" />
+            <p className="text-xs text-gray-400 mt-1">Ignored once live reviews are connected below.</p>
           </div>
           <div className="sm:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-1.5">Google Reviews URL</label>
             <input name="googleReviewsUrl" defaultValue={values.googleReviewsUrl ?? ""} className={cls} placeholder="https://g.page/r/.../review" />
-            <p className="text-xs text-gray-400 mt-1">Link users to leave or read reviews on Google.</p>
+            <p className="text-xs text-gray-400 mt-1">Link users to leave or read reviews on Google. Overridden by the live Google Maps link once connected.</p>
           </div>
         </div>
       </div>
 
+      {/* Live Google connection */}
+      <div className="border border-gray-100 rounded-2xl p-5 space-y-4 bg-gray-50">
+        <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Live Google Reviews (Recommended)</h3>
+        <p className="text-sm text-gray-500">
+          Connect your real Google Business Profile so the 5 most relevant real reviews (with real names, photos, and ratings) show automatically — refreshed hourly. Google&apos;s API caps this at 5 reviews per business; the rating badge above will still show your true total.
+        </p>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">Google Place ID</label>
+          <input name="googlePlaceId" defaultValue={values.googlePlaceId ?? ""} className={cls} placeholder="ChIJ..." />
+          <p className="text-xs text-gray-400 mt-1">
+            Find it with Google&apos;s{" "}
+            <a
+              href="https://developers.google.com/maps/documentation/places/web-service/place-id"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#1b4f72] underline"
+            >
+              Place ID Finder tool
+            </a>
+            {" "}— search for the clinic and copy the ID shown.
+          </p>
+        </div>
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800">
+          <p className="font-medium mb-1">One more step (done by a developer, not here):</p>
+          <p>
+            A <code className="bg-amber-100 px-1 rounded">GOOGLE_PLACES_API_KEY</code> must be set in the server environment. Create it in the{" "}
+            <a
+              href="https://console.cloud.google.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline"
+            >
+              Google Cloud Console
+            </a>
+            : create/select a project, enable &ldquo;Places API (New)&rdquo;, create an API key restricted to that API, and add it to the site&apos;s <code className="bg-amber-100 px-1 rounded">.env</code> file. Until this key is set, the custom reviews below (or default placeholders) are shown instead.
+          </p>
+        </div>
+      </div>
+
+      {/* Attach review photos */}
+      {liveReviews.length > 0 && (
+        <div className="border border-gray-100 rounded-2xl p-5 space-y-4 bg-gray-50">
+          <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Attach Review Photos</h3>
+          <p className="text-sm text-gray-500">
+            Google doesn&apos;t give us access to photos a customer attaches inside their review — only their profile picture. To feature one anyway: open the review on Google Maps, save the photo the patient posted, then upload it here against that exact review.
+          </p>
+          <div className="space-y-4">
+            {liveReviews.map((r) => (
+              <div key={r.reviewId} className="border border-gray-200 rounded-2xl p-4 space-y-3 bg-white">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-semibold text-gray-700">{r.name}</p>
+                    <p className="text-xs text-gray-400 mt-0.5">&ldquo;{r.snippet}&rdquo;</p>
+                  </div>
+                  {r.reviewUrl && (
+                    <a
+                      href={r.reviewUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs font-medium text-[#1b4f72] underline whitespace-nowrap"
+                    >
+                      View on Google Maps ↗
+                    </a>
+                  )}
+                </div>
+                <ImageUpload
+                  name={`reviewPhoto__${r.reviewId}`}
+                  defaultValue={values[`reviewPhoto__${r.reviewId}`] ?? ""}
+                  label="Attached photo (optional)"
+                />
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-gray-400">If a review later drops out of Google&apos;s top 5, its photo simply goes unused — attach a new one to whichever review replaces it.</p>
+        </div>
+      )}
+
       {/* Reviews list */}
       <div className="border border-gray-100 rounded-2xl p-5 space-y-4 bg-gray-50">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Custom Reviews</h3>
+          <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Fallback Reviews</h3>
           <button
             type="button"
             onClick={addReview}
@@ -129,6 +216,7 @@ export function GoogleReviewsForm({ values }: { values: Values }) {
             + Add Review
           </button>
         </div>
+        <p className="text-xs text-gray-400">Used only when a live Google Place ID above isn&apos;t connected or the live fetch fails.</p>
         {reviews.length === 0 && (
           <p className="text-sm text-gray-400 text-center py-4">No custom reviews yet — default placeholders will be shown.</p>
         )}

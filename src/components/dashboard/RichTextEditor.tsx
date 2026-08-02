@@ -4,7 +4,8 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
+import type { InternalLink } from "@/app/api/internal-links/route";
 
 // ─── Toolbar button ─────────────────────────────────────────────────────────
 function Btn({
@@ -57,6 +58,9 @@ export function RichTextEditor({
   const [showLink, setShowLink] = useState(false);
   const [linkUrl, setLinkUrl] = useState("");
   const [linkNewTab, setLinkNewTab] = useState(false);
+  const [internalLinks, setInternalLinks] = useState<InternalLink[]>([]);
+  const [linkSearch, setLinkSearch] = useState("");
+  const fetchedRef = useRef(false);
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -124,8 +128,16 @@ export function RichTextEditor({
     if (!editor) return;
     const existing = editor.getAttributes("link").href ?? "";
     setLinkUrl(existing);
+    setLinkSearch("");
     setLinkNewTab(editor.getAttributes("link").target === "_blank");
     setShowLink((v) => !v);
+    if (!fetchedRef.current) {
+      fetchedRef.current = true;
+      fetch("/api/internal-links")
+        .then((r) => r.json())
+        .then((data: InternalLink[]) => setInternalLinks(data))
+        .catch(() => {});
+    }
   }, [editor]);
 
   // Loading skeleton
@@ -255,6 +267,54 @@ export function RichTextEditor({
               placeholder="/services/composite-bonding"
               className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1b4f72]/30 bg-white"
             />
+            {/* ── Internal page picker ── */}
+            {internalLinks.length > 0 && (
+              <div className="mt-2 border border-gray-200 rounded-lg bg-white overflow-hidden">
+                <div className="px-2 pt-2 pb-1">
+                  <input
+                    type="text"
+                    value={linkSearch}
+                    onChange={(e) => setLinkSearch(e.target.value)}
+                    placeholder="Search pages, services, posts…"
+                    className="w-full border border-gray-100 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-[#1b4f72]/30 bg-gray-50"
+                  />
+                </div>
+                <div className="overflow-y-auto max-h-48">
+                  {(["Pages", "Services", "Posts"] as const).map((group) => {
+                    const items = internalLinks.filter(
+                      (l) =>
+                        l.group === group &&
+                        (linkSearch === "" ||
+                          l.label.toLowerCase().includes(linkSearch.toLowerCase()) ||
+                          l.href.toLowerCase().includes(linkSearch.toLowerCase()))
+                    );
+                    if (items.length === 0) return null;
+                    return (
+                      <div key={group}>
+                        <div className="px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-gray-400 bg-gray-50 border-t border-gray-100">
+                          {group}
+                        </div>
+                        {items.map((item) => (
+                          <button
+                            key={item.href}
+                            type="button"
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              setLinkUrl(item.href);
+                              setLinkSearch("");
+                            }}
+                            className="w-full text-left px-3 py-1.5 text-xs hover:bg-amber-50 flex items-center justify-between gap-2 group"
+                          >
+                            <span className="font-medium text-gray-700 group-hover:text-[#1b4f72] truncate">{item.label}</span>
+                            <span className="text-gray-400 font-mono shrink-0 group-hover:text-[#c9a84c]">{item.href}</span>
+                          </button>
+                        ))}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
           <label className="flex items-center gap-1.5 text-xs text-gray-600 cursor-pointer pb-2">
             <input
