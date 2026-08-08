@@ -9,6 +9,7 @@ import Navbar from "@/components/Navbar";
 import BeforeAfter from "@/components/BeforeAfter";
 import { SpeakableJsonLd } from "@/components/JsonLd";
 import FAQ from "@/components/FAQ";
+import GoogleReviews from "@/components/GoogleReviews";
 
 export async function generateMetadata(): Promise<Metadata> {
   const raw = await getSettings();
@@ -162,6 +163,8 @@ export default async function AboutPage() {
           </ul>
         </div>
       </section>
+
+      <GoogleReviews />
 
       {/* FAQ */}
       {aboutFaqItems.length > 0 && <FAQ items={aboutFaqItems} />}

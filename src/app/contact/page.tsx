@@ -8,6 +8,7 @@ import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
 import BeforeAfter from "@/components/BeforeAfter";
 import FAQ from "@/components/FAQ";
+import GoogleReviews from "@/components/GoogleReviews";
 import { ContactPageJsonLd } from "@/components/JsonLd";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -163,6 +164,9 @@ export default async function ContactPage() {
           </div>
         </div>
       </section>
+
+      <GoogleReviews />
+
       {contactFaqItems.length > 0 && <FAQ items={contactFaqItems} />}
       <Footer />
     </>
