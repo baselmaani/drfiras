@@ -3,9 +3,27 @@ import Link from "next/link";
 import Image from "next/image";
 import { deleteBeforeAfter } from "@/lib/actions/before-after";
 import { DeleteButton } from "@/components/dashboard/DeleteButton";
+import Pagination from "@/components/dashboard/Pagination";
 
-export default async function BeforeAfterPage() {
-  const items = await db.beforeAfter.findMany({ orderBy: { order: "asc" } });
+const PAGE_SIZE = 24;
+
+export default async function BeforeAfterPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const params = await searchParams;
+  const page = Math.max(1, parseInt(params.page ?? "1", 10) || 1);
+
+  const [totalCount, items] = await Promise.all([
+    db.beforeAfter.count(),
+    db.beforeAfter.findMany({
+      orderBy: { order: "asc" },
+      skip: (page - 1) * PAGE_SIZE,
+      take: PAGE_SIZE,
+    }),
+  ]);
+  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
 
   return (
     <div>
@@ -17,7 +35,7 @@ export default async function BeforeAfterPage() {
           >
             Before &amp; After
           </h1>
-          <p className="text-gray-500 text-sm mt-1">{items.length} items</p>
+          <p className="text-gray-500 text-sm mt-1">{totalCount} items</p>
         </div>
         <Link
           href="/dashboard/before-after/new"
@@ -27,7 +45,7 @@ export default async function BeforeAfterPage() {
         </Link>
       </div>
 
-      {items.length === 0 ? (
+      {totalCount === 0 ? (
         <div className="bg-white rounded-2xl border border-gray-100 py-16 text-center text-gray-400">
           <p className="text-lg mb-2">No before &amp; after items yet</p>
           <Link
@@ -85,6 +103,8 @@ export default async function BeforeAfterPage() {
           ))}
         </div>
       )}
+
+      <Pagination page={page} totalPages={totalPages} basePath="/dashboard/before-after" />
     </div>
   );
 }

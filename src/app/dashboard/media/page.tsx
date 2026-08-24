@@ -5,8 +5,11 @@ import CopyButton from "@/components/dashboard/CopyButton";
 import MediaUploader from "@/components/dashboard/MediaUploader";
 import NewFolderButton from "@/components/dashboard/NewFolderButton";
 import MoveFileMenu from "@/components/dashboard/MoveFileMenu";
+import Pagination from "@/components/dashboard/Pagination";
 import Image from "next/image";
 import Link from "next/link";
+
+const PAGE_SIZE = 24;
 
 function formatBytes(bytes: number) {
   if (bytes < 1024) return `${bytes} B`;
@@ -27,31 +30,37 @@ const FolderIcon = ({ className }: { className?: string }) => (
 export default async function MediaPage({
   searchParams,
 }: {
-  searchParams: Promise<{ folder?: string; all?: string }>;
+  searchParams: Promise<{ folder?: string; all?: string; page?: string }>;
 }) {
   const params = await searchParams;
   const folderId = params.folder ? parseInt(params.folder) : null;
   const showAll = params.all === "1";
+  const page = Math.max(1, parseInt(params.page ?? "1", 10) || 1);
 
-  const [allFolders, currentFolder, subfolders, files] = await Promise.all([
-    db.mediaFolder.findMany({ orderBy: { name: "asc" } }),
-    folderId ? db.mediaFolder.findUnique({ where: { id: folderId } }) : null,
-    db.mediaFolder.findMany({
-      where: { parentId: folderId ?? null },
-      orderBy: { name: "asc" },
-    }),
-    showAll
-      ? db.mediaFile.findMany({ orderBy: { createdAt: "desc" } })
-      : db.mediaFile.findMany({
-          where: { folderId: folderId ?? null },
-          orderBy: { createdAt: "desc" },
-        }),
-  ]);
+  const fileWhere = showAll ? {} : { folderId: folderId ?? null };
+
+  const [allFolders, currentFolder, subfolders, fileCount, videoCount, files] =
+    await Promise.all([
+      db.mediaFolder.findMany({ orderBy: { name: "asc" } }),
+      folderId ? db.mediaFolder.findUnique({ where: { id: folderId } }) : null,
+      db.mediaFolder.findMany({
+        where: { parentId: folderId ?? null },
+        orderBy: { name: "asc" },
+      }),
+      db.mediaFile.count({ where: fileWhere }),
+      db.mediaFile.count({ where: { ...fileWhere, mimeType: { startsWith: "video/" } } }),
+      db.mediaFile.findMany({
+        where: fileWhere,
+        orderBy: { createdAt: "desc" },
+        skip: (page - 1) * PAGE_SIZE,
+        take: PAGE_SIZE,
+      }),
+    ]);
+  const totalPages = Math.max(1, Math.ceil(fileCount / PAGE_SIZE));
 
   const rootFolders = allFolders.filter((f) => f.parentId === null);
-  const imageCount = files.filter((f) => !isVideo(f.mimeType)).length;
-  const videoCount = files.filter((f) => isVideo(f.mimeType)).length;
-  const totalCount = files.length + (showAll ? 0 : subfolders.length);
+  const imageCount = fileCount - videoCount;
+  const totalCount = fileCount + (showAll ? 0 : subfolders.length);
 
   return (
     <div className="flex gap-6 min-h-screen">
@@ -289,6 +298,13 @@ export default async function MediaPage({
                 </div>
               ))}
             </div>
+
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              basePath="/dashboard/media"
+              extraParams={{ folder: params.folder, all: params.all }}
+            />
           </>
         ) : null}
       </div>

@@ -1,10 +1,28 @@
 import { db } from "@/lib/db";
 import { deletePost } from "@/lib/actions/posts";
 import { DeleteButton } from "@/components/dashboard/DeleteButton";
+import Pagination from "@/components/dashboard/Pagination";
 import Link from "next/link";
 
-export default async function PostsPage() {
-  const posts = await db.post.findMany({ orderBy: { createdAt: "desc" } });
+const PAGE_SIZE = 20;
+
+export default async function PostsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const params = await searchParams;
+  const page = Math.max(1, parseInt(params.page ?? "1", 10) || 1);
+
+  const [totalCount, posts] = await Promise.all([
+    db.post.count(),
+    db.post.findMany({
+      orderBy: { createdAt: "desc" },
+      skip: (page - 1) * PAGE_SIZE,
+      take: PAGE_SIZE,
+    }),
+  ]);
+  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
 
   return (
     <div>
@@ -27,7 +45,7 @@ export default async function PostsPage() {
       </div>
 
       <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-        {posts.length === 0 ? (
+        {totalCount === 0 ? (
           <div className="text-center py-16 text-gray-400">
             <p className="text-lg mb-2">No blog posts yet</p>
             <Link href="/dashboard/posts/new" className="text-[#1b4f72] hover:underline text-sm">
@@ -98,6 +116,8 @@ export default async function PostsPage() {
           </table>
         )}
       </div>
+
+      <Pagination page={page} totalPages={totalPages} basePath="/dashboard/posts" />
     </div>
   );
 }

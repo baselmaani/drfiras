@@ -3,12 +3,28 @@ import Link from "next/link";
 import Image from "next/image";
 import { deleteGalleryImage } from "@/lib/actions/gallery";
 import { DeleteButton } from "@/components/dashboard/DeleteButton";
+import Pagination from "@/components/dashboard/Pagination";
 
-export default async function GalleryPage() {
-  const items = await db.galleryImage.findMany({
-    orderBy: { order: "asc" },
-    include: { service: { select: { title: true } } },
-  });
+const PAGE_SIZE = 24;
+
+export default async function GalleryPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const params = await searchParams;
+  const page = Math.max(1, parseInt(params.page ?? "1", 10) || 1);
+
+  const [totalCount, items] = await Promise.all([
+    db.galleryImage.count(),
+    db.galleryImage.findMany({
+      orderBy: { order: "asc" },
+      include: { service: { select: { title: true } } },
+      skip: (page - 1) * PAGE_SIZE,
+      take: PAGE_SIZE,
+    }),
+  ]);
+  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
 
   return (
     <div>
@@ -20,7 +36,7 @@ export default async function GalleryPage() {
           >
             Gallery
           </h1>
-          <p className="text-gray-500 text-sm mt-1">{items.length} images</p>
+          <p className="text-gray-500 text-sm mt-1">{totalCount} images</p>
         </div>
         <Link
           href="/dashboard/gallery/new"
@@ -30,7 +46,7 @@ export default async function GalleryPage() {
         </Link>
       </div>
 
-      {items.length === 0 ? (
+      {totalCount === 0 ? (
         <div className="bg-white rounded-2xl border border-gray-100 py-16 text-center text-gray-400">
           <p className="text-lg mb-2">No gallery images yet</p>
           <Link
@@ -94,6 +110,8 @@ export default async function GalleryPage() {
           ))}
         </div>
       )}
+
+      <Pagination page={page} totalPages={totalPages} basePath="/dashboard/gallery" />
     </div>
   );
 }

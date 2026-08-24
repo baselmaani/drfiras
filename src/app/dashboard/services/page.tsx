@@ -2,9 +2,27 @@ import { db } from "@/lib/db";
 import Link from "next/link";
 import { deleteService } from "@/lib/actions/services";
 import { DeleteButton } from "@/components/dashboard/DeleteButton";
+import Pagination from "@/components/dashboard/Pagination";
 
-export default async function ServicesPage() {
-  const services = await db.service.findMany({ orderBy: { order: "asc" } });
+const PAGE_SIZE = 20;
+
+export default async function ServicesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const params = await searchParams;
+  const page = Math.max(1, parseInt(params.page ?? "1", 10) || 1);
+
+  const [totalCount, services] = await Promise.all([
+    db.service.count(),
+    db.service.findMany({
+      orderBy: { order: "asc" },
+      skip: (page - 1) * PAGE_SIZE,
+      take: PAGE_SIZE,
+    }),
+  ]);
+  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
 
   return (
     <div>
@@ -16,7 +34,7 @@ export default async function ServicesPage() {
           >
             Services
           </h1>
-          <p className="text-gray-500 text-sm mt-1">{services.length} services</p>
+          <p className="text-gray-500 text-sm mt-1">{totalCount} services</p>
         </div>
         <Link
           href="/dashboard/services/new"
@@ -27,7 +45,7 @@ export default async function ServicesPage() {
       </div>
 
       <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-        {services.length === 0 ? (
+        {totalCount === 0 ? (
           <div className="py-16 text-center text-gray-400">
             <p className="text-lg mb-2">No services yet</p>
             <Link
@@ -99,6 +117,8 @@ export default async function ServicesPage() {
           </table>
         )}
       </div>
+
+      <Pagination page={page} totalPages={totalPages} basePath="/dashboard/services" />
     </div>
   );
 }
