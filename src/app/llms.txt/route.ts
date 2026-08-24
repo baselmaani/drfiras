@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
 import { SITE_URL, GOOGLE_MAPS_CID } from "@/lib/constants";
+import { getLiveGoogleReviews } from "@/lib/googlePlaces";
 
 export const dynamic = "force-dynamic";
 
@@ -24,6 +25,10 @@ export async function GET() {
       select: { title: true, treatment: true, description: true },
     }),
   ]);
+
+  const live = settings.googlePlaceId ? await getLiveGoogleReviews(settings.googlePlaceId) : null;
+  const reviewRating = live ? String(live.rating) : settings.googleRating;
+  const reviewCount = live ? String(live.reviewCount) : settings.googleReviewCount;
 
   const doctorName = settings.doctorName ?? "Dr. Firas Zoghieb";
   const specialty  = settings.specialty  ?? "Cosmetic Dentist";
@@ -102,8 +107,8 @@ export async function GET() {
     lines.push(`- Book consultation: ${settings.bookingUrl}`);
   lines.push("- Working hours: Tuesday–Sunday, 11:00–20:00 (closed Monday)");
   if (GOOGLE_MAPS_CID) lines.push(`- Google Maps: https://maps.google.com/?cid=${GOOGLE_MAPS_CID}`);
-  if (settings.googleRating && settings.googleReviewCount)
-    lines.push(`- Google rating: ${settings.googleRating} stars (${settings.googleReviewCount} reviews)`);
+  if (reviewRating && reviewCount)
+    lines.push(`- Google rating: ${reviewRating} stars (${reviewCount} reviews)`);
   lines.push("");
 
   // Services

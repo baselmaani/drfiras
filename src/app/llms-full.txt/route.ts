@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { getSettings } from "@/lib/settings";
 import { SITE_URL, GOOGLE_MAPS_CID } from "@/lib/constants";
+import { getLiveGoogleReviews } from "@/lib/googlePlaces";
 
 export const dynamic = "force-dynamic";
 
@@ -40,6 +41,10 @@ export async function GET() {
   const email      = settings.email      ?? "";
   const address    = settings.address    ?? "";
 
+  const live = settings.googlePlaceId ? await getLiveGoogleReviews(settings.googlePlaceId) : null;
+  const reviewRating = live ? String(live.rating) : settings.googleRating;
+  const reviewCount = live ? String(live.reviewCount) : settings.googleReviewCount;
+
   const lines: string[] = [];
 
   // ── Header ──────────────────────────────────────────────────────────────────
@@ -59,8 +64,8 @@ export async function GET() {
   if (settings.whatsapp) lines.push(`- WhatsApp: ${settings.whatsapp}`);
   lines.push(`- Hours: Tuesday–Sunday, 11:00–20:00 (closed Monday)`);
   if (GOOGLE_MAPS_CID) lines.push(`- Google Maps: https://maps.google.com/?cid=${GOOGLE_MAPS_CID}`);
-  if (settings.googleRating && settings.googleReviewCount)
-    lines.push(`- Google rating: ${settings.googleRating}/5 (${settings.googleReviewCount} verified reviews)`);
+  if (reviewRating && reviewCount)
+    lines.push(`- Google rating: ${reviewRating}/5 (${reviewCount} verified reviews)`);
   lines.push("");
 
   // ── E-E-A-T Credentials ──────────────────────────────────────────────────────
