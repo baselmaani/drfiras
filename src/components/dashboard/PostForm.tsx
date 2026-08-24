@@ -5,16 +5,39 @@ import { ImageUpload } from "./ImageUpload";
 import { RichTextEditor } from "./RichTextEditor";
 import { InlineFAQManager } from "./InlineFAQManager";
 import type { FAQItem } from "./InlineFAQManager";
+import { InlineLinksManager } from "./InlineLinksManager";
+import { validateInternalLinks, type RelatedLink } from "@/lib/internalLinks";
 
 type ActionState = { error: string } | null;
 type PostAction = (prevState: ActionState, formData: FormData) => Promise<ActionState>;
 
 type ContentBlock =
   | { type: "h2" | "h3"; text: string }
-  | { type: "p"; text: string }
+  | { type: "p"; text: string; links?: RelatedLink[] }
   | { type: "ul" | "ol"; items: string[] }
   | { type: "blockquote"; text: string }
   | { type: "hr" };
+
+function escapeHtmlAttr(value: string): string {
+  return value.replace(/&/g, "&amp;").replace(/"/g, "&quot;");
+}
+
+function applyInlineLinks(text: string, links: RelatedLink[] | undefined): string {
+  if (!links || links.length === 0) return text;
+  let result = text;
+  for (const link of links) {
+    const anchor = link.anchor?.trim();
+    const url = link.url?.trim();
+    if (!anchor || !url || !url.startsWith("/")) continue;
+    const index = result.indexOf(anchor);
+    if (index === -1) continue;
+    result =
+      result.slice(0, index) +
+      `<a href="${escapeHtmlAttr(url)}">${anchor}</a>` +
+      result.slice(index + anchor.length);
+  }
+  return result;
+}
 
 function blocksToHtml(blocks: ContentBlock[]): string {
   return blocks
@@ -22,7 +45,7 @@ function blocksToHtml(blocks: ContentBlock[]): string {
       switch (block.type) {
         case "h2": return `<h2>${block.text}</h2>`;
         case "h3": return `<h3>${block.text}</h3>`;
-        case "p":  return `<p>${block.text}</p>`;
+        case "p":  return `<p>${applyInlineLinks(block.text, block.links)}</p>`;
         case "ul": return `<ul>${block.items.map((i) => `<li>${i}</li>`).join("")}</ul>`;
         case "ol": return `<ol>${block.items.map((i) => `<li>${i}</li>`).join("")}</ol>`;
         case "blockquote": return `<blockquote><p>${block.text}</p></blockquote>`;
@@ -51,9 +74,19 @@ const EXAMPLE_JSON = `{
     { "type": "h2", "text": "Main Section Heading" },
     { "type": "p",  "text": "Paragraph text goes here." },
     { "type": "h3", "text": "Sub-section Heading" },
-    { "type": "p",  "text": "Another paragraph." },
+    {
+      "type": "p",
+      "text": "If you are considering composite bonding in Dubai, a consultation can help you understand your options.",
+      "links": [
+        { "anchor": "composite bonding in Dubai", "url": "/services/composite-bonding-dubai" }
+      ]
+    },
     { "type": "ul", "items": ["Bullet one", "Bullet two", "Bullet three"] },
     { "type": "blockquote", "text": "A highlighted quote or tip." }
+  ],
+  "internalLinks": [
+    { "anchor": "composite bonding in Dubai", "url": "/services/composite-bonding-dubai" },
+    { "anchor": "teeth whitening in Dubai", "url": "/services/teeth-whitening-dubai" }
   ]
 }`;
 
@@ -85,6 +118,12 @@ export function PostForm({
   if (post?.faqItems) {
     try { initialFaqItems = JSON.parse(post.faqItems); } catch { /* keep empty */ }
   }
+
+  let parsedInitialLinks: RelatedLink[] = [];
+  if (post?.internalLinks) {
+    try { parsedInitialLinks = JSON.parse(post.internalLinks); } catch { /* keep empty */ }
+  }
+  const [internalLinksDefault, setInternalLinksDefault] = useState<RelatedLink[]>(parsedInitialLinks);
 
   // ── JSON import panel ───────────────────────────────────────────────────
   const [showJson, setShowJson]   = useState(false);
@@ -130,8 +169,14 @@ export function PostForm({
 
     if (html) {
       setContentDefault(html);
-      setContentKey((k) => k + 1); // force RichTextEditor remount
     }
+
+    if (Array.isArray(parsed.internalLinks)) {
+      const { valid } = validateInternalLinks(parsed.internalLinks as RelatedLink[]);
+      setInternalLinksDefault(valid);
+    }
+
+    setContentKey((k) => k + 1); // force RichTextEditor + InlineLinksManager remount
 
     setShowJson(false);
     setJsonText("");
@@ -178,7 +223,9 @@ export function PostForm({
               {`{ "title", "slug", "excerpt", "coverImage", "published",`}<br />
               {`  "metaTitle", "metaDesc", "metaKeywords", "ogImage",`}<br />
               {`  "content": "<h2>…</h2><p>…</p>"  // HTML string`}<br />
-              {`  "content": [{ "type": "h2", "text": "…" }, …]  // or block array`}
+              {`  "content": [{ "type": "h2", "text": "…" }, …]  // or block array`}<br />
+              {`  // "p" blocks may include "links": [{ "anchor", "url" }] for inline links`}<br />
+              {`  "internalLinks": [{ "anchor": "…", "url": "/services/…" }, …]  // optional`}
             </div>
 
             <textarea
@@ -328,6 +375,15 @@ export function PostForm({
         <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">FAQ Items</h3>
         <p className="text-xs text-gray-400">Add frequently asked questions shown at the bottom of this post.</p>
         <InlineFAQManager initial={initialFaqItems} name="faqItems" />
+      </div>
+
+      {/* Internal Links */}
+      <div className="border border-gray-100 rounded-2xl p-5 space-y-4 bg-gray-50">
+        <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Internal Links</h3>
+        <p className="text-xs text-gray-400">
+          Add related services or articles shown in a &ldquo;Related Services &amp; Articles&rdquo; box at the end of this post.
+        </p>
+        <InlineLinksManager key={`links-${contentKey}`} initial={internalLinksDefault} name="internalLinks" />
       </div>
 
       <label className="flex items-center gap-3 cursor-pointer">

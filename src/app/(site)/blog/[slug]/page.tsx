@@ -10,6 +10,8 @@ import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import ContactSection from "@/components/ContactSection";
 import FAQ from "@/components/FAQ";
+import RelatedLinks from "@/components/RelatedLinks";
+import { parseInternalLinks } from "@/lib/internalLinks";
 
 export async function generateStaticParams() {
   const posts = await db.post.findMany({
@@ -69,6 +71,7 @@ export default async function BlogPostPage({
   if (post.faqItems) {
     try { faqItems = JSON.parse(post.faqItems); } catch { /* keep empty */ }
   }
+  const internalLinks = parseInternalLinks(post.internalLinks);
 
   return (
     <div className="bg-[#0d0d0d] min-h-screen">
@@ -133,7 +136,7 @@ export default async function BlogPostPage({
       <article className="py-12 pb-24 border-t border-white/[0.06]">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <div
-            className="[&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-white [&_h2]:mt-8 [&_h2]:mb-3 [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:text-white/90 [&_h3]:mt-6 [&_h3]:mb-2 [&_p]:text-white/55 [&_p]:text-[16px] [&_p]:leading-relaxed [&_p]:mb-4 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-4 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-4 [&_li]:text-white/55 [&_li]:mb-1 [&_strong]:text-white/80 [&_strong]:font-semibold [&_a]:text-[#c9a84c] [&_a]:underline [&_blockquote]:border-l-4 [&_blockquote]:border-[#c9a84c] [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-white/45 [&_hr]:border-white/10 [&_hr]:my-8"
+            className="[&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-white [&_h2]:mt-8 [&_h2]:mb-3 [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:text-white/90 [&_h3]:mt-6 [&_h3]:mb-2 [&_p]:text-white/55 [&_p]:text-[16px] [&_p]:leading-relaxed [&_p]:mb-4 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-4 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-4 [&_li]:text-white/55 [&_li]:mb-1 [&_strong]:text-white/80 [&_strong]:font-semibold [&_a]:text-[#c9a84c] [&_a]:font-medium [&_a]:underline [&_a]:decoration-[#c9a84c]/40 [&_a]:underline-offset-4 [&_a]:transition-colors [&_a:hover]:text-[#e2c264] [&_a:hover]:decoration-[#e2c264] [&_blockquote]:border-l-4 [&_blockquote]:border-[#c9a84c] [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-white/45 [&_hr]:border-white/10 [&_hr]:my-8"
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
 
@@ -148,6 +151,9 @@ export default async function BlogPostPage({
           </div>
         </div>
       </article>
+
+      {/* Related internal links */}
+      <RelatedLinks links={internalLinks} />
 
       {/* FAQ */}
       {faqItems.length > 0 && <FAQ items={faqItems} />}

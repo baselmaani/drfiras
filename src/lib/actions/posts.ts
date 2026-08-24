@@ -2,11 +2,24 @@
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { validateInternalLinks, type RelatedLink } from "@/lib/internalLinks";
 
 type ActionState = { error: string } | null;
 
 function toSlug(str: string) {
   return str.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
+function readInternalLinks(formData: FormData): string | null {
+  const raw = (formData.get("internalLinks") as string) || "[]";
+  let parsed: RelatedLink[] = [];
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    parsed = [];
+  }
+  const { valid } = validateInternalLinks(Array.isArray(parsed) ? parsed : []);
+  return valid.length ? JSON.stringify(valid) : null;
 }
 
 export async function createPost(
@@ -39,6 +52,7 @@ export async function createPost(
         metaKeywords: (formData.get("metaKeywords") as string) || null,
         ogImage: (formData.get("ogImage") as string) || null,
         faqItems: (formData.get("faqItems") as string) || null,
+        internalLinks: readInternalLinks(formData),
       },
     });
   } catch {
@@ -83,6 +97,7 @@ export async function updatePost(
         metaKeywords: (formData.get("metaKeywords") as string) || null,
         ogImage: (formData.get("ogImage") as string) || null,
         faqItems: (formData.get("faqItems") as string) || null,
+        internalLinks: readInternalLinks(formData),
       },
     });
   } catch {
