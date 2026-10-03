@@ -1,7 +1,13 @@
 import Link from "next/link";
 import type { RelatedLink } from "@/lib/internalLinks";
 
-export default function RelatedLinks({ links }: { links: RelatedLink[] }) {
+export default function RelatedLinks({
+  links,
+  heading = "Related Services & Articles",
+}: {
+  links: RelatedLink[];
+  heading?: string;
+}) {
   if (!links || links.length === 0) return null;
 
   return (
@@ -15,7 +21,7 @@ export default function RelatedLinks({ links }: { links: RelatedLink[] }) {
             className="text-xl sm:text-2xl font-bold text-white mb-5"
             style={{ fontFamily: "var(--font-playfair)" }}
           >
-            Related Services &amp; Articles
+            {heading}
           </h2>
 
           <ul className="grid sm:grid-cols-2 gap-3">

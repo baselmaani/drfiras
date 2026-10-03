@@ -64,8 +64,8 @@ export default function GalleryGrid({ grouped }: { grouped: ServiceGroup[] }) {
                           alt={item.title}
                           width={600}
                           height={800}
+                          sizes="(max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                           className="w-full h-auto block transition-transform duration-500 group-hover:scale-105"
-                          unoptimized
                         />
                         {/* Hover overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent flex flex-col justify-end p-3 sm:p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">

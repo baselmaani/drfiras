@@ -2,19 +2,22 @@ import { db } from "@/lib/db";
 import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
 import { SITE_URL, GOOGLE_MAPS_CID } from "@/lib/constants";
 import { getLiveGoogleReviews } from "@/lib/googlePlaces";
+import { getServicePrices } from "@/lib/prices";
+import { LIVE_POSTS } from "@/lib/posts";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const [settings, services, posts, cases] = await Promise.all([
+  const [settings, prices, services, posts, cases] = await Promise.all([
     getSettings(),
+    getServicePrices(),
     db.service.findMany({
       where: { published: true },
       orderBy: { order: "asc" },
       select: { title: true, slug: true, description: true, metaKeywords: true, faqItems: true },
     }),
     db.post.findMany({
-      where: { published: true },
+      where: LIVE_POSTS,
       orderBy: { publishedAt: "desc" },
       take: 20,
       select: { title: true, slug: true, excerpt: true, metaKeywords: true, faqItems: true },
@@ -116,6 +119,8 @@ export async function GET() {
   if (services.length > 0) {
     for (const s of services) {
       lines.push(`- ${s.title}: ${s.description}`);
+      const price = prices.get(s.title.trim().toLowerCase());
+      if (price) lines.push(`  Price: ${price.label}`);
       if (s.metaKeywords) lines.push(`  Keywords: ${s.metaKeywords}`);
     }
   } else {
@@ -172,6 +177,8 @@ export async function GET() {
   }
   lines.push(`- Invisalign Dubai: ${SITE_URL}/services/invisalign-dubai`);
   lines.push(`- Blog: ${SITE_URL}/blog`);
+  lines.push(`- Gallery: ${SITE_URL}/gallery`);
+  lines.push(`- Prices: ${SITE_URL}/prices`);
   lines.push(`- Contact: ${SITE_URL}/contact`);
   lines.push("");
 

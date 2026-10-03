@@ -8,9 +8,8 @@ interface DentistJsonLdProps {
   address?: string;
   description?: string;
   image?: string;
-  rating?: string;
-  reviewCount?: string;
   instagram?: string;
+  services?: { name: string; slug: string; price?: { amount: number | null; unit: string | null } }[];
 }
 
 export function DentistJsonLd({
@@ -21,9 +20,8 @@ export function DentistJsonLd({
   address,
   description,
   image,
-  rating,
-  reviewCount,
   instagram,
+  services,
 }: DentistJsonLdProps) {
   const schema = {
     "@context": "https://schema.org",
@@ -95,13 +93,25 @@ export function DentistJsonLd({
         sameAs: [
           instagram ?? "https://www.instagram.com/dr.firaszoghieb",
         ].filter(Boolean),
-        ...(rating && reviewCount && {
-          aggregateRating: {
-            "@type": "AggregateRating",
-            ratingValue: rating,
-            reviewCount: reviewCount,
-            bestRating: "5",
-            worstRating: "1",
+        ...(services && services.length > 0 && {
+          hasOfferCatalog: {
+            "@type": "OfferCatalog",
+            name: "Dental Services",
+            itemListElement: services.map((svc, i) => ({
+              "@type": "Offer",
+              position: i + 1,
+              itemOffered: { "@id": `${SITE_URL}/services/${svc.slug}#procedure` },
+              ...(svc.price?.amount != null && {
+                price: svc.price.amount,
+                priceCurrency: "AED",
+                priceSpecification: {
+                  "@type": "UnitPriceSpecification",
+                  price: svc.price.amount,
+                  priceCurrency: "AED",
+                  ...(svc.price.unit && { unitText: svc.price.unit }),
+                },
+              }),
+            })),
           },
         }),
       },
@@ -123,10 +133,6 @@ export function DentistJsonLd({
         url: `${SITE_URL}/about`,
         worksFor: { "@id": `${SITE_URL}/#dentist` },
         knowsAbout: ["Composite Bonding", "Invisalign", "Dental Veneers", "Cosmetic Dentistry", "Smile Makeovers", "Teeth Whitening"],
-        alumniOf: [
-          { "@type": "EducationalOrganization", name: "University Dental School", description: "BDS (Honours)" },
-          { "@type": "EducationalOrganization", name: "MSc Cosmetic Dentistry Programme", description: "MSc Cosmetic Dentistry" },
-        ],
         sameAs: [
           instagram ?? "https://www.instagram.com/dr.firaszoghieb",
         ].filter(Boolean),
@@ -148,12 +154,14 @@ export function ServiceJsonLd({
   url,
   image,
   slug,
+  updatedAt,
 }: {
   name: string;
   description: string;
   url: string;
   image?: string;
   slug?: string;
+  updatedAt?: Date;
 }) {
   const schemas = [
     {
@@ -169,6 +177,8 @@ export function ServiceJsonLd({
       about: { "@id": `${url}#procedure` },
       mentions: { "@id": `${SITE_URL}/#dentist` },
       audience: { "@type": "Patient" },
+      reviewedBy: { "@id": `${SITE_URL}/#person` },
+      ...(updatedAt && { lastReviewed: updatedAt.toISOString().slice(0, 10) }),
       ...(image && { primaryImageOfPage: { "@type": "ImageObject", url: image } }),
       speakable: {
         "@type": "SpeakableSpecification",

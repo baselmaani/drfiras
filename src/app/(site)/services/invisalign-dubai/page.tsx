@@ -1,10 +1,17 @@
+export const revalidate = 60;
+
 import type { Metadata } from "next";
-import { SITE_NAME, SITE_URL } from "@/lib/constants";
+import { db } from "@/lib/db";
+import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
+import RelatedLinks from "@/components/RelatedLinks";
+import { postMatchesService } from "@/lib/serviceTopics";
+import { SITE_URL, withBrand } from "@/lib/constants";
 import { ServiceJsonLd, FAQJsonLd } from "@/components/JsonLd";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import FAQ from "@/components/FAQ";
 import ContactSection from "@/components/ContactSection";
+import { LIVE_POSTS } from "@/lib/posts";
 
 const SLUG = "invisalign-dubai";
 const SERVICE_URL = `${SITE_URL}/services/${SLUG}`;
@@ -66,26 +73,41 @@ const faqs = [
   },
 ];
 
-export const metadata: Metadata = {
-  title,
-  description,
-  keywords:
-    "invisalign dubai, invisalign al wasl, clear aligners dubai, teeth straightening dubai, invisible braces dubai, invisalign provider dubai, dr firas zoghieb invisalign",
-  alternates: { canonical: SERVICE_URL },
-  openGraph: {
-    title: `${title} | ${SITE_NAME}`,
+export async function generateMetadata(): Promise<Metadata> {
+  const s = { ...DEFAULT_SETTINGS, ...(await getSettings()) };
+  return {
+    title: { absolute: withBrand(title) },
     description,
-    url: SERVICE_URL,
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `${title} | ${SITE_NAME}`,
-    description,
-  },
-};
+    keywords:
+      "invisalign dubai, invisalign al wasl, clear aligners dubai, teeth straightening dubai, invisible braces dubai, invisalign provider dubai, dr firas zoghieb invisalign",
+    alternates: { canonical: SERVICE_URL },
+    openGraph: {
+      title: withBrand(title),
+      description,
+      url: SERVICE_URL,
+      type: "website",
+      ...(s.heroImageUrl && { images: [{ url: s.heroImageUrl }] }),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: withBrand(title),
+      description,
+      ...(s.heroImageUrl && { images: [s.heroImageUrl] }),
+    },
+  };
+}
 
-export default function InvisalignPage() {
+export default async function InvisalignPage() {
+  const posts = await db.post.findMany({
+    where: LIVE_POSTS,
+    orderBy: { publishedAt: "desc" },
+    select: { slug: true, title: true },
+  });
+  const guides = posts
+    .filter((p) => postMatchesService("invisalign-dubai", p))
+    .slice(0, 8)
+    .map((p) => ({ anchor: p.title, url: `/blog/${p.slug}` }));
+
   return (
     <>
       <Navbar />
@@ -246,6 +268,12 @@ export default function InvisalignPage() {
       </section>
 
       {/* FAQ */}
+      {guides.length > 0 && (
+        <div className="pt-20 bg-[#0d0d0d] border-t border-white/[0.06]">
+          <RelatedLinks links={guides} heading="Invisalign Guides" />
+        </div>
+      )}
+
       <FAQ items={faqs} />
 
       {/* Contact */}

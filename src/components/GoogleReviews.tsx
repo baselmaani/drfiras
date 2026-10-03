@@ -13,45 +13,6 @@ interface Review {
   reviewImageUrl?: string;
 }
 
-const DEFAULT_REVIEWS: Review[] = [
-  {
-    name: "Sarah M.",
-    rating: 5,
-    text: "Absolutely amazing experience. Dr. Firas transformed my smile with composite bonding in a single visit. The results are beyond what I imagined — completely natural-looking. I couldn't be happier.",
-    date: "February 2025",
-  },
-  {
-    name: "James T.",
-    rating: 5,
-    text: "I had Invisalign treatment over 10 months and the whole process was seamless. Dr. Firas is incredibly professional and attentive. My teeth are perfectly aligned now and I feel so much more confident.",
-    date: "January 2025",
-  },
-  {
-    name: "Layla K.",
-    rating: 5,
-    text: "I was nervous about getting veneers but Dr. Firas put me completely at ease. The consultation was thorough, the procedure was painless, and the final result is stunning. Highly recommend!",
-    date: "December 2024",
-  },
-  {
-    name: "Omar H.",
-    rating: 5,
-    text: "Best dental experience I've ever had. The clinic is spotless, the team is warm, and Dr. Firas genuinely cares about getting the best outcome for each patient. My bonding looks perfect.",
-    date: "November 2024",
-  },
-  {
-    name: "Priya S.",
-    rating: 5,
-    text: "Dr. Firas is a true artist. I came in feeling self-conscious about a gap in my front teeth — left with a beautiful, confident smile. The whole appointment took just over an hour. Worth every penny.",
-    date: "October 2024",
-  },
-  {
-    name: "Daniel R.",
-    rating: 5,
-    text: "Exceptional care from start to finish. Dr. Firas took time to explain every step and made sure I was comfortable throughout. The results speak for themselves — completely life-changing.",
-    date: "September 2024",
-  },
-];
-
 function StarRating({ rating }: { rating: number }) {
   return (
     <div className="flex gap-0.5" aria-label={`${rating} out of 5 stars`}>
@@ -105,7 +66,7 @@ export default async function GoogleReviews() {
 
   let rating = parseFloat(settings.googleRating ?? "5.0");
   let reviewCount: string = settings.googleReviewCount ?? "100+";
-  let reviews: Review[] = DEFAULT_REVIEWS;
+  let reviews: Review[] = [];
   let isLive = false;
 
   if (live && live.reviews.length > 0) {
@@ -126,12 +87,16 @@ export default async function GoogleReviews() {
     if (stored) {
       try {
         const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) reviews = parsed;
+        // Skip blank/test entries saved from the dashboard
+        if (Array.isArray(parsed)) reviews = parsed.filter((r) => r?.name && r?.text?.trim());
       } catch {
         // fall back to defaults
       }
     }
   }
+
+  // Only real reviews are shown — never placeholder testimonials
+  if (reviews.length === 0) return null;
 
   const reviewsUrl = live?.mapsUri ?? settings.googleReviewsUrl ?? "#";
   const displayReviews = reviews.slice(0, 6);

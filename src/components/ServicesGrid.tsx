@@ -63,9 +63,8 @@ export default async function ServicesGrid({ showHeading = true }: { showHeading
                     alt={service.title}
                     width={0}
                     height={0}
-                    sizes="100vw"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 384px"
                     className="w-full h-auto transition-transform duration-500 group-hover:scale-105"
-                    unoptimized
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#1a1a1a] to-[#222]">

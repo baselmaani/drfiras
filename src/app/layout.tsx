@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Inter, Manrope } from "next/font/google";
+import { Playfair_Display, Inter } from "next/font/google";
 import { GTMScript } from "@/components/GTMScript";
 import "./globals.css";
 import { DentistJsonLd } from "@/components/JsonLd";
 import { SITE_NAME, SITE_URL, SITE_DESCRIPTION, SITE_LOCALE, GEO_LAT, GEO_LNG, GEO_REGION, GEO_PLACENAME } from "@/lib/constants";
 import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
-import { getLiveGoogleReviews } from "@/lib/googlePlaces";
+import { db } from "@/lib/db";
+import { getServicePrices } from "@/lib/prices";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -19,12 +20,6 @@ const inter = Inter({
   display: "swap",
 });
 
-const manrope = Manrope({
-  variable: "--font-manrope",
-  subsets: ["latin"],
-  display: "swap",
-});
-
 export const viewport = {
   width: "device-width",
   initialScale: 1,
@@ -32,59 +27,55 @@ export const viewport = {
   themeColor: "#0d0d0d",
 };
 
-export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  title: {
-    default: `${SITE_NAME} | Composite Bonding & Cosmetic Dentist Dubai`,
-    template: `%s | ${SITE_NAME}`,
-  },
-  description: SITE_DESCRIPTION,
-  keywords: [
-    "cosmetic dentist dubai",
-    "composite bonding dubai",
-    "composite bonding al wasl",
-    "invisalign dubai",
-    "veneers dubai",
-    "smile makeover dubai",
-    "teeth whitening dubai",
-    "dental bonding dubai",
-    "cosmetic dentistry uae",
-    "dr firas zoghieb",
-    "dr firas dentist dubai",
-  ],
-  authors: [{ name: SITE_NAME, url: SITE_URL }],
-  creator: SITE_NAME,
-  publisher: SITE_NAME,
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
-  },
-  openGraph: {
-    type: "website",
-    siteName: SITE_NAME,
-    title: `${SITE_NAME} | Composite Bonding & Cosmetic Dentist Dubai`,
-    description: SITE_DESCRIPTION,
-    url: SITE_URL,
-    locale: SITE_LOCALE,
-    images: [{ url: `${SITE_URL}/og.jpg`, width: 1200, height: 630, alt: `${SITE_NAME} | Composite Bonding & Cosmetic Dentist Dubai` }],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `${SITE_NAME} | Composite Bonding & Cosmetic Dentist Dubai`,
-    description: SITE_DESCRIPTION,
-    creator: "@dr.firaszoghieb",
-    images: [`${SITE_URL}/og.jpg`],
-  },
-  alternates: {
-    canonical: SITE_URL,
-    languages: {
-      "en": SITE_URL,
-      "en-AE": SITE_URL,
-      "x-default": SITE_URL,
+// Default share image is the hero photo from the dashboard (there is no static /og.jpg).
+export async function generateMetadata(): Promise<Metadata> {
+  const s = { ...DEFAULT_SETTINGS, ...(await getSettings()) };
+  const ogImage = s.heroImageUrl || undefined;
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: {
+      default: `${SITE_NAME} | Composite Bonding & Cosmetic Dentist Dubai`,
+      template: `%s | ${SITE_NAME}`,
     },
-  },
-};
+    description: SITE_DESCRIPTION,
+    keywords: [
+      "cosmetic dentist dubai",
+      "composite bonding dubai",
+      "composite bonding al wasl",
+      "invisalign dubai",
+      "veneers dubai",
+      "smile makeover dubai",
+      "teeth whitening dubai",
+      "dental bonding dubai",
+      "cosmetic dentistry uae",
+      "dr firas zoghieb",
+      "dr firas dentist dubai",
+    ],
+    authors: [{ name: SITE_NAME, url: SITE_URL }],
+    creator: SITE_NAME,
+    publisher: SITE_NAME,
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
+    },
+    openGraph: {
+      type: "website",
+      siteName: SITE_NAME,
+      title: `${SITE_NAME} | Composite Bonding & Cosmetic Dentist Dubai`,
+      description: SITE_DESCRIPTION,
+      url: SITE_URL,
+      locale: SITE_LOCALE,
+      ...(ogImage && { images: [{ url: ogImage, alt: `${SITE_NAME} | Composite Bonding & Cosmetic Dentist Dubai` }] }),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${SITE_NAME} | Composite Bonding & Cosmetic Dentist Dubai`,
+      description: SITE_DESCRIPTION,
+      ...(ogImage && { images: [ogImage] }),
+    },
+  };
+}
 
 export default async function RootLayout({
   children,
@@ -93,9 +84,14 @@ export default async function RootLayout({
 }>) {
   const raw = await getSettings();
   const s = { ...DEFAULT_SETTINGS, ...raw };
-  const live = s.googlePlaceId ? await getLiveGoogleReviews(s.googlePlaceId) : null;
-  const reviewRating = live ? String(live.rating) : s.googleRating;
-  const reviewCount = live ? String(live.reviewCount) : s.googleReviewCount;
+  const [services, prices] = await Promise.all([
+    db.service.findMany({
+      where: { published: true },
+      orderBy: { order: "asc" },
+      select: { title: true, slug: true },
+    }),
+    getServicePrices(),
+  ]);
   return (
     <html lang="en-AE">
       <head>
@@ -116,7 +112,7 @@ export default async function RootLayout({
           </>
         )}
       </head>
-      <body className={`${playfair.variable} ${inter.variable} ${manrope.variable} antialiased`}>
+      <body className={`${playfair.variable} ${inter.variable} antialiased`}>
         <GTMScript />
         {/* GTM noscript fallback */}
         <noscript>
@@ -134,8 +130,7 @@ export default async function RootLayout({
           email={s.email}
           address={s.address}
           instagram={s.instagram}
-          rating={reviewRating}
-          reviewCount={reviewCount}
+          services={services.map((svc) => ({ name: svc.title, slug: svc.slug, price: prices.get(svc.title.trim().toLowerCase()) }))}
         />
         {children}
       </body>

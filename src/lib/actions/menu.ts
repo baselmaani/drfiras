@@ -15,11 +15,11 @@ export type MenuItemData = {
 
 const STATIC_DEFAULTS: MenuItemData[] = [
   { id: -1, label: "Home", href: "/", position: "left", order: 0, parentId: null, enabled: true, children: [] },
-  { id: -2, label: "Treatments", href: "#expertise", position: "left", order: 1, parentId: null, enabled: true, children: [] },
-  { id: -3, label: "Smile Gallery", href: "#before-after", position: "left", order: 2, parentId: null, enabled: true, children: [] },
+  { id: -2, label: "Treatments", href: "/#expertise", position: "left", order: 1, parentId: null, enabled: true, children: [] },
+  { id: -3, label: "Smile Gallery", href: "/#before-after", position: "left", order: 2, parentId: null, enabled: true, children: [] },
   { id: -4, label: "Blog", href: "/blog", position: "left", order: 3, parentId: null, enabled: true, children: [] },
   { id: -5, label: "About", href: "/about", position: "left", order: 4, parentId: null, enabled: true, children: [] },
-  { id: -6, label: "FAQ", href: "#faq", position: "right", order: 0, parentId: null, enabled: true, children: [] },
+  { id: -6, label: "FAQ", href: "/#faq", position: "right", order: 0, parentId: null, enabled: true, children: [] },
   { id: -7, label: "Contact", href: "/contact", position: "right", order: 1, parentId: null, enabled: true, children: [] },
 ];
 
@@ -86,11 +86,11 @@ export async function deleteMenuItem(id: number) {
 export async function seedDefaultMenuItems() {
   const defaults = [
     { label: "Home", href: "/", position: "left", order: 0 },
-    { label: "Treatments", href: "#expertise", position: "left", order: 1 },
-    { label: "Smile Gallery", href: "#before-after", position: "left", order: 2 },
+    { label: "Treatments", href: "/#expertise", position: "left", order: 1 },
+    { label: "Smile Gallery", href: "/#before-after", position: "left", order: 2 },
     { label: "Blog", href: "/blog", position: "left", order: 3 },
     { label: "About", href: "/about", position: "left", order: 4 },
-    { label: "FAQ", href: "#faq", position: "right", order: 0 },
+    { label: "FAQ", href: "/#faq", position: "right", order: 0 },
     { label: "Contact", href: "/contact", position: "right", order: 1 },
   ];
 

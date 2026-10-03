@@ -3,20 +3,33 @@ export const revalidate = 60;
 import type { Metadata } from "next";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
 import { db } from "@/lib/db";
+import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
 import Navbar from "@/components/Navbar";
 import ContactSection from "@/components/ContactSection";
 
-export const metadata: Metadata = {
-  title: { absolute: `Prices & Fees | ${SITE_NAME}` },
-  description: `Transparent pricing for cosmetic dentistry treatments at ${SITE_NAME}. View our price list for composite bonding, Invisalign, veneers, and more.`,
-  alternates: { canonical: `${SITE_URL}/prices` },
-  openGraph: {
-    title: `Prices & Fees | ${SITE_NAME}`,
-    description: `Transparent pricing for cosmetic dentistry treatments at ${SITE_NAME}.`,
-    url: `${SITE_URL}/prices`,
-    type: "website",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const s = { ...DEFAULT_SETTINGS, ...(await getSettings()) };
+  const title = `Prices & Fees | ${SITE_NAME}`;
+  const description = `Transparent pricing for cosmetic dentistry treatments at ${SITE_NAME}.`;
+  return {
+    title: { absolute: title },
+    description: `${description} View our price list for composite bonding, Invisalign, veneers, and more.`,
+    alternates: { canonical: `${SITE_URL}/prices` },
+    openGraph: {
+      title,
+      description,
+      url: `${SITE_URL}/prices`,
+      type: "website",
+      ...(s.heroImageUrl && { images: [{ url: s.heroImageUrl }] }),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      ...(s.heroImageUrl && { images: [s.heroImageUrl] }),
+    },
+  };
+}
 
 export default async function PricesPage() {
   const prices = await db.servicePrice.findMany({

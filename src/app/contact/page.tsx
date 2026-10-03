@@ -2,7 +2,7 @@ export const revalidate = 60;
 
 import type { Metadata } from "next";
 import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
-import { SITE_NAME, SITE_URL } from "@/lib/constants";
+import { SITE_URL, withBrand } from "@/lib/constants";
 import Navbar from "@/components/Navbar";
 import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
@@ -18,12 +18,12 @@ export async function generateMetadata(): Promise<Metadata> {
   const description = s.seoContactDesc || `Book a consultation with ${s.doctorName}, cosmetic dentist in Dubai.`;
   const url = `${SITE_URL}/contact`;
   return {
-    title,
+    title: { absolute: withBrand(title) },
     description,
     ...(s.seoContactKeywords && { keywords: s.seoContactKeywords }),
     alternates: { canonical: url },
     openGraph: {
-      title: `${title} | ${SITE_NAME}`,
+      title: withBrand(title),
       description,
       url,
       type: "website",
@@ -31,7 +31,7 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     twitter: {
       card: "summary_large_image",
-      title: `${title} | ${SITE_NAME}`,
+      title: withBrand(title),
       description,
       ...(s.heroImageUrl && { images: [s.heroImageUrl] }),
     },

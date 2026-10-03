@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 function PhoneIcon() {
   return (
@@ -151,9 +152,12 @@ export default function NavbarClient({ phone, whatsapp, instagram, tiktok, logoU
           <Link href="/" className="flex flex-row items-center gap-0 mx-auto lg:mx-0 group" aria-label="Dr. Firas Zoghieb – Home">
             {logoUrl ? (
               <>
-                <img
+                <Image
                   src={logoUrl}
                   alt={doctorName ?? "Dr. Firas Zoghieb logo"}
+                  width={72}
+                  height={72}
+                  priority
                   className="h-[72px] w-auto object-contain"
                 />
                 <div className="text-left">

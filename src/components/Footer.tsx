@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
 
 export default async function Footer() {
@@ -29,9 +30,8 @@ export default async function Footer() {
         <div>
           <div className="flex items-center gap-3 mb-4">
             {s.logoUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
               <>
-                <img src={s.logoUrl} alt={s.doctorName} className="h-16 w-auto object-contain" />
+                <Image src={s.logoUrl} alt={s.doctorName} width={64} height={64} className="h-16 w-auto object-contain" />
                 <div>
                   <p className="font-bold text-white text-lg leading-tight" style={{ fontFamily: "var(--font-playfair)" }}>{s.doctorName}</p>
                   <p className="text-white/50 text-xs">{s.specialty}</p>

@@ -22,11 +22,13 @@ export async function generateMetadata(): Promise<Metadata> {
       description,
       url,
       type: "website",
+      ...(s.heroImageUrl && { images: [{ url: s.heroImageUrl }] }),
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
+      ...(s.heroImageUrl && { images: [s.heroImageUrl] }),
     },
   };
 }

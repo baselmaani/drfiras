@@ -1,10 +1,23 @@
 import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
+import { SITE_URL } from "@/lib/constants";
 import Image from "next/image";
 import Link from "next/link";
+
+function resolveCtaLink(link: string): { href: string; external: boolean } {
+  if (!/^https?:\/\//.test(link)) return { href: link, external: false };
+  try {
+    const url = new URL(link);
+    if (url.origin === new URL(SITE_URL).origin) {
+      return { href: `${url.pathname}${url.search}${url.hash}` || "/", external: false };
+    }
+  } catch {}
+  return { href: link, external: true };
+}
 
 export default async function Hero() {
   const raw = await getSettings();
   const s = { ...DEFAULT_SETTINGS, ...raw };
+  const cta1 = resolveCtaLink(s.heroCta1Link);
 
   return (
     <section className="relative min-h-screen bg-[#0d0d0d] overflow-hidden flex items-center pt-[76px] sm:pt-[108px]">
@@ -32,20 +45,24 @@ export default async function Hero() {
         {/* ── LEFT: Text ── */}
         <div className="order-2 md:order-1">
 
-          {/* Eyebrow */}
-          <div className="flex items-center gap-3 mb-7">
-            <p className="text-[#c9a84c] text-[14px] font-semibold uppercase tracking-[0.3em]">
-              {s.heroEyebrow}
-            </p>
-          </div>
-
-          {/* Heading */}
-          <h1
-            data-speakable
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.04] mb-7 whitespace-nowrap"
-            style={{ fontFamily: "var(--font-playfair)" }}
-          >
-            {s.heroHeading}
+          {/* Eyebrow + heading share one <h1> so the keyword-bearing eyebrow
+              ("Composite Bonding Specialist in Dubai") is part of the heading. */}
+          <h1 data-speakable className="mb-7">
+            {s.heroEyebrow && (
+              <span
+                className="block mb-7 text-[#c9a84c] text-[14px] font-semibold uppercase tracking-[0.3em]"
+                style={{ fontFamily: "var(--font-inter), \"Helvetica Neue\", Arial, sans-serif" }}
+              >
+                {s.heroEyebrow}
+                <span className="sr-only"> — </span>
+              </span>
+            )}
+            <span
+              className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.04] whitespace-nowrap"
+              style={{ fontFamily: "var(--font-playfair)" }}
+            >
+              {s.heroHeading}
+            </span>
           </h1>
 
           {/* Subparagraph */}
@@ -68,9 +85,9 @@ export default async function Hero() {
 
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row gap-4">
-            {/^https?:\/\//.test(s.heroCta1Link) ? (
+            {cta1.external ? (
               <a
-                href={s.heroCta1Link}
+                href={cta1.href}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-[#e85535] text-white px-8 py-3.5 rounded-full font-semibold text-sm hover:bg-[#d44428] active:scale-[0.98] transition-all duration-200 text-center shadow-xl shadow-[#e85535]/20"
@@ -79,7 +96,7 @@ export default async function Hero() {
               </a>
             ) : (
               <Link
-                href={s.heroCta1Link}
+                href={cta1.href}
                 className="bg-[#e85535] text-white px-8 py-3.5 rounded-full font-semibold text-sm hover:bg-[#d44428] active:scale-[0.98] transition-all duration-200 text-center shadow-xl shadow-[#e85535]/20"
               >
                 {s.heroCta1Text}

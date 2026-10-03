@@ -3,7 +3,7 @@ export const revalidate = 60;
 import { db } from "@/lib/db";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { SITE_NAME, SITE_URL } from "@/lib/constants";
+import { SITE_URL, withBrand } from "@/lib/constants";
 import { ServiceJsonLd, FAQJsonLd } from "@/components/JsonLd";
 import Link from "next/link";
 import Image from "next/image";
@@ -11,6 +11,12 @@ import Navbar from "@/components/Navbar";
 import BeforeAfter from "@/components/BeforeAfter";
 import FAQ from "@/components/FAQ";
 import ContactSection from "@/components/ContactSection";
+import RelatedLinks from "@/components/RelatedLinks";
+import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
+import { getServicePrices } from "@/lib/prices";
+import { SERVICE_TOPICS, postMatchesService } from "@/lib/serviceTopics";
+import { LIVE_POSTS } from "@/lib/posts";
+import { stripEmptyHeadings } from "@/lib/html";
 
 export async function generateStaticParams() {
   const services = await db.service.findMany({
@@ -32,24 +38,25 @@ export async function generateMetadata({
   const title = service.metaTitle ?? service.title;
   const description = service.metaDesc ?? service.description;
   const url = `${SITE_URL}/services/${service.slug}`;
+  const shareImage = service.ogImage ?? service.heroImage;
 
   return {
-    title,
+    title: { absolute: withBrand(title) },
     description,
     ...(service.metaKeywords && { keywords: service.metaKeywords }),
     alternates: { canonical: url },
     openGraph: {
-      title: `${title} | ${SITE_NAME}`,
+      title: withBrand(title),
       description,
       url,
       type: "website",
-      ...(service.ogImage && { images: [{ url: service.ogImage }] }),
+      ...(shareImage && { images: [{ url: shareImage }] }),
     },
     twitter: {
       card: "summary_large_image",
-      title: `${title} | ${SITE_NAME}`,
+      title: withBrand(title),
       description,
-      ...(service.ogImage && { images: [service.ogImage] }),
+      ...(shareImage && { images: [shareImage] }),
     },
   };
 }
@@ -73,6 +80,24 @@ export default async function ServicePage({
     try { faqItems = JSON.parse(service.faqItems); } catch { /* keep empty */ }
   }
 
+  const [raw, prices, posts] = await Promise.all([
+    getSettings(),
+    getServicePrices(),
+    db.post.findMany({
+      where: LIVE_POSTS,
+      orderBy: { publishedAt: "desc" },
+      select: { slug: true, title: true },
+    }),
+  ]);
+  const s = { ...DEFAULT_SETTINGS, ...raw };
+  const price = prices.get(service.title.trim().toLowerCase());
+  const heading = /dubai/i.test(service.title) ? service.title : `${service.title} in Dubai`;
+  const guides = posts
+    .filter((p) => postMatchesService(service.slug, p))
+    .slice(0, 8)
+    .map((p) => ({ anchor: p.title, url: `/blog/${p.slug}` }));
+  const topicName = SERVICE_TOPICS[service.slug] ? service.title : "Treatment";
+
   return (
     <>
       <Navbar />
@@ -81,6 +106,7 @@ export default async function ServicePage({
         description={service.description}
         url={`${SITE_URL}/services/${service.slug}`}
         image={service.heroImage ?? service.ogImage ?? undefined}
+        updatedAt={service.updatedAt}
       />
       {faqItems.length > 0 && <FAQJsonLd items={faqItems} />}
 
@@ -123,11 +149,20 @@ export default async function ServicePage({
                 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold text-white mb-5 leading-[1.1]"
                 style={{ fontFamily: "var(--font-playfair)" }}
               >
-                {service.title}
+                {heading}
               </h1>
-              <p data-speakable className="text-base md:text-lg text-white/55 leading-relaxed mb-10 max-w-lg">
+              <p data-speakable className={`text-base md:text-lg text-white/55 leading-relaxed max-w-lg ${price ? "mb-5" : "mb-10"}`}>
                 {service.description}
               </p>
+              {price && (
+                <p data-speakable className="text-[15px] text-white/70 mb-10">
+                  <span className="text-[#c9a84c] font-semibold">{price.label}</span>
+                  <span className="text-white/25 mx-2">·</span>
+                  <Link href="/prices" className="underline underline-offset-4 decoration-white/20 hover:text-[#c9a84c] transition-colors">
+                    See all prices
+                  </Link>
+                </p>
+              )}
 
               <div className="flex flex-wrap gap-3">
                 <Link
@@ -195,11 +230,29 @@ export default async function ServicePage({
                 [&_hr]:border-white/10 [&_hr]:my-8
                 [&_blockquote]:border-l-2 [&_blockquote]:border-[#c9a84c] [&_blockquote]:pl-4 [&_blockquote]:text-white/45 [&_blockquote]:italic [&_blockquote]:my-4
               "
-              dangerouslySetInnerHTML={{ __html: service.content }}
+              dangerouslySetInnerHTML={{ __html: stripEmptyHeadings(service.content) }}
             />
           </div>
         </section>
       )}
+
+      {/* Who performs the treatment — E-E-A-T signal for medical content */}
+      <section className="bg-[#111] border-t border-white/[0.06]">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl border border-white/[0.06] bg-white/[0.02] px-6 py-5">
+            <p className="text-white/60 text-[15px] leading-relaxed">
+              Treatment performed by <strong className="text-white/85 font-semibold">{s.doctorName}</strong>, a{" "}
+              {s.specialty.toLowerCase()} in Al Wasl, Dubai.
+            </p>
+            <Link
+              href="/about"
+              className="flex-shrink-0 text-[#c9a84c] text-sm font-medium hover:text-[#e2c264] transition-colors"
+            >
+              About {s.doctorName} →
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* Case Images Gallery */}
       {caseImages.length > 0 && (
@@ -250,6 +303,12 @@ export default async function ServicePage({
             </div>
           </div>
         </section>
+      )}
+
+      {guides.length > 0 && (
+        <div className="pt-20 bg-[#0d0d0d] border-t border-white/[0.06]">
+          <RelatedLinks links={guides} heading={`${topicName} Guides`} />
+        </div>
       )}
 
       <BeforeAfter />

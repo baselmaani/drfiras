@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { LIVE_POSTS } from "@/lib/posts";
 
 export const revalidate = 60;
 
@@ -23,7 +24,7 @@ export async function GET() {
   const [services, posts] = await Promise.all([
     db.service.findMany({ select: { title: true, slug: true }, orderBy: { title: "asc" } }),
     db.post.findMany({
-      where: { published: true },
+      where: LIVE_POSTS,
       select: { title: true, slug: true },
       orderBy: { title: "asc" },
     }),

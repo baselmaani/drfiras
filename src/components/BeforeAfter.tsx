@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { db } from "@/lib/db";
 import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
 
@@ -17,8 +18,14 @@ function BeforeAfterCard({ title, treatment, beforeImage }: {
     <div className="rounded-2xl overflow-hidden border border-[#c9a84c] transition-all">
       <div className="bg-[#111]">
         {beforeImage ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={beforeImage} alt={`Before & After - ${treatment}`} className="w-full h-auto block" />
+          <Image
+            src={beforeImage}
+            alt={`Before & After - ${treatment}`}
+            width={0}
+            height={0}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 384px"
+            className="w-full h-auto block"
+          />
         ) : (
           <div className="aspect-[3/4] flex items-center justify-center bg-gradient-to-br from-[#1a1a1a] to-[#222]">
             <svg className="w-10 h-10 text-white/15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
