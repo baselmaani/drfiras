@@ -40,6 +40,8 @@ export async function POST(request: Request): Promise<Response> {
             "video/x-matroska",
           ],
           maximumSizeInBytes: 500 * 1024 * 1024, // 500 MB
+          // Unique URL per upload so repeated filenames (e.g. IMG_1234.jpg) don't collide
+          addRandomSuffix: true,
           tokenPayload: clientPayload ?? "",
         };
       },
