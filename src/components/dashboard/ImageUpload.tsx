@@ -1,5 +1,6 @@
 "use client";
 import { useState, useRef } from "react";
+import { upload } from "@vercel/blob/client";
 import dynamic from "next/dynamic";
 
 const MediaPicker = dynamic(() => import("./MediaPicker"), { ssr: false });
@@ -25,13 +26,29 @@ export function ImageUpload({ name, defaultValue = "", label, required, onUpload
     setError("");
     setUploading(true);
     try {
-      const fd = new FormData();
-      fd.append("file", file);
-      const res = await fetch("/api/upload", { method: "POST", body: fd });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Upload failed");
-      setUrl(data.url);
-      onUpload?.(data.url);
+      // Upload directly to Vercel Blob (bypasses serverless 4.5 MB body limit)
+      const blob = await upload(file.name, file, {
+        access: "public",
+        handleUploadUrl: "/api/upload",
+        clientPayload: JSON.stringify({ folderId: null, name: file.name, size: file.size }),
+      });
+
+      // Register in the media library so it shows up under "Library"
+      await fetch("/api/media", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          url: blob.url,
+          name: file.name,
+          size: file.size,
+          mimeType: file.type,
+          folderId: null,
+        }),
+      }).catch(() => {});
+
+      setUrl(blob.url);
+      onUpload?.(blob.url);
       if (fileInputRef.current) fileInputRef.current.value = "";
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Upload failed");

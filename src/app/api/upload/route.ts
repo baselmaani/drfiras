@@ -15,9 +15,9 @@ export async function POST(request: Request): Promise<Response> {
   const cookieStore = await cookies();
   const session = cookieStore.get("admin-session");
 
-  const body = (await request.json()) as HandleUploadBody;
-
   try {
+    const body = (await request.json()) as HandleUploadBody;
+
     const jsonResponse = await handleUpload({
       body,
       request,
