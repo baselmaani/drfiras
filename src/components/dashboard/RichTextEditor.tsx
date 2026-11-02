@@ -4,6 +4,7 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
+import { Table, TableRow, TableHeader, TableCell } from "@tiptap/extension-table";
 import { useState, useCallback, useRef } from "react";
 import type { InternalLink } from "@/app/api/internal-links/route";
 
@@ -75,6 +76,10 @@ export function RichTextEditor({
         },
       }),
       Placeholder.configure({ placeholder }),
+      Table.configure({ resizable: false }),
+      TableRow,
+      TableHeader,
+      TableCell,
     ],
     content: defaultValue,
     onUpdate({ editor }) {
@@ -92,6 +97,7 @@ export function RichTextEditor({
           "[&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-3 [&_ol_li]:text-gray-700 [&_ol_li]:text-sm [&_ol_li]:mb-0.5",
           "[&_a]:text-[#c9a84c] [&_a]:underline [&_a]:underline-offset-2",
           "[&_strong]:font-semibold",
+          "[&_table]:w-full [&_table]:border-collapse [&_table]:my-3 [&_th]:border [&_th]:border-gray-200 [&_th]:bg-gray-50 [&_th]:px-2 [&_th]:py-1.5 [&_th]:text-left [&_th]:font-semibold [&_th]:text-[#1b4f72] [&_td]:border [&_td]:border-gray-200 [&_td]:px-2 [&_td]:py-1.5 [&_td]:align-top [&_th_p]:mb-0 [&_td_p]:mb-0 [&_.selectedCell]:bg-[#1b4f72]/10",
           "[&_.is-editor-empty]:before:content-[attr(data-placeholder)] [&_.is-editor-empty]:before:text-gray-400 [&_.is-editor-empty]:before:pointer-events-none [&_.is-editor-empty]:before:float-left [&_.is-editor-empty]:before:h-0",
         ].join(" "),
       },
@@ -243,6 +249,36 @@ export function RichTextEditor({
         >
           —
         </Btn>
+
+        <Divider />
+
+        {/* Table */}
+        <Btn
+          title="Insert table (3×3 with header row)"
+          active={editor.isActive("table")}
+          onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()}
+        >
+          ▦ Table
+        </Btn>
+        {editor.isActive("table") && (
+          <>
+            <Btn title="Add row below" onClick={() => editor.chain().focus().addRowAfter().run()}>
+              + Row
+            </Btn>
+            <Btn title="Add column to the right" onClick={() => editor.chain().focus().addColumnAfter().run()}>
+              + Col
+            </Btn>
+            <Btn title="Delete row" onClick={() => editor.chain().focus().deleteRow().run()}>
+              − Row
+            </Btn>
+            <Btn title="Delete column" onClick={() => editor.chain().focus().deleteColumn().run()}>
+              − Col
+            </Btn>
+            <Btn title="Delete table" onClick={() => editor.chain().focus().deleteTable().run()}>
+              ✕ Table
+            </Btn>
+          </>
+        )}
       </div>
 
       {/* ── Link panel ── */}

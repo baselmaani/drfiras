@@ -25,6 +25,11 @@ export const SERVICE_TOPICS: Record<string, ServiceTopic> = {
     anchor: "Invisalign in Dubai",
     keywords: ["invisalign"],
   },
+  "abc-smile-makeover-dubai": {
+    url: "/services/abc-smile-makeover-dubai",
+    anchor: "ABC smile makeover in Dubai",
+    keywords: ["smile makeover", "smile-makeover", "abc smile", "abc-smile"],
+  },
 };
 
 function matches(topic: ServiceTopic, post: { slug: string; title: string }) {

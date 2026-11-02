@@ -36,6 +36,12 @@ describe("serviceTopics", () => {
       "/services/porcelain-veneers-dubai",
     );
     expect(serviceForPost({ slug: "best-dentist-in-dubai", title: "Best Dentist in Dubai" })).toBeNull();
+    expect(serviceForPost({ slug: "smile-makeover-treatments-in-dubai", title: "Smile Makeover Treatments in Dubai" })?.url).toBe(
+      "/services/abc-smile-makeover-dubai",
+    );
+    expect(serviceForPost({ slug: "composite-bonding-smile-makeover", title: "" })?.url).toBe(
+      "/services/composite-bonding-dubai",
+    );
   });
 
   it("excludes redirected posts from a service's guides", () => {

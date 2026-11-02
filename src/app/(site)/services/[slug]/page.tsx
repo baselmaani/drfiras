@@ -229,6 +229,10 @@ export default async function ServicePage({
                 [&_a]:text-[#c9a84c] [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:text-[#b8943e]
                 [&_hr]:border-white/10 [&_hr]:my-8
                 [&_blockquote]:border-l-2 [&_blockquote]:border-[#c9a84c] [&_blockquote]:pl-4 [&_blockquote]:text-white/45 [&_blockquote]:italic [&_blockquote]:my-4
+                overflow-x-auto [&_table]:w-full [&_table]:border-collapse [&_table]:my-6 [&_table]:text-[14px]
+                [&_th]:border [&_th]:border-white/10 [&_th]:bg-white/[0.03] [&_th]:px-4 [&_th]:py-3 [&_th]:text-left [&_th]:align-top [&_th]:font-semibold [&_th]:text-white/85
+                [&_td]:border [&_td]:border-white/10 [&_td]:px-4 [&_td]:py-3 [&_td]:align-top [&_td]:text-white/55
+                [&_th_p]:mb-0 [&_td_p]:mb-0 [&_td_p]:text-[14px]
               "
               dangerouslySetInnerHTML={{ __html: stripEmptyHeadings(service.content) }}
             />
