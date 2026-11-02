@@ -24,7 +24,7 @@ export default function ContactForm({ phone, email, address, googleBusinessUrl }
       phone: fd.get("phone") as string,
       email: fd.get("email") as string,
       message: fd.get("message") as string,
-      website: fd.get("website") as string, // honeypot
+      hp_extra_field: fd.get("hp_extra_field") as string, // honeypot
     };
 
     try {
@@ -70,7 +70,17 @@ export default function ContactForm({ phone, email, address, googleBusinessUrl }
 
       {/* Honeypot anti-spam: hidden from real users, bots fill it in */}
       <div aria-hidden="true" tabIndex={-1} style={{ position: "absolute", left: "-9999px", opacity: 0, pointerEvents: "none" }}>
-        <input type="text" name="website" autoComplete="off" tabIndex={-1} />
+        {/* Obscure name + password-manager opt-outs so desktop autofill never fills it */}
+        <input
+          type="text"
+          name="hp_extra_field"
+          autoComplete="off"
+          tabIndex={-1}
+          data-lpignore="true"
+          data-1p-ignore=""
+          data-bwignore=""
+          data-form-type="other"
+        />
       </div>
 
       <div className="grid sm:grid-cols-2 gap-4">

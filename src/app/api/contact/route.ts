@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
 
-// Simple in-memory rate limiter: 3 submissions per IP per 10 minutes
+// Simple in-memory rate limiter: 5 submissions per IP per 10 minutes
 const rateMap = new Map<string, { count: number; resetAt: number }>();
-const RATE_LIMIT = 3;
+const RATE_LIMIT = 5;
 const WINDOW_MS = 10 * 60 * 1000;
 
 function isRateLimited(ip: string): boolean {
@@ -22,18 +22,20 @@ function isRateLimited(ip: string): boolean {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, phone, email, message, website } = body as Record<string, string>;
+    const { name, phone, email, message, hp_extra_field, website } = body as Record<string, string>;
 
-    // Honeypot: bots fill the hidden "website" field, humans leave it empty
-    if (website) {
-      return NextResponse.json({ success: true }); // silently discard
-    }
-
-    // Rate limit by IP
     const ip =
       req.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
       req.headers.get("x-real-ip") ||
       "unknown";
+
+    // Honeypot: bots fill the hidden field, humans leave it empty. Browser autofill
+    // can fill it too, so flag the message instead of dropping a real lead.
+    // ("website" is the old field name, still sent by cached pages.)
+    const isSuspectedSpam = Boolean(hp_extra_field || website);
+    if (isSuspectedSpam) console.warn("[contact] honeypot filled", { ip });
+
+    // Rate limit by IP
     if (isRateLimited(ip)) {
       return NextResponse.json(
         { error: "Too many requests. Please wait a few minutes and try again." },
@@ -73,7 +75,7 @@ export async function POST(req: NextRequest) {
       from,
       to,
       replyTo: `${name} <${email}>`,
-      subject: `New Contact Form Message from ${name}`,
+      subject: `${isSuspectedSpam ? "[Possible spam] " : ""}New Contact Form Message from ${name}`,
       html: `
         <div style="font-family:sans-serif;max-width:600px;margin:0 auto;">
           <h2 style="color:#c9a84c;">New Contact Form Submission</h2>
@@ -87,8 +89,10 @@ export async function POST(req: NextRequest) {
       `,
     });
 
-    // Auto-reply to the user
-    await transporter.sendMail({
+    console.log("[contact] sent", { to });
+
+    // Auto-reply to the user (skipped for suspected bots)
+    if (!isSuspectedSpam) await transporter.sendMail({
       from,
       to: `${name} <${email}>`,
       subject: `Thank you for contacting Dr. Firas Zoghieb`,
