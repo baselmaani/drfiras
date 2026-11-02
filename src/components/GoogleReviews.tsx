@@ -1,6 +1,7 @@
 import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
 import { getLiveGoogleReviews } from "@/lib/googlePlaces";
 import { ReviewAvatar } from "@/components/ReviewAvatar";
+import { ReviewText } from "@/components/ReviewText";
 import Link from "next/link";
 
 interface Review {
@@ -147,6 +148,26 @@ export default async function GoogleReviews() {
         {/* Review cards */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
           {displayReviews.map((review, i) => {
+            const header = (
+              <div className="relative flex items-center gap-3">
+                <ReviewAvatar name={review.name} photoUrl={review.photoUrl} colorIndex={i} />
+                <div className="min-w-0">
+                  <p className="font-semibold text-white/80 text-sm truncate">{review.name}</p>
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <StarRating rating={review.rating} />
+                    {isLive && (
+                      <span className="inline-flex items-center gap-1 text-[10px] font-medium text-[#c9a84c] bg-[#c9a84c]/10 border border-[#c9a84c]/20 px-1.5 py-0.5 rounded-full">
+                        ✓ Verified
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div className="ml-auto flex-shrink-0">
+                  <GoogleLogo />
+                </div>
+              </div>
+            );
+
             const card = (
               <div className="relative overflow-hidden bg-[#141414] rounded-2xl p-6 flex flex-col gap-4 border border-[#1e1e1e] hover:border-[#c9a84c]/25 hover:-translate-y-1 hover:shadow-[0_20px_45px_-18px_rgba(201,168,76,0.3)] transition-all duration-300 h-full">
                 {/* Decorative quote glyph */}
@@ -159,24 +180,19 @@ export default async function GoogleReviews() {
                   <path d="M9.983 3v7.391c0 5.704-3.731 9.57-8.983 10.609l-.995-2.151c2.432-.917 3.995-3.638 3.995-5.849h-4v-10h9.983zm14.017 0v7.391c0 5.704-3.748 9.571-9 10.609l-.996-2.151c2.433-.917 3.996-3.638 3.996-5.849h-3.983v-10h9.983z" />
                 </svg>
 
-                {/* Header: avatar + name + stars */}
-                <div className="relative flex items-center gap-3">
-                  <ReviewAvatar name={review.name} photoUrl={review.photoUrl} colorIndex={i} />
-                  <div className="min-w-0">
-                    <p className="font-semibold text-white/80 text-sm truncate">{review.name}</p>
-                    <div className="flex items-center gap-2 mt-0.5">
-                      <StarRating rating={review.rating} />
-                      {isLive && (
-                        <span className="inline-flex items-center gap-1 text-[10px] font-medium text-[#c9a84c] bg-[#c9a84c]/10 border border-[#c9a84c]/20 px-1.5 py-0.5 rounded-full">
-                          ✓ Verified
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                  <div className="ml-auto flex-shrink-0">
-                    <GoogleLogo />
-                  </div>
-                </div>
+                {/* Header: avatar + name + stars, linked to the reviewer profile */}
+                {review.profileUrl ? (
+                  <Link
+                    href={review.profileUrl}
+                    target="_blank"
+                    rel="noopener noreferrer nofollow"
+                    className="block"
+                  >
+                    {header}
+                  </Link>
+                ) : (
+                  header
+                )}
 
                 {/* Photo the patient attached to their review */}
                 {review.reviewImageUrl && (
@@ -189,26 +205,14 @@ export default async function GoogleReviews() {
                 )}
 
                 {/* Review text */}
-                <p className="relative text-white/45 text-sm leading-relaxed flex-1">&ldquo;{review.text}&rdquo;</p>
+                <ReviewText text={review.text} />
 
                 {/* Date */}
                 <p className="relative text-xs text-white/25">{review.date}</p>
               </div>
             );
 
-            return review.profileUrl ? (
-              <Link
-                key={i}
-                href={review.profileUrl}
-                target="_blank"
-                rel="noopener noreferrer nofollow"
-                className="block"
-              >
-                {card}
-              </Link>
-            ) : (
-              <div key={i}>{card}</div>
-            );
+            return <div key={i}>{card}</div>;
           })}
         </div>
 
