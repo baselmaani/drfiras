@@ -9,6 +9,13 @@ interface DentistJsonLdProps {
   description?: string;
   image?: string;
   instagram?: string;
+  tiktok?: string;
+  googleBusinessUrl?: string;
+  // Author credentials for the #person node — each is omitted when empty.
+  doctorPhoto?: string;
+  doctorBio?: string;
+  qualifications?: string;
+  license?: string;
   services?: { name: string; slug: string; price?: { amount: number | null; unit: string | null } }[];
 }
 
@@ -21,8 +28,28 @@ export function DentistJsonLd({
   description,
   image,
   instagram,
+  tiktok,
+  googleBusinessUrl,
+  doctorPhoto,
+  doctorBio,
+  qualifications,
+  license,
   services,
 }: DentistJsonLdProps) {
+  const credentials = [
+    qualifications && {
+      "@type": "EducationalOccupationalCredential",
+      credentialCategory: "degree",
+      name: qualifications,
+    },
+    license && {
+      "@type": "EducationalOccupationalCredential",
+      credentialCategory: "license",
+      name: `Dubai Health Authority licence ${license}`,
+      recognizedBy: { "@type": "Organization", name: "Dubai Health Authority" },
+    },
+  ].filter(Boolean);
+
   const schema = {
     "@context": "https://schema.org",
     "@graph": [
@@ -92,6 +119,8 @@ export function DentistJsonLd({
         ],
         sameAs: [
           instagram ?? "https://www.instagram.com/dr.firaszoghieb",
+          tiktok,
+          googleBusinessUrl,
         ].filter(Boolean),
         ...(services && services.length > 0 && {
           hasOfferCatalog: {
@@ -131,10 +160,15 @@ export function DentistJsonLd({
         familyName: "Zoghieb",
         jobTitle: specialty,
         url: `${SITE_URL}/about`,
+        ...(doctorPhoto && { image: doctorPhoto }),
+        ...(doctorBio && { description: doctorBio }),
+        ...(credentials.length > 0 && { hasCredential: credentials }),
         worksFor: { "@id": `${SITE_URL}/#dentist` },
         knowsAbout: ["Composite Bonding", "Invisalign", "Dental Veneers", "Cosmetic Dentistry", "Smile Makeovers", "Teeth Whitening"],
         sameAs: [
           instagram ?? "https://www.instagram.com/dr.firaszoghieb",
+          tiktok,
+          googleBusinessUrl,
         ].filter(Boolean),
       },
     ],
@@ -230,6 +264,7 @@ export function ArticleJsonLd({
   image,
   publishedAt,
   updatedAt,
+  reviewedAt,
 }: {
   title: string;
   description?: string;
@@ -237,6 +272,7 @@ export function ArticleJsonLd({
   image?: string;
   publishedAt?: Date | null;
   updatedAt: Date;
+  reviewedAt?: Date | null;
 }) {
   const schemas = [
     {
@@ -252,7 +288,15 @@ export function ArticleJsonLd({
       author: { "@id": `${SITE_URL}/#person` },
       publisher: { "@id": `${SITE_URL}/#dentist` },
       isPartOf: { "@id": `${SITE_URL}/#website` },
-      mainEntityOfPage: { "@type": "WebPage", "@id": url },
+      // A reviewed post is a medical page checked by the doctor (E-E-A-T).
+      mainEntityOfPage: reviewedAt
+        ? {
+            "@type": ["WebPage", "MedicalWebPage"],
+            "@id": url,
+            reviewedBy: { "@id": `${SITE_URL}/#person` },
+            lastReviewed: reviewedAt.toISOString().slice(0, 10),
+          }
+        : { "@type": "WebPage", "@id": url },
       about: { "@id": `${SITE_URL}/#dentist` },
       speakable: {
         "@type": "SpeakableSpecification",

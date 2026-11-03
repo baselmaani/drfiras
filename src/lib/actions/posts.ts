@@ -36,6 +36,7 @@ export async function createPost(
   }
 
   const published = formData.get("published") === "on";
+  const reviewed = formData.get("reviewed") === "on";
 
   try {
     await db.post.create({
@@ -47,6 +48,7 @@ export async function createPost(
         coverImage: (formData.get("coverImage") as string) || null,
         published,
         publishedAt: published ? new Date() : null,
+        reviewedAt: reviewed ? new Date() : null,
         metaTitle: (formData.get("metaTitle") as string) || null,
         metaDesc: (formData.get("metaDesc") as string) || null,
         metaKeywords: (formData.get("metaKeywords") as string) || null,
@@ -78,6 +80,7 @@ export async function updatePost(
   }
 
   const published = formData.get("published") === "on";
+  const reviewed = formData.get("reviewed") === "on";
   const existing = await db.post.findUnique({ where: { id } });
 
   try {
@@ -92,6 +95,8 @@ export async function updatePost(
         published,
         publishedAt:
           published && !existing?.publishedAt ? new Date() : existing?.publishedAt ?? null,
+        // Keeps the original review date on re-save; unticking clears it.
+        reviewedAt: reviewed ? existing?.reviewedAt ?? new Date() : null,
         metaTitle: (formData.get("metaTitle") as string) || null,
         metaDesc: (formData.get("metaDesc") as string) || null,
         metaKeywords: (formData.get("metaKeywords") as string) || null,

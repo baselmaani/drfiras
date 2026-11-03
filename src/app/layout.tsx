@@ -130,6 +130,12 @@ export default async function RootLayout({
           email={s.email}
           address={s.address}
           instagram={s.instagram}
+          tiktok={s.tiktok}
+          googleBusinessUrl={s.googleBusinessUrl}
+          doctorPhoto={s.doctorPhotoUrl || s.heroImageUrl}
+          doctorBio={s.doctorBio || s.heroBody}
+          qualifications={s.doctorQualifications}
+          license={s.doctorLicense}
           services={services.map((svc) => ({ name: svc.title, slug: svc.slug, price: prices.get(svc.title.trim().toLowerCase()) }))}
         />
         {children}

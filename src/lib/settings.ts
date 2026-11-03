@@ -9,6 +9,11 @@ export const DEFAULT_SETTINGS: Record<string, string> = {
   logoUrl: "",
   doctorName: "Dr. Firas Zoghieb",
   specialty: "Cosmetic Dentist",
+  // Author credentials (E-E-A-T) — shown on blog posts and in schema only when filled
+  doctorQualifications: "",
+  doctorLicense: "",
+  doctorBio: "",
+  doctorPhotoUrl: "",
   phone: "+971 50 869 6919",
   email: "info@drfiraszoghieb.com",
   address: "Happiness St, Al Wasl, Dubai",

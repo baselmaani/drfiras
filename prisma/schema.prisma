@@ -53,6 +53,7 @@ model Post {
   coverImage  String?
   published   Boolean   @default(false)
   publishedAt DateTime?
+  reviewedAt  DateTime?
   metaTitle    String?
   metaDesc    String?
   metaKeywords String?

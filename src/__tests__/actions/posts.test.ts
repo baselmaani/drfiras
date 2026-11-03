@@ -84,6 +84,14 @@ describe("posts – createPost", () => {
     expect(callData.publishedAt).toBeInstanceOf(Date);
   });
 
+  it("sets reviewedAt only when reviewed flag is 'on'", async () => {
+    mockPost.post.create.mockResolvedValue({ id: 4 });
+    await createPost(null, makeFormData({ title: "R", slug: "r", content: "C", reviewed: "on" }));
+    await createPost(null, makeFormData({ title: "U", slug: "u", content: "C" }));
+    expect(mockPost.post.create.mock.calls[0][0].data.reviewedAt).toBeInstanceOf(Date);
+    expect(mockPost.post.create.mock.calls[1][0].data.reviewedAt).toBeNull();
+  });
+
   it("returns error when db throws (duplicate slug)", async () => {
     mockPost.post.create.mockRejectedValue(new Error("Unique"));
     const result = await createPost(null, makeFormData({ title: "X", slug: "x", content: "Y" }));
@@ -131,6 +139,21 @@ describe("posts – updatePost", () => {
     );
     const callData = mockPost.post.update.mock.calls[0][0].data;
     expect(callData.publishedAt).toBe(existingDate);
+  });
+
+  it("preserves existing reviewedAt when still reviewed", async () => {
+    const reviewedDate = new Date("2026-04-01");
+    mockPost.post.findUnique.mockResolvedValue({ id: 1, publishedAt: null, reviewedAt: reviewedDate });
+    mockPost.post.update.mockResolvedValue({ id: 1 });
+    await updatePost(1, null, makeFormData({ title: "T", slug: "t", content: "C", reviewed: "on" }));
+    expect(mockPost.post.update.mock.calls[0][0].data.reviewedAt).toBe(reviewedDate);
+  });
+
+  it("clears reviewedAt when reviewed is unticked", async () => {
+    mockPost.post.findUnique.mockResolvedValue({ id: 1, publishedAt: null, reviewedAt: new Date() });
+    mockPost.post.update.mockResolvedValue({ id: 1 });
+    await updatePost(1, null, makeFormData({ title: "T", slug: "t", content: "C" }));
+    expect(mockPost.post.update.mock.calls[0][0].data.reviewedAt).toBeNull();
   });
 
   it("returns error on db failure", async () => {

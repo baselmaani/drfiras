@@ -98,6 +98,37 @@ export function SettingsForm({ initialData }: { initialData: Settings }) {
         </div>
       </section>
 
+      {/* Author Credentials */}
+      <section>
+        <h2 className="text-base font-semibold text-gray-800 mb-1 pb-2 border-b border-gray-100">
+          Doctor Credentials (E-E-A-T)
+        </h2>
+        <p className="text-xs text-gray-400 mb-4">
+          Shown in the author box on every blog post and in Google structured data. Leave a field empty to hide it — only enter verified details.
+        </p>
+        <div className="mb-5">
+          <label className="block text-sm font-medium text-gray-700 mb-2">Doctor Photo</label>
+          <ImageUpload
+            name="doctorPhotoUrl"
+            defaultValue={initialData["doctorPhotoUrl"] ?? ""}
+            label="Upload Photo"
+          />
+          <p className="text-xs text-gray-400 mt-1.5">Square headshot. Leave empty to use the homepage hero image.</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {field("doctorQualifications", "Qualifications", "text", "BDS, MSc Cosmetic Dentistry")}
+          {field("doctorLicense", "DHA Licence Number", "text", "12345678")}
+        </div>
+        <div className="mt-4">
+          {field(
+            "doctorBio",
+            "Author Bio (blog posts)",
+            "textarea",
+            "Leave empty to use the homepage hero text."
+          )}
+        </div>
+      </section>
+
       {/* About */}
       <section>
         <h2 className="text-base font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-100">

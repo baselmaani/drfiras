@@ -106,6 +106,7 @@ export function PostForm({
   const [excerpt, setExcerpt]           = useState(post?.excerpt ?? "");
   const [coverImage, setCoverImage]     = useState(post?.coverImage ?? "");
   const [published, setPublished]       = useState(post?.published ?? false);
+  const [reviewed, setReviewed]         = useState(!!post?.reviewedAt);
   const [metaTitle, setMetaTitle]       = useState(post?.metaTitle ?? "");
   const [metaDesc, setMetaDesc]         = useState(post?.metaDesc ?? "");
   const [metaKeywords, setMetaKeywords] = useState(post?.metaKeywords ?? "");
@@ -396,6 +397,19 @@ export function PostForm({
         />
         <span className="text-sm font-medium text-gray-700">
           Published (visible on site)
+        </span>
+      </label>
+
+      <label className="flex items-center gap-3 cursor-pointer">
+        <input
+          type="checkbox"
+          name="reviewed"
+          checked={reviewed}
+          onChange={(e) => setReviewed(e.target.checked)}
+          className="w-4 h-4 accent-[#1b4f72]"
+        />
+        <span className="text-sm font-medium text-gray-700">
+          Medically reviewed by Dr. Firas (shows a &ldquo;Medically reviewed&rdquo; label on the post)
         </span>
       </label>
 

@@ -11,6 +11,7 @@ import Navbar from "@/components/Navbar";
 import ContactSection from "@/components/ContactSection";
 import FAQ from "@/components/FAQ";
 import RelatedLinks from "@/components/RelatedLinks";
+import AuthorBox from "@/components/AuthorBox";
 import { parseInternalLinks } from "@/lib/internalLinks";
 import { serviceForPost } from "@/lib/serviceTopics";
 import { getSettings, DEFAULT_SETTINGS } from "@/lib/settings";
@@ -105,6 +106,7 @@ export default async function BlogPostPage({
         image={shareImage}
         publishedAt={post.publishedAt}
         updatedAt={post.updatedAt}
+        reviewedAt={post.reviewedAt}
       />
       {faqItems.length > 0 && <FAQJsonLd items={faqItems} />}
 
@@ -131,11 +133,16 @@ export default async function BlogPostPage({
                 <p data-speakable className="text-lg text-white/55 leading-relaxed">{post.excerpt}</p>
               )}
               <p className="mt-6 text-sm text-white/45">
-                By{" "}
+                Written by{" "}
                 <Link href="/about" className="text-white/75 hover:text-[#c9a84c] font-medium transition-colors">
                   {SITE_NAME}
                 </Link>
-                , Cosmetic Dentist in Dubai · Updated <time dateTime={post.updatedAt.toISOString()}>{formatDate(post.updatedAt)}</time>
+                , Cosmetic Dentist in Dubai ·{" "}
+                {post.reviewedAt ? (
+                  <>Medically reviewed <time dateTime={post.reviewedAt.toISOString()}>{formatDate(post.reviewedAt)}</time></>
+                ) : (
+                  <>Updated <time dateTime={post.updatedAt.toISOString()}>{formatDate(post.updatedAt)}</time></>
+                )}
               </p>
             </div>
 
@@ -176,6 +183,11 @@ export default async function BlogPostPage({
             className="[&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-white [&_h2]:mt-8 [&_h2]:mb-3 [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:text-white/90 [&_h3]:mt-6 [&_h3]:mb-2 [&_p]:text-white/55 [&_p]:text-[16px] [&_p]:leading-relaxed [&_p]:mb-4 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-4 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-4 [&_li]:text-white/55 [&_li]:mb-1 [&_strong]:text-white/80 [&_strong]:font-semibold [&_a]:text-[#c9a84c] [&_a]:font-medium [&_a]:underline [&_a]:decoration-[#c9a84c]/40 [&_a]:underline-offset-4 [&_a]:transition-colors [&_a:hover]:text-[#e2c264] [&_a:hover]:decoration-[#e2c264] [&_blockquote]:border-l-4 [&_blockquote]:border-[#c9a84c] [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-white/45 [&_hr]:border-white/10 [&_hr]:my-8 overflow-x-auto [&_table]:w-full [&_table]:border-collapse [&_table]:my-6 [&_table]:text-[15px] [&_th]:border [&_th]:border-white/10 [&_th]:bg-white/[0.03] [&_th]:px-4 [&_th]:py-3 [&_th]:text-left [&_th]:align-top [&_th]:font-semibold [&_th]:text-white/85 [&_td]:border [&_td]:border-white/10 [&_td]:px-4 [&_td]:py-3 [&_td]:align-top [&_td]:text-white/55 [&_th_p]:mb-0 [&_td_p]:mb-0"
             dangerouslySetInnerHTML={{ __html: stripEmptyHeadings(post.content) }}
           />
+
+          <AuthorBox reviewedAt={post.reviewedAt} />
+          <p className="mt-6 text-xs text-white/35 leading-relaxed">
+            This article is for general information and is not a substitute for a personal dental consultation.
+          </p>
 
           {/* Back link */}
           <div className="mt-12 pt-8 border-t border-white/[0.06]">
