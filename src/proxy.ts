@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
+import { SESSION_COOKIE, verifySessionToken } from "@/lib/session";
 
-export function proxy(request: NextRequest) {
-  const isLoggedIn = request.cookies.get("admin-session")?.value === "1";
+export async function proxy(request: NextRequest) {
+  const isLoggedIn = await verifySessionToken(
+    request.cookies.get(SESSION_COOKIE)?.value,
+    process.env.ADMIN_SECRET
+  );
   const { pathname } = request.nextUrl;
 
   const isLoginPage = pathname === "/dashboard/login";

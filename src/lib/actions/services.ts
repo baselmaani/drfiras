@@ -1,5 +1,6 @@
 "use server";
 import { db } from "@/lib/db";
+import { requireAdmin } from "@/lib/adminSession";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -13,6 +14,7 @@ export async function createService(
   prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  await requireAdmin();
   const title = (formData.get("title") as string)?.trim();
   const rawSlug = (formData.get("slug") as string)?.trim();
   const slug = rawSlug || toSlug(title);
@@ -56,6 +58,7 @@ export async function updateService(
   prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  await requireAdmin();
   const title = (formData.get("title") as string)?.trim();
   const slug = (formData.get("slug") as string)?.trim();
   const description = (formData.get("description") as string)?.trim();
@@ -100,6 +103,7 @@ export async function updateService(
 }
 
 export async function deleteService(id: number, _formData: FormData) {
+  await requireAdmin();
   await db.service.delete({ where: { id } });
   revalidatePath("/dashboard/services");
   revalidatePath("/");

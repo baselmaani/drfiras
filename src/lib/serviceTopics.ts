@@ -1,6 +1,6 @@
 // Maps each treatment page to the blog topics it owns, so service pages can
 // list their guides and blog posts can link back to the treatment page.
-import { BLOG_REDIRECTS } from "@/lib/blogRedirects";
+import { BLOG_REDIRECTS, COSMETIC_PAGE_LIVE } from "@/lib/blogRedirects";
 
 type ServiceTopic = { url: string; anchor: string; keywords: string[] };
 
@@ -30,6 +30,15 @@ export const SERVICE_TOPICS: Record<string, ServiceTopic> = {
     anchor: "ABC smile makeover in Dubai",
     keywords: ["smile makeover", "smile-makeover", "abc smile", "abc-smile"],
   },
+  ...(COSMETIC_PAGE_LIVE
+    ? {
+        "cosmetic-dentist-dubai": {
+          url: "/services/cosmetic-dentist-dubai",
+          anchor: "Cosmetic dentistry in Dubai",
+          keywords: ["cosmetic dentist", "cosmetic-dentist", "cosmetic dental", "cosmetic-dental"],
+        },
+      }
+    : {}),
 };
 
 function matches(topic: ServiceTopic, post: { slug: string; title: string }) {

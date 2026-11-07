@@ -1,5 +1,6 @@
 "use server";
 import { db } from "@/lib/db";
+import { requireAdmin } from "@/lib/adminSession";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { validateInternalLinks, type RelatedLink } from "@/lib/internalLinks";
@@ -26,6 +27,7 @@ export async function createPost(
   prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  await requireAdmin();
   const title = (formData.get("title") as string)?.trim();
   const rawSlug = (formData.get("slug") as string)?.trim();
   const slug = rawSlug || toSlug(title);
@@ -71,6 +73,7 @@ export async function updatePost(
   prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  await requireAdmin();
   const title = (formData.get("title") as string)?.trim();
   const slug = (formData.get("slug") as string)?.trim();
   const content = (formData.get("content") as string)?.trim();
@@ -116,6 +119,7 @@ export async function updatePost(
 }
 
 export async function deletePost(id: number, _formData: FormData) {
+  await requireAdmin();
   await db.post.delete({ where: { id } });
   revalidatePath("/dashboard/posts");
   revalidatePath("/blog");

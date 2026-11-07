@@ -1,9 +1,11 @@
 "use server";
 import { db } from "@/lib/db";
+import { requireAdmin } from "@/lib/adminSession";
 import { del } from "@vercel/blob";
 import { revalidatePath } from "next/cache";
 
 export async function deleteMediaFile(id: number, _formData: FormData) {
+  await requireAdmin();
   const file = await db.mediaFile.findUnique({ where: { id } });
   if (!file) return;
 
@@ -19,11 +21,13 @@ export async function deleteMediaFile(id: number, _formData: FormData) {
 }
 
 export async function createFolder(name: string, parentId: number | null) {
+  await requireAdmin();
   await db.mediaFolder.create({ data: { name: name.trim(), parentId } });
   revalidatePath("/dashboard/media");
 }
 
 export async function deleteFolder(id: number, _formData: FormData) {
+  await requireAdmin();
   // Move all files in this folder to root before deleting
   await db.mediaFile.updateMany({ where: { folderId: id }, data: { folderId: null } });
   await db.mediaFolder.delete({ where: { id } });
@@ -31,6 +35,7 @@ export async function deleteFolder(id: number, _formData: FormData) {
 }
 
 export async function moveFile(fileId: number, folderId: number | null) {
+  await requireAdmin();
   await db.mediaFile.update({ where: { id: fileId }, data: { folderId } });
   revalidatePath("/dashboard/media");
 }

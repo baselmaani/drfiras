@@ -1,7 +1,7 @@
 import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { isAdmin } from "@/lib/adminSession";
 
 /**
  * Handles Vercel Blob client-side upload events:
@@ -12,9 +12,6 @@ import { db } from "@/lib/db";
  * pass through this serverless function body — no 4.5 MB size limit applies.
  */
 export async function POST(request: Request): Promise<Response> {
-  const cookieStore = await cookies();
-  const session = cookieStore.get("admin-session");
-
   try {
     const body = (await request.json()) as HandleUploadBody;
 
@@ -23,7 +20,7 @@ export async function POST(request: Request): Promise<Response> {
       request,
 
       onBeforeGenerateToken: async (_pathname, clientPayload) => {
-        if (!session || session.value !== "1") {
+        if (!(await isAdmin())) {
           throw new Error("Unauthorized");
         }
         return {

@@ -1,5 +1,6 @@
 "use server";
 import { db } from "@/lib/db";
+import { requireAdmin } from "@/lib/adminSession";
 import { revalidatePath } from "next/cache";
 
 export type MenuItemData = {
@@ -45,6 +46,7 @@ export async function getMenuItems(): Promise<MenuItemData[]> {
 
 /** Fetch all items flat (for dashboard management) */
 export async function getAllMenuItems() {
+  await requireAdmin();
   try {
     return db.menuItem.findMany({
       orderBy: [{ position: "asc" }, { order: "asc" }],
@@ -62,6 +64,7 @@ export async function createMenuItem(data: {
   order: number;
   parentId?: number | null;
 }) {
+  await requireAdmin();
   await db.menuItem.create({ data });
   revalidatePath("/");
   revalidatePath("/dashboard/content/menu");
@@ -71,12 +74,14 @@ export async function updateMenuItem(
   id: number,
   data: { label?: string; href?: string; position?: string; order?: number; parentId?: number | null; enabled?: boolean }
 ) {
+  await requireAdmin();
   await db.menuItem.update({ where: { id }, data });
   revalidatePath("/");
   revalidatePath("/dashboard/content/menu");
 }
 
 export async function deleteMenuItem(id: number) {
+  await requireAdmin();
   await db.menuItem.delete({ where: { id } });
   revalidatePath("/");
   revalidatePath("/dashboard/content/menu");
@@ -84,6 +89,7 @@ export async function deleteMenuItem(id: number) {
 
 /** Seed default menu items if none exist */
 export async function seedDefaultMenuItems() {
+  await requireAdmin();
   const defaults = [
     { label: "Home", href: "/", position: "left", order: 0 },
     { label: "Treatments", href: "/#expertise", position: "left", order: 1 },

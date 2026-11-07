@@ -8,6 +8,7 @@ interface DentistJsonLdProps {
   address?: string;
   description?: string;
   image?: string;
+  logo?: string;
   instagram?: string;
   tiktok?: string;
   googleBusinessUrl?: string;
@@ -27,6 +28,7 @@ export function DentistJsonLd({
   address,
   description,
   image,
+  logo,
   instagram,
   tiktok,
   googleBusinessUrl,
@@ -77,7 +79,7 @@ export function DentistJsonLd({
         },
         hasMap: `https://maps.google.com/?cid=${GOOGLE_MAPS_CID}`,
         ...(image && { image }),
-        ...(image && { logo: { "@type": "ImageObject", url: image } }),
+        ...(logo && { logo: { "@type": "ImageObject", url: logo } }),
         medicalSpecialty: "Dentistry",
         priceRange: "$$$$",
         currenciesAccepted: "AED",

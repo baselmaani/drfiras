@@ -26,7 +26,8 @@ export default function robots(): MetadataRoute.Robots {
       { userAgent: "Amazonbot",          allow: "/", disallow: ["/dashboard/", "/api/"] },
       { userAgent: "AI2Bot",             allow: "/", disallow: ["/dashboard/", "/api/"] },
     ],
-    sitemap: `${SITE_URL}/sitemap.xml`,
+    // sitemap-retired.xml is temporary: remove it with its route around Jan 2027
+    sitemap: [`${SITE_URL}/sitemap.xml`, `${SITE_URL}/sitemap-retired.xml`],
     host: SITE_URL,
   };
 }

@@ -1,5 +1,6 @@
 "use server";
 import { db } from "@/lib/db";
+import { requireAdmin } from "@/lib/adminSession";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -9,6 +10,7 @@ export async function createBeforeAfter(
   prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  await requireAdmin();
   const title = (formData.get("title") as string)?.trim();
   const treatment = (formData.get("treatment") as string)?.trim();
   const beforeImage = (formData.get("beforeImage") as string)?.trim();
@@ -38,6 +40,7 @@ export async function updateBeforeAfter(
   prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  await requireAdmin();
   const title = (formData.get("title") as string)?.trim();
   const treatment = (formData.get("treatment") as string)?.trim();
   const beforeImage = (formData.get("beforeImage") as string)?.trim();
@@ -64,6 +67,7 @@ export async function updateBeforeAfter(
 }
 
 export async function deleteBeforeAfter(id: number, _formData: FormData) {
+  await requireAdmin();
   await db.beforeAfter.delete({ where: { id } });
   revalidatePath("/dashboard/before-after");
   revalidatePath("/");

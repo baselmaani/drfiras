@@ -1,5 +1,6 @@
 "use server";
 import { db } from "@/lib/db";
+import { requireAdmin } from "@/lib/adminSession";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -9,6 +10,7 @@ export async function createPrice(
   prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  await requireAdmin();
   const title = (formData.get("title") as string)?.trim();
   const price = (formData.get("price") as string)?.trim();
 
@@ -38,6 +40,7 @@ export async function updatePrice(
   prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  await requireAdmin();
   const title = (formData.get("title") as string)?.trim();
   const price = (formData.get("price") as string)?.trim();
 
@@ -64,6 +67,7 @@ export async function updatePrice(
 }
 
 export async function deletePrice(id: number, _formData: FormData) {
+  await requireAdmin();
   await db.servicePrice.delete({ where: { id } });
   revalidatePath("/dashboard/prices");
   revalidatePath("/prices");

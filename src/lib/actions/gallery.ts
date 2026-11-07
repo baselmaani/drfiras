@@ -1,5 +1,6 @@
 "use server";
 import { db } from "@/lib/db";
+import { requireAdmin } from "@/lib/adminSession";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -9,6 +10,7 @@ export async function createGalleryImage(
   prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  await requireAdmin();
   const title = (formData.get("title") as string)?.trim();
   const image = (formData.get("image") as string)?.trim();
   const serviceId = parseInt(formData.get("serviceId") as string);
@@ -39,6 +41,7 @@ export async function updateGalleryImage(
   prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  await requireAdmin();
   const title = (formData.get("title") as string)?.trim();
   const image = (formData.get("image") as string)?.trim();
   const serviceId = parseInt(formData.get("serviceId") as string);
@@ -66,6 +69,7 @@ export async function updateGalleryImage(
 }
 
 export async function deleteGalleryImage(id: number, _formData: FormData) {
+  await requireAdmin();
   await db.galleryImage.delete({ where: { id } });
   revalidatePath("/dashboard/gallery");
   revalidatePath("/gallery");

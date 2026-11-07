@@ -132,6 +132,8 @@ export default async function RootLayout({
           instagram={s.instagram}
           tiktok={s.tiktok}
           googleBusinessUrl={s.googleBusinessUrl}
+          image={s.doctorPhotoUrl || s.heroImageUrl || undefined}
+          logo={s.logoUrl || undefined}
           doctorPhoto={s.doctorPhotoUrl || s.heroImageUrl}
           doctorBio={s.doctorBio || s.heroBody}
           qualifications={s.doctorQualifications}

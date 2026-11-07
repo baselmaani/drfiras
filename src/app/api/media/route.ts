@@ -1,11 +1,9 @@
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { isAdmin } from "@/lib/adminSession";
 
 export async function GET(req: Request) {
-  const cookieStore = await cookies();
-  const session = cookieStore.get("admin-session");
-  if (!session || session.value !== "1") {
+  if (!(await isAdmin())) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -35,9 +33,7 @@ export async function GET(req: Request) {
 // Called by the client after a successful client-side upload to register the
 // file in the database. Works in both local dev and production.
 export async function POST(request: Request) {
-  const cookieStore = await cookies();
-  const session = cookieStore.get("admin-session");
-  if (!session || session.value !== "1") {
+  if (!(await isAdmin())) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

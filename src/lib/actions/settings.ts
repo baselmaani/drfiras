@@ -1,11 +1,13 @@
 "use server";
 import { db } from "@/lib/db";
+import { requireAdmin } from "@/lib/adminSession";
 import { revalidatePath } from "next/cache";
 
 export async function updateSettings(
   _prevState: { success: boolean; error?: string } | null,
   formData: FormData
 ): Promise<{ success: boolean; error?: string }> {
+  await requireAdmin();
   const entries = Array.from(formData.entries()) as [string, string][];
 
   try {

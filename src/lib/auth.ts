@@ -1,6 +1,7 @@
 "use server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { SESSION_COOKIE, SESSION_MAX_AGE_SECONDS, createSessionToken } from "@/lib/session";
 
 export async function loginAction(
   prevState: { error: string } | null,
@@ -8,16 +9,18 @@ export async function loginAction(
 ): Promise<{ error: string } | null> {
   const password = formData.get("password") as string;
 
-  if (!password || password !== process.env.ADMIN_SECRET) {
+  const secret = process.env.ADMIN_SECRET;
+
+  if (!secret || !password || password !== secret) {
     return { error: "Invalid password" };
   }
 
   const cookieStore = await cookies();
-  cookieStore.set("admin-session", "1", {
+  cookieStore.set(SESSION_COOKIE, await createSessionToken(secret), {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
-    maxAge: 60 * 60 * 24 * 7,
+    maxAge: SESSION_MAX_AGE_SECONDS,
   });
 
   redirect("/dashboard");
@@ -25,6 +28,6 @@ export async function loginAction(
 
 export async function logoutAction() {
   const cookieStore = await cookies();
-  cookieStore.delete("admin-session");
+  cookieStore.delete(SESSION_COOKIE);
   redirect("/dashboard/login");
 }
