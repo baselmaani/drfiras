@@ -178,7 +178,6 @@ export async function GET() {
   lines.push(`- Invisalign Dubai: ${SITE_URL}/services/invisalign-dubai`);
   lines.push(`- Blog: ${SITE_URL}/blog`);
   lines.push(`- Gallery: ${SITE_URL}/gallery`);
-  lines.push(`- Prices: ${SITE_URL}/prices`);
   lines.push(`- Contact: ${SITE_URL}/contact`);
   lines.push("");
 

@@ -31,7 +31,6 @@ export async function createPrice(
   });
 
   revalidatePath("/dashboard/prices");
-  revalidatePath("/prices");
   redirect("/dashboard/prices");
 }
 
@@ -62,7 +61,6 @@ export async function updatePrice(
   });
 
   revalidatePath("/dashboard/prices");
-  revalidatePath("/prices");
   redirect("/dashboard/prices");
 }
 
@@ -70,5 +68,4 @@ export async function deletePrice(id: number, _formData: FormData) {
   await requireAdmin();
   await db.servicePrice.delete({ where: { id } });
   revalidatePath("/dashboard/prices");
-  revalidatePath("/prices");
 }

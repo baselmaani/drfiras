@@ -39,7 +39,11 @@ function BeforeAfterCard({ title, treatment, beforeImage }: {
         <p className="text-sm font-semibold text-white/80" style={{ fontFamily: "var(--font-playfair)" }}>
           {title}
         </p>
-        <p className="text-xs text-white/30 mt-0.5">{treatment}</p>
+        {/* Most cards use the treatment name as their title; printing it twice
+            only repeats the keyword (it was ~12 extra mentions per page). */}
+        {treatment.trim().toLowerCase() !== title.trim().toLowerCase() && (
+          <p className="text-xs text-white/30 mt-0.5">{treatment}</p>
+        )}
       </div>
     </div>
   );

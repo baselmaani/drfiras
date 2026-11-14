@@ -185,7 +185,6 @@ export async function GET() {
   lines.push(`- ${SITE_URL}/blog`);
   for (const p of posts) lines.push(`- ${SITE_URL}/blog/${p.slug}`);
   lines.push(`- ${SITE_URL}/gallery`);
-  lines.push(`- ${SITE_URL}/prices`);
   lines.push(`- ${SITE_URL}/contact`);
   lines.push(`- ${SITE_URL}/sitemap.xml`);
 

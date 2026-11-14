@@ -113,7 +113,6 @@ export default async function Footer() {
             {[
               { label: "Services", href: "/services" },
               { label: "Gallery", href: "/gallery" },
-              { label: "Prices", href: "/prices" },
               { label: "Blog", href: "/blog" },
               { label: "About", href: "/about" },
               { label: "Contact", href: "/contact" },
