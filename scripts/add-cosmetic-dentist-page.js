@@ -65,7 +65,7 @@ const content = `
 <p>You can read more in our guide on <a href="/blog/how-to-choose-a-cosmetic-dentist-in-dubai">how to choose a cosmetic dentist in Dubai</a>, view real results in the <a href="/gallery">smile gallery</a>, or learn more <a href="/about">about Dr. Firas</a>.</p>
 
 <h2>Visit Dr. Firas in Al Wasl, Dubai</h2>
-<p>The clinic is on Happiness St in Al Wasl, Dubai, and is open Tuesday to Sunday from 11:00 to 20:00. Consultations are available in English and Arabic. See our <a href="/prices">prices</a> or <a href="/contact">book a consultation</a> to discuss your smile.</p>
+<p>The clinic is on Happiness St in Al Wasl, Dubai, and is open Tuesday to Sunday from 11:00 to 20:00. Consultations are available in English and Arabic. <a href="/contact">Book a consultation</a> to discuss your smile.</p>
 `.trim();
 
 const faqItems = [

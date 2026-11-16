@@ -132,3 +132,68 @@ model MediaFile {
   folder    MediaFolder? @relation(fields: [folderId], references: [id], onDelete: SetNull)
   createdAt DateTime     @default(now())
 }
+
+// ── AI connector (MCP over OAuth 2.1, for ChatGPT and Claude) ───────────────
+// Codes and tokens are stored as SHA-256 hashes. `secretFingerprint` ties each
+// grant to the current ADMIN_SECRET, so rotating the password disconnects every
+// assistant, the same way it logs out dashboard sessions. See src/lib/mcp/oauth.ts.
+model McpClient {
+  id           String        @id @default(cuid())
+  name         String
+  redirectUris String[]
+  createdAt    DateTime      @default(now())
+  codes        McpAuthCode[]
+  tokens       McpToken[]
+}
+
+model McpAuthCode {
+  id                String    @id @default(cuid())
+  codeHash          String    @unique
+  clientId          String
+  client            McpClient @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  redirectUri       String
+  codeChallenge     String
+  resource          String
+  scope             String
+  familyId          String // tokens issued from this code; replaying the code revokes them
+  secretFingerprint String
+  expiresAt         DateTime
+  usedAt            DateTime?
+  createdAt         DateTime  @default(now())
+}
+
+model McpToken {
+  id                String    @id @default(cuid())
+  accessHash        String    @unique
+  refreshHash       String    @unique
+  familyId          String
+  clientId          String
+  client            McpClient @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  resource          String
+  scope             String
+  secretFingerprint String
+  accessExpiresAt   DateTime
+  refreshExpiresAt  DateTime
+  rotatedAt         DateTime?
+  revokedAt         DateTime?
+  lastUsedAt        DateTime?
+  createdAt         DateTime  @default(now())
+
+  @@index([familyId])
+}
+
+// Before/after snapshot of every change an AI assistant makes, so it can be undone.
+model McpAuditLog {
+  id         String   @id @default(cuid())
+  tool       String
+  entity     String // "post", "service", "price", ..., "settings", "media_file"
+  entityId   String
+  label      String
+  before     Json?
+  after      Json?
+  clientName String?
+  createdAt  DateTime @default(now())
+
+  @@index([entity, entityId])
+  @@index([createdAt])
+}

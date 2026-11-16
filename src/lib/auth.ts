@@ -1,7 +1,7 @@
 "use server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { SESSION_COOKIE, SESSION_MAX_AGE_SECONDS, createSessionToken } from "@/lib/session";
+import { SESSION_COOKIE, SESSION_MAX_AGE_SECONDS, createSessionToken, safeNext } from "@/lib/session";
 
 export async function loginAction(
   prevState: { error: string } | null,
@@ -23,7 +23,7 @@ export async function loginAction(
     maxAge: SESSION_MAX_AGE_SECONDS,
   });
 
-  redirect("/dashboard");
+  redirect(safeNext(formData.get("next") as string | null));
 }
 
 export async function logoutAction() {

@@ -15,7 +15,6 @@ const STATIC_PAGES: InternalLink[] = [
   { label: "About", href: "/about", group: "Pages" },
   { label: "Blog", href: "/blog", group: "Pages" },
   { label: "Gallery", href: "/gallery", group: "Pages" },
-  { label: "Prices", href: "/prices", group: "Pages" },
   { label: "Services", href: "/services", group: "Pages" },
   { label: "Contact", href: "/contact", group: "Pages" },
 ];

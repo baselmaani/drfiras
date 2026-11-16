@@ -47,3 +47,10 @@ export async function verifySessionToken(
     payloadFor(expiry)
   );
 }
+
+// Where to go after signing in: only a dashboard path on this site, never another origin.
+export function safeNext(next: string | null | undefined): string {
+  if (!next || !/^\/dashboard(\/|\?|$)/.test(next) || next.startsWith("/dashboard/login")) return "/dashboard";
+  if (/[\\\s]|\/\//.test(next)) return "/dashboard";
+  return next;
+}

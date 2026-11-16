@@ -20,6 +20,8 @@ const nextConfig: NextConfig = {
         destination: "https://drfiraszoghieb.com/:path*",
         permanent: true,
       },
+      // Public price list removed 2026-11-14; prices still show on each service page
+      { source: "/prices", destination: "/services", permanent: true },
       ...Object.entries(BLOG_REDIRECTS).map(([slug, destination]) => ({
         source: `/blog/${slug}`,
         destination,

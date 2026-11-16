@@ -1,6 +1,13 @@
 "use client";
-import { useActionState } from "react";
+import { Suspense, useActionState } from "react";
+import { useSearchParams } from "next/navigation";
 import { loginAction } from "@/lib/auth";
+
+// Carries ?next= (e.g. the AI connector's consent page) through the login form.
+function NextField() {
+  const next = useSearchParams().get("next");
+  return next ? <input type="hidden" name="next" value={next} /> : null;
+}
 
 export default function LoginPage() {
   const [state, formAction, pending] = useActionState(loginAction, null);
@@ -25,6 +32,9 @@ export default function LoginPage() {
           action={formAction}
           className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 space-y-5"
         >
+          <Suspense fallback={null}>
+            <NextField />
+          </Suspense>
           {state?.error && (
             <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">
               {state.error}

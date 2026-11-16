@@ -157,10 +157,6 @@ export default async function ServicePage({
               {price && (
                 <p data-speakable className="text-[15px] text-white/70 mb-10">
                   <span className="text-[#c9a84c] font-semibold">{price.label}</span>
-                  <span className="text-white/25 mx-2">·</span>
-                  <Link href="/prices" className="underline underline-offset-4 decoration-white/20 hover:text-[#c9a84c] transition-colors">
-                    See all prices
-                  </Link>
                 </p>
               )}
 
