@@ -58,7 +58,7 @@ export default async function Hero() {
               </span>
             )}
             <span
-              className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.04] whitespace-nowrap"
+              className="block text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.04] text-balance break-words"
               style={{ fontFamily: "var(--font-playfair)" }}
             >
               {s.heroHeading}
